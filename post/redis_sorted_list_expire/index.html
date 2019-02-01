@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>给Redis的list添加超时属性 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="lekai" />
+  <meta name="description" content="Redis里简单的K/V Pair默认是有expire属性的，当设定超时时间，一旦超时，设置的k/v对会自动被清除，但对于在list的item" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/redis_sorted_list_expire/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="给Redis的list添加超时属性" />
+<meta property="og:description" content="Redis里简单的K/V Pair默认是有expire属性的，当设定超时时间，一旦超时，设置的k/v对会自动被清除，但对于在list的item" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/redis_sorted_list_expire/" />
+<meta property="article:published_time" content="2018-10-25T17:28:39&#43;08:00"/>
+<meta property="article:modified_time" content="2018-10-25T17:28:39&#43;08:00"/>
+
+<meta itemprop="name" content="给Redis的list添加超时属性">
+<meta itemprop="description" content="Redis里简单的K/V Pair默认是有expire属性的，当设定超时时间，一旦超时，设置的k/v对会自动被清除，但对于在list的item">
+
+
+<meta itemprop="datePublished" content="2018-10-25T17:28:39&#43;08:00" />
+<meta itemprop="dateModified" content="2018-10-25T17:28:39&#43;08:00" />
+<meta itemprop="wordCount" content="1562">
+
+
+
+<meta itemprop="keywords" content="redis,db," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="给Redis的list添加超时属性"/>
+<meta name="twitter:description" content="Redis里简单的K/V Pair默认是有expire属性的，当设定超时时间，一旦超时，设置的k/v对会自动被清除，但对于在list的item"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">给Redis的list添加超时属性</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-25 </span>
+        <div class="post-category">
+            
+              <a href="/categories/tech/"> tech </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#使用redis-sorted-list">使用redis sorted list</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>Redis里简单的K/V Pair默认是有expire属性的，当设定超时时间，一旦超时，设置的k/v对会自动被清除，但对于在list的item而言，并没有这个超时设置选项。</p>
+
+<p>最近业务里有一个小需求，Redis需要缓存一个未确认交易list：</p>
+
+<ol>
+<li>对于list里的任意一个item，需要支持超时功能，自动删除12小时以前的记录。</li>
+<li>能通过key（很长的hash）快速删除列表里指定item。</li>
+<li>能通过key快速返回列表里item的内容。</li>
+<li>list能按时间排序返回列表里指定数量的交易（offset,limit)</li>
+</ol>
+
+<p>单纯使用K/V pair的话已经能满足1，2，3， 主要是需要按时间倒序返回交易列。
+我一开始想到的是通过使用一个辅助list，给K/V Pairs增加按时排序功能。具体实现，是将K/V pair set的所有keys按时间排序插入到list里。</p>
+
+<p><strong>结构</strong>：
+* list (ptxList)： 记录每个交易的key，按时间插入（LPUSH）
+* K/V pairs： 每笔交易的key跟其对应的详细交易内容。(共享前缀ptx）</p>
+
+<p><strong>需求实现</strong>：
+* 超时设置: 每个K/V pair都自带expire属性，设置12小时即可
+* 获取指定未确认交易: GET ptx:[key]
+* 删除未确认交易
+    <code>
+    LREM mylist ptx:[key]
+    DEL key
+</code>
+* 获取按时间排序的未确认交易列: 因为list里的items是按时间插入的可以通过 (注意这里我们一定要sort by<code>not-exist-key</code>,因为ptxList本身就是按时间插入排序好，这里只是起辅助作用）
+     <code>
+     SORT ptxList by not-exist-key GET ptx*
+</code>
+咋看可行，跑了一段时间貌似也行，但很快就发现了一个问题，mylist 的keys跟k/v pairs里的keys不匹配。</p>
+
+<blockquote>
+<p>原因： 对应K/V pairs，当某个key超时时，该key会被删除，mylist里面keys却不会。</p>
+</blockquote>
+
+<p>确实，每笔交易确认之后，keys都有从k/v pair组跟list删除。也就是说这个方法只能保证前12小时的数据准确性。之后，mylist的keys会比 k/v pair组多很多。
+问题又回到了起点&hellip;</p>
+
+<h3 id="使用redis-sorted-list">使用redis sorted list</h3>
+
+<blockquote>
+<p>万能的Google，每当你遇到一个坑跨不过的时候，总有前辈给你搭好了桥。</p>
+</blockquote>
+
+<p>redis 里自带了sorted list。 往sorted list里添加item时，可以添加一个score attribute</p>
+
+<ol>
+<li>ZADD SCORE MEMBER</li>
+<li>ZREMRANGEBYSCORE</li>
+</ol>
+
+<p>方法跟上面一致，只不过是将normal的list换成了sorted list，然后每次插入一个item的时候，添加一个score，score值位当前的timestamp（unix epoch格式)。 这样可以通过<code>ZREMRANGEBYSCORE ptxList min max</code>来删除过期的members.</p>
+
+<p>例子:</p>
+
+<pre><code>建立一个sorted list
+127.0.0.1:6379&gt; zadd ptxlist 1540458292 key1
+(integer) 1
+127.0.0.1:6379&gt; zadd ptxlist 1540458293 key2
+(integer) 1
+127.0.0.1:6379&gt; zadd ptxlist 1540458294 key3
+(integer) 1
+127.0.0.1:6379&gt; zadd ptxlist 1540458294 key5
+(integer) 1
+127.0.0.1:6379&gt; zadd ptxlist 1540458293 key4
+(integer) 1
+</code></pre>
+
+<p>这里要注意，虽然key4 比key5 晚插入，但是因为是sorted list， 由于key4的score比key3跟key5低，插入4之后，ptxlist的实际顺序是 <code>key1, key2, key4, key3, key5</code></p>
+
+<p>创建对应的k/v 键值对。</p>
+
+<pre><code>127.0.0.1:6379&gt; set ptx:key1 data1
+OK
+127.0.0.1:6379&gt; set ptx:key2 data2
+OK
+127.0.0.1:6379&gt; set ptx:key3 data3
+OK
+127.0.0.1:6379&gt; set ptx:key4 data4
+OK
+127.0.0.1:6379&gt; set ptx:key5 data5
+OK
+</code></pre>
+
+<p>取得最新的两个交易记录, 应该返回data5， data3.</p>
+
+<pre><code>127.0.0.1:6379&gt; sort ptxlist limit 0 2 desc by not-exist-key get ptx:*
+1) &quot;data5&quot;
+2) &quot;data3&quot;
+</code></pre>
+
+<p>删除超时的key, 删除key1，key2，key4</p>
+
+<pre><code>127.0.0.1:6379&gt; zremrangebyscore ptxlist 0 1540458293
+(integer) 3
+127.0.0.1:6379&gt; zrange ptxlist 0 -1
+1) &quot;key3&quot;
+2) &quot;key5&quot;
+</code></pre>
+
+<p>可以看到通过采取sorted list之后，是可以满足需求的。</p>
+
+<p>当然清理超时的记录是要在应用程序里实现,比如每5秒检查并清除12小时之前的记录，
+用<code>golang</code>的话可以这么写：</p>
+
+<pre><code class="language-go">	ticker := time.NewTicker(5*time.Seocnd)
+	defer func() {
+		ticker.Stop()
+	}()
+	for {
+		select {
+		case &lt;-ticker.C:
+			redis.ZRemRangeScore(mylist, 0, time.Now().Unix() - 12*3600)
+		}
+	}
+</code></pre>
+
+<p><strong>后记</strong>
+最后我还是没有采用辅助sorted list的方式，因为有了新的需求，需要按未确认交易里面某些值进行排序，这样的话再纯依靠redis就比较复杂，redis就只保存了k/v pairs键值对。毕竟redis的访问速度很快，未确认交易数量也就100k左右，索性每隔10秒全部取到程序里，在程序里对未确认交易进行排序。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">lekai</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-10-25</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/redis/">redis</a>
+          
+          <a href="/tags/db/">db</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/leet_code_lru/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">LRU golang 实现</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/eth_explorer_summary/">
+            <span class="next-text nav-default">Eth Explorer 开发回顾</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

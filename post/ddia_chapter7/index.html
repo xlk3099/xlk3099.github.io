@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Designing Data-Intensive Applications 7: Transaction - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="lekai" />
+  <meta name="description" content="Summary Race condition scenarios Dirty Reads One client reads another client’s writes before they have been committed. The read committed isolation level and stronger levels prevent dirty reads. Dirty Writes One client overwrites data that another client has written, but not yet committed. Almost all transaction implementations prevent dirty writes. Two transactions concurrently try to update the same object in a database, normaly" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/ddia_chapter7/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Designing Data-Intensive Applications 7: Transaction" />
+<meta property="og:description" content="Summary Race condition scenarios Dirty Reads One client reads another client’s writes before they have been committed. The read committed isolation level and stronger levels prevent dirty reads. Dirty Writes One client overwrites data that another client has written, but not yet committed. Almost all transaction implementations prevent dirty writes. Two transactions concurrently try to update the same object in a database, normaly" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/ddia_chapter7/" />
+<meta property="article:published_time" content="2019-01-22T10:50:25&#43;08:00"/>
+<meta property="article:modified_time" content="2019-01-22T10:50:25&#43;08:00"/>
+
+<meta itemprop="name" content="Designing Data-Intensive Applications 7: Transaction">
+<meta itemprop="description" content="Summary Race condition scenarios Dirty Reads One client reads another client’s writes before they have been committed. The read committed isolation level and stronger levels prevent dirty reads. Dirty Writes One client overwrites data that another client has written, but not yet committed. Almost all transaction implementations prevent dirty writes. Two transactions concurrently try to update the same object in a database, normaly">
+
+
+<meta itemprop="datePublished" content="2019-01-22T10:50:25&#43;08:00" />
+<meta itemprop="dateModified" content="2019-01-22T10:50:25&#43;08:00" />
+<meta itemprop="wordCount" content="3753">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Designing Data-Intensive Applications 7: Transaction"/>
+<meta name="twitter:description" content="Summary Race condition scenarios Dirty Reads One client reads another client’s writes before they have been committed. The read committed isolation level and stronger levels prevent dirty reads. Dirty Writes One client overwrites data that another client has written, but not yet committed. Almost all transaction implementations prevent dirty writes. Two transactions concurrently try to update the same object in a database, normaly"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Designing Data-Intensive Applications 7: Transaction</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-01-22 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#summary"><strong>Summary</strong></a>
+<ul>
+<li><a href="#race-condition-scenarios">Race condition scenarios</a></li>
+<li><a href="#3-ways-to-implement-serializable-transactions">3 ways to implement serializable transactions</a></li>
+</ul></li>
+<li><a href="#笔记区">笔记区</a>
+<ul>
+<li><a href="#why-we-need-transaction">Why we need transaction</a></li>
+<li><a href="#what-is-transaction-in-database-systems">What is transaction in database systems</a></li>
+<li><a href="#when-to-use-transactions">When to use transactions</a></li>
+<li><a href="#隔离级别">隔离级别</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h1 id="summary"><strong>Summary</strong></h1>
+
+<h2 id="race-condition-scenarios">Race condition scenarios</h2>
+
+<p><span style="font-size:larger;">Dirty Reads</span></p>
+
+<p>One client reads another client’s writes before they have been committed. The read committed isolation level and stronger levels prevent dirty reads.</p>
+
+<p><span style="font-size:larger;">Dirty Writes</span></p>
+
+<p>One client overwrites data that another client has written, but not yet committed. Almost all transaction implementations prevent dirty writes.</p>
+
+<p>Two transactions concurrently try to update the same object in a database, normaly we expect the later writes should overwrite the ealirer write. But it&rsquo;s possible that the earlier write is part of a transaction and has not commited yet, and the later write overwrites <strong>an uncommited</strong> value.</p>
+
+<p><span style="font-size:larger;">Read skew(nonrepeatable reads)</span></p>
+
+<p>A client sees different parts of the database at different points in time. This issue is most commonly prevented with snapshot isolation, which allows a transaction to read from a consistent snapshot at one point in time. It is usually implemented with <em>multi-version concurrency control</em> (MVCC).</p>
+
+<p><span style="font-size:larger;">Lost Updates</span></p>
+
+<p>Two clients concurrently perform a <strong>read-modify-write</strong> cycle. One overwrites the other’s write without incorporating its changes, so data is lost. Some implementations of snapshot isolation prevent this anomaly automatically, while others require a manual lock (<code>SELECT FOR UPDATE</code>).</p>
+
+<p>Lost updates 跟 Dirty Writes 需要区分下。</p>
+
+<p><span style="font-size:larger;">Write skew</span></p>
+
+<p>A transaction reads something, makes a decision based on the value it saw, and writes the decision to the database. However, by the time the write is made, the premise of the decision is no longer true. Only serializable isolation prevents this anomaly.</p>
+
+<p><span style="font-size:larger;">Phantom reads</span></p>
+
+<p>A transaction reads objects that match some search condition. Another client makes a write that affects the results of that search. Snapshot isolation prevents <strong>straightforward phantom reads</strong>, but phantoms in the context of write skew require special treatment, such as index-range locks.</p>
+
+<p>Weak isolation levels protect against some of those anomalies but leave you, the application developer, to handle others manually (e.g., using explicit locking). Only serializable isolation protects against all of these issues.</p>
+
+<h2 id="3-ways-to-implement-serializable-transactions">3 ways to implement serializable transactions</h2>
+
+<ol>
+<li>Literally executing transactions in a serial order, representative: redis, cost: can only work on a single CPU core.</li>
+<li>Two phase locking(2PL): 统治了几十年，但现在很多 application avoid using it， 因为性能问题, 悲观锁</li>
+<li>SSI（serializable snapshot isolation）： 新贵，use an optimistic approach， 乐观锁</li>
+</ol>
+
+<p>最后要提出的是，multi-object transactions 在 SQL database 里面用的比较多，在 K-V 里面比较少，现有很多 K-V 数据库考虑到性能问题，不支持 multi-object transactions</p>
+
+<hr />
+
+<h1 id="笔记区">笔记区</h1>
+
+<h2 id="why-we-need-transaction">Why we need transaction</h2>
+
+<ol>
+<li>database or hardward may fail at anytime</li>
+<li>application may crash</li>
+<li>interruption in the network unexpectedly cut off the application from the database, or one database from another</li>
+<li>Several clients may write to the database at the same time, overwriting each other&rsquo;s changes</li>
+<li>A client may read data that does not make sense because it has only partially been updated</li>
+<li>Race conditions between clients can cause surprising bugs</li>
+</ol>
+
+<h2 id="what-is-transaction-in-database-systems">What is transaction in database systems</h2>
+
+<p>Transaction：is a way for an application to group several reads and writes together into a logical unit. 也就是说，all the reads &amp; writes in a trasaction are executed as one operation. 要么全部成功，or 都失败（abort，rollback), if it fails, the application can safely retry. 这里讲的不是如何去减少这些问题，而是如何保证在有这些问题的情况下，读写仍然正确。</p>
+
+<p>With transaction,error handling in application side is easier, we do not need to care about partial failure.</p>
+
+<h2 id="when-to-use-transactions">When to use transactions</h2>
+
+<p>Understand what safety guarantees transactions can provide and the costs are associated with them.</p>
+
+<p><span style="font-size:larger;"><strong>ACID</strong></span></p>
+
+<p>safety guaranntees provided by transactions also known as ACID ( Atomicity, Consistency, Isolation, Durability) <strong>Note:</strong> The high-level is sound, but the devil is in the details, today when a system claims to be ACID compliant, it&rsquo;s unclear what guarantees you can actually expect, ACID has unfortunately become mostly a marketinng term.</p>
+
+<p>Atomicity, isolation an durability are properties of the database, whereas consistency is a property of the application.</p>
+
+<p><strong>BASE</strong>: for software which do not meet ACID criteria, basically availale, soft state, and eventual consistency.</p>
+
+<p><span style="font-size:larger;"> Atomicity</span></p>
+
+<p>简单来说就是，数据库不接受 partial failure，要么全部成功，要么全部失败。upon a group of write requests, if any of them fails due to whatever reason, this transaction is aborted and the database will discard or undo any writes it has made so far in the transaction.</p>
+
+<p><em>abortability</em> [by author] might be a better word actually.</p>
+
+<p><span style="font-size:larger;"> Consistency</span></p>
+
+<p>作者吐槽了下 consistency 被严重滥用了 哈哈。</p>
+
+<p>In the context of ACID, consistency refers to an application-specific notion of the database being good state. 也就是说用来描述数据库状态。</p>
+
+<p>what people expect? you have certain statements about the data that must always be true. Actually in this case, it&rsquo;s the responsibility of the application instead of the database.</p>
+
+<p><span style="font-size:larger;"> Isolation</span></p>
+
+<p>Most databases are accessed by several clients at the same time. 又让我想起了很多 KV 数据库只支持单个 client，比如 LevelDB， RocksDB.</p>
+
+<p>Isolation in the context of ACID means that concurrently executing transactions are isolationed from each other, they can not step on each other&rsquo;s toes. 没啥太多好解释的。</p>
+
+<p><span style="font-size:larger;"> Durability</span></p>
+
+<p>Durability is the promise that once a transactions has commiteted successfully, any data it has written will not be forgotten, <strong>even if there is a hardware fault or the database crashes</strong>. 要等的就是这个承诺！</p>
+
+<p>在 single node database 里，可以通过 non-volatile storage such as a hard drive or SSD, WAL(writing ahead log) - 就觉得应该是 WAL, 所以就算系统崩了也允许 recovery。but in a replicated database, durability may mean that the data has been successfully copied to some number of nodes. in order to provide durability gurarantee, a database must wait until these writes or replications are complete before reporting a transaction as successfully commiteed.</p>
+
+<p><strong>Note</strong> There is no perfect durability, if all the hard dissks and all the backups are destroyed, there&rsquo;s no way the database can save you.</p>
+
+<p><span style="font-size:larger;"> Single object and multiobject operations</span></p>
+
+<p><span style="font-size:larger;"> Single object operations</span></p>
+
+<p>虽然 atomicity 第一反应是觉得同时处理多个 objects，但对 single object 也是需要支持。甚至很多 KV 数据库只支持 single object 的 ACID.
+比如假设向数据库写一个 20KB 的 JSON 文档。</p>
+
+<ol>
+<li>If the network connection is interrupted after the first 10 KB have been sent, does the database store that unparseable 10 KB fragment of JSON?</li>
+<li>If the power fails while the database is in the middle of overwriting the previous value on disk, do you end up with the old and new values spliced together?</li>
+<li>If another client reads that document while the write is in progress, will it see a partially updated value?</li>
+</ol>
+
+<p>所以 storage engines 也会给 single object 提供 ACID 的支持。</p>
+
+<p><span style="font-size:larger;"> The need for multi-object transactions</span></p>
+
+<p>many distributed datastores have abandoned multi-object transactions because they are difficult to implement across partitions and they can get in the way in some scenarios where very high availability or performance is required.</p>
+
+<ol>
+<li>SQL DB 为啥需要? ensure foreign keys to be correct and up to date.</li>
+<li>NoSQL DB 为啥需要？document DB 通常 join 能力很弱，所以一般会存储额外的 documents 来记录 join 信息，这些 documents 也需要同时更新。</li>
+<li><strong>In database with secondary indexes</strong>？ 这块目前不是很懂。</li>
+</ol>
+
+<p><span style="font-size:larger;"> Handling errors and aborts</span></p>
+
+<p>用 transaction 方便的地方在于，每次 transaction 失败的时候，它会被 aborted，application 端可以很方便的处理错误然后 retry。
+作者顺带又吐槽了 ORM 模型，并举例了 Rails&rsquo;s ActiveRecord and Django dont retry aborted transactions
+Although retrying an aborted transaction is a simple and effective error handling mechanism, it isnt
+perfect.
+abort and retry 用起来很方便，但这种处理方式其实是有很大的弊端:</p>
+
+<ol>
+<li>if the transaction actually succeeded, but the network failed while the server tried to acknowledge the successful commit to the client(so the client thinks if tailed), double transaction might happen in this case.</li>
+<li>If the error is due to overload, retry will make the problem worse, not better. To avoid such feedback cycles, we need to limit the number of retries, and handle overloaded related errors different from other errors(if possible)</li>
+<li>It&rsquo;s only worth retrying after transient errors (for example due to deadlock, isolation violation, temporary network interruptions, and failover); after a permanent error(e.g., constraint violation), a retry would be pointless</li>
+<li>if the transaction also has side effects outside of the database, those side effects may happen even if transaction is aborted. e.g. if sending an email, you would not want to send the email again every time you retry the transaction. To make sure several different systems either commit or abort together, two-phase commit can help.</li>
+<li><strong>If the client process fails while retrying, any data it was trying to write to the database is lost</strong></li>
+</ol>
+
+<p>总结下，就是对错误处理不够精细化，容易给服务器造成 too much overload。</p>
+
+<h2 id="隔离级别">隔离级别</h2>
+
+<p><span style="font-size:larger;"> Read commited </span></p>
+
+<p>最基本的隔离级别，是个数据库基本都得有。</p>
+
+<p>when reading from the database, you will only see data that has been committed (no dirty reads)
+when writing to the database, you will only overwrite data that has been committed ( no dirty writes)</p>
+
+<ol>
+<li>Dirty read 的定义 见总结</li>
+<li>Dirty write 的定义 见总结</li>
+<li>how to implement read committed:
+
+<ol>
+<li>prevent dirty writes: 加 row-level locks。</li>
+<li>prevent dirty reads: 跟上述一样加锁, 但很多时候加锁不是很好的选择，requiring read locks does not work well in practice, because one long-running write transaction can force many read-only transactions to wait until the long-running transaction has completed. this harms the response time of read-only transaction and is bad for operability. therefore, a practical way is for every object that is written, the database remembers both the <strong>old commiteed value</strong> and <strong>the new value set by the transaction</strong> that currently holds the writ lock. 其实就是 MVCC</li>
+</ol></li>
+</ol>
+
+<p>但是 read commited 不能很好的解决（幻读）</p>
+
+<p><span style="font-size:larger;"> Snapshot isolation &amp; Repeatable read</span></p>
+
+<p>Read skew or non-repeatable read in most cases is acceptable but not for long DB process like <strong>DB backups</strong> or <strong>analytic queries</strong> and <strong>integrity checks</strong>.</p>
+
+<p>也就是说，在进行 backup 操作的时候，read commited isolation level non-repeatable read 是不可接受的。</p>
+
+<p>snapshot isolation is the most common solution to this problem: The idea is that each transaction reads from a consistent snapshot of the database - that is , the transaction sees all the data that was commited in the database at the start of the transaction. Even if the data is subsequently changed by another transaction, each transaction sees only the old data from that particular point in time. 保证了 in a same transaction, the same read returns same result. reapeatble read.</p>
+
+<p>实现：</p>
+
+<ol>
+<li>跟 read commited 一样，用 lock 来 prevent dirty writes。</li>
+<li>跟 read commited 类似，snapshot isolation 也是使用了多个 version。 if a database only need to provide read commited isolation, but not snapshot isolation, it would be sufficient to keep two versions of an object, the commited version and the overwritten-but-not-yet-commited version. A typical approach is that read commited uses a separate snapshot for each query, while snapshot isolation uses the same snaphost for an entire transaction.</li>
+</ol>
+
+<p><span style="font-size:larger;"> Indexes and snapshot isolation</span></p>
+
+<p>问题：how do indexes work in a multi-version database? one option is to have the index simply point to all versions of an object and require an index query to filter out any object versions that are not visisble to the current transaction. When garbage collection removes old object versions that are no longer visisble to any transaction, the corresponding index entries can also be removed.</p>
+
+<p>&hellip; 略过有点复杂</p>
+
+<p><span style="font-size:larger;"> Preventing lost updates </span></p>
+
+<p>描述下 lost update 的问题</p>
+
+<p>The lost update problem can occur if an application reads some value from the database, modifies it, and writes back the modified value (a <em>read-modify-write cycle</em>). If two transactions do this concurrently, one of the modifications can be lost, because the second write does not include the first modification.</p>
+
+<ul>
+<li>Incrementing a counter or updating an account balance (requires reading the current value, calculating the new value, and writing back the updated value)</li>
+<li>Making a local change to a complex value, e.g., adding an element to a list within a JSON document (requires parsing the document, making the change, and writing back the modified document)</li>
+<li>Two users editing a wiki page at the same time, where each user saves their changes by sending the entire page contents to the server, overwriting whatever is currently in the database</li>
+</ul>
+
+<p><strong>解决措施</strong></p>
+
+<ol>
+<li><p>atomic operations provided by database:通常情况下 update a record, we follow read-modify-write cycles in application code, but luckily, many databases provide atomic update operations.</p>
+
+<p>e.g. in mysql</p>
+
+<pre><code class="language-mysql">UPDATE COUNTERS SET VALUE = VALUE+1 WHERE KEY ='FOO
+</code></pre>
+
+<p>注意 ORM 模型又一个缺点，ORM 非常容易采用 read-modify-write cycle instead of using atomic operations provided by database. <strong>It belongs to a single-object operations</strong>.</p></li>
+
+<li><p>explicit locking: if db does not provide the atomic operations, then the application itself can do an explicit lock on the objects that are going to be updated, then the application can perform a read-modify-write cycle. in this case if any other transactions tries to concurrently read the same object, it is forced to wait until the first read-modify-write cycle has completed. 何时用这个？举个例子：consider a multiplayer game in which several player can move the same figure concurrently, 这种情况下 an atomic operation might not be sufficient.</p></li>
+
+<li><p><strong>atomatically detecing lost updates</strong>: 上面两个方式 是防止 lost udpates, but think in another way, if the transaction manager detects a lost update, abort the transaction and force it to retry its read-modify-write cycle. In fact, this is a very efficient way. PostgreSQL and Oracles provides this feature, but not MySQL. This is a great feature, because it does not require application code to use any special database featrues- you may forget to use a lock or an atomic operation and thus introduce a bug, but lost update detection happens automatically and is thus less error-prone.</p></li>
+
+<li><p><strong>conflict resolution and replication</strong>: in replicated databases, preventing lost updates takes on another dimension: since they have copies of the data on multiple nodes, and the data can potentially be modified concurrently on different nodes. <strong>atomic operations</strong> can work well in a replicated context.</p></li>
+</ol>
+
+<p><span style="font-size:larger;"> Write Skew </span></p>
+
+<p>characterizing write skew</p>
+
+<ol>
+<li>because two transactions are updating two different objects. Write skew can occur, if two transactions read the same objects, and then update some of those objects. Atomic single-object operations dont help, as multiple objects are invovled.</li>
+<li>The automatica detection of lost updates do not help here either.</li>
+<li>Some databbases allow you to configure constraints, which are then enforecd by the database, but most databases do not have built-in support for such constratins, you may be able to implement them with triggers or materialized views, depending on the database, though.</li>
+<li>If can use a serializable isolation level, the second-best option in this case is probably to explictly lock the rows that the transaction depends on.</li>
+</ol>
+
+<p>more examples of write skew:</p>
+
+<ol>
+<li>Meeting room booking systems: there can be two booking for the same meeting room at the same time</li>
+<li>multiplayter game</li>
+<li>claiming a user name</li>
+<li>preventing double - spending</li>
+</ol>
+
+<p>Serializability</p>
+
+<p><span style="font-size:larger;">Serializability: 串行化</span></p>
+
+<p>Serializable isolation is usually regarded as the strongest isolation level. It guarantees that even though transactions may execute in parallel, the end result is the same as if they had executed one at a time, serially without any concurrency. 顾名思义，串行！in other words, the database prevents all possible race conditions.</p>
+
+<p><strong>How to implement serializability</strong></p>
+
+<ol>
+<li>literally executing transactions in a serial order</li>
+<li>Two phase locking (2PL) which used for several decades.</li>
+<li>Optimistic concurrency control techniques, 乐观锁？</li>
+</ol>
+
+<p><strong>Actual serial execution</strong></p>
+
+<p>The simplest way of avoiding concurrency problems is to remove the concurrency entirely: to execute only one transaction at a time, in serial order, on a single thread. 尽管这个 idea 看上去很蠢，但是直到 2007 年才被可行。</p>
+
+<ol>
+<li>RAM became cheap enough that for many use cases it is now feasible to keep the entire active dataset in memory.</li>
+<li>Database designers realized that OLTP transactions are usually short and only make a small number of reads and writes. By contract, long-running queries are typically read-only, so they can be run on a consistent snapshot outside of the serial execution loop.</li>
+</ol>
+
+<p>This approach of executing transactions serially is implemented in VoltDB/H-Store, Redis and Datomic, in fact. A system designed for single-threaded execution can sometimes perform better than a system that supports concurrency, because it can <strong>avoid the coordination overhead of locking.</strong> However, its throughput is limited to that of a single CPU core.</p>
+
+<p><strong>Summary of serial execution</strong></p>
+
+<ol>
+<li>Every transaction must be small and fast, because it takes only one slow transaction to stall all transaction processing.</li>
+<li>It is limited to use cases where the active dataset can fit in memory. Rarely accessed data counld potentially be moved to disk, but if needed to be accessed in a single-threaded transaction, the system would get very slow.</li>
+<li>Write throughput must be low enough to be handled on a single CPU core, or else transactions need to be partitioned without requiring cross-parittion coordination.</li>
+<li>Cross-parition transactions are possible, but there is a hard limit to the extent to which they can be used.</li>
+</ol>
+
+<p><strong>Two-Phase Locking(2PL)</strong></p>
+
+<p>The blocking of readers and writers is implemented by a having a lock on each object in the database. The lock can either be in shared mode or in exclusive mode. The lock is used as follows:</p>
+
+<ol>
+<li>If a transaction wants to read an object, it must first acquire the lock in shared mode. Several transdactions are allowed to hold the lock in shared mode simultaneously, but if another transaction already has an exclusive lock on the object, theest transactions must wait.</li>
+<li>If a transaction wants to write to an object, it must first acquire the lock in exclusive mode. No other transaction may hold the lock at the same time(either in sahred or in exclusive mode), so if there is any existing lock on the object. The transaction must wait.</li>
+<li>After a transaction has accquired the lock, it must continue to hold the lock until the end of the transaction(commit or abort). This is where the name &ldquo;two-phase&rdquo; comes from: the first phase(while the transaction is executing) is when the locks are acquired, and the second phase (at the end of the transcation) is when all the locks are released.</li>
+</ol>
+
+<p>Since so many locks are in use, it can happen quite easily that transaction A is stuck waiting for trasaction B to release its lock, and vice versa. This situation is called deadlock. The database automatically detects deadlocks between transdactions and aborts one of them so that the others can make progress. The aborted transaction needs to be retried by the application.</p>
+
+<p><strong>Performance of the 2PL</strong></p>
+
+<p>the big downside of two-phase locking and the reason why it hasnot been used by everybody since the 1970s, is performance: transaction throughput and response times of quereis are significantly worse under 2PL than under weak isolation.</p>
+
+<p>2PL reduces a lot of concurrency and creates a lot locks(overhead)</p>
+
+<p>Under 2PL, deadlocks can happen much more frequently.</p>
+
+<p><strong>几种不同的锁 了解下</strong></p>
+
+<ol>
+<li>Shared Locks</li>
+<li>Exclusive Locks</li>
+<li>Predicate Locks</li>
+<li>Index-Range Locks</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">lekai</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2019-01-22</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/ddia_chapter8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Designing Data-Intensive Applications 8: The trouble with distributed systems</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/ddia_chapter6/">
+            <span class="next-text nav-default">Designing Data-Intensive Applications 6: Partition</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

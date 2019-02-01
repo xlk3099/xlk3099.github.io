@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（四）：Array 数组 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="在大多数编程语言中, 数组都是最常见的数据储存类型. go也不例外, 而且在go里, slice, map 的底层都是通过数组实现的. 数组的内部实现 在go 里, 数组是一" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action-array/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（四）：Array 数组" />
+<meta property="og:description" content="在大多数编程语言中, 数组都是最常见的数据储存类型. go也不例外, 而且在go里, slice, map 的底层都是通过数组实现的. 数组的内部实现 在go 里, 数组是一" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action-array/" />
+<meta property="article:published_time" content="2018-04-10T20:35:36&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-10T20:35:36&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（四）：Array 数组">
+<meta itemprop="description" content="在大多数编程语言中, 数组都是最常见的数据储存类型. go也不例外, 而且在go里, slice, map 的底层都是通过数组实现的. 数组的内部实现 在go 里, 数组是一">
+
+
+<meta itemprop="datePublished" content="2018-04-10T20:35:36&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-10T20:35:36&#43;08:00" />
+<meta itemprop="wordCount" content="1428">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（四）：Array 数组"/>
+<meta name="twitter:description" content="在大多数编程语言中, 数组都是最常见的数据储存类型. go也不例外, 而且在go里, slice, map 的底层都是通过数组实现的. 数组的内部实现 在go 里, 数组是一"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（四）：Array 数组</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-10 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#数组的内部实现">数组的内部实现</a></li>
+<li><a href="#数组的声明和初始化">数组的声明和初始化</a></li>
+<li><a href="#数组的使用">数组的使用</a></li>
+<li><a href="#多维数组">多维数组</a></li>
+<li><a href="#数组在函数之间的传递">数组在函数之间的传递</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>在大多数编程语言中, 数组都是最常见的数据储存类型.
+go也不例外, 而且在go里, slice, map 的底层都是通过数组实现的.</p>
+
+<p></br></p>
+
+<h1 id="数组的内部实现">数组的内部实现</h1>
+
+<hr />
+
+<p>在go 里, 数组是一个固定长度, 包含了一段连续的相同类型数据的数据结构.
+这些数据类型可以是built-in 比如int, strings, 也可以是其它数据类型如struct.</p>
+
+<div class='align-center'>
+  <p>数组内部示意图
+<img src="https://user-images.githubusercontent.com/1768412/38557809-cda6037a-3d00-11e8-95f9-0c315fcc45cc.png" alt="image" />
+ (图片来自&rdquo;go in action&rdquo;)</p>
+
+</div>
+
+<p>因为数组在内存里是连续分配的, 因此它使得CPU可以对正在使用的内存数据缓存更久. 而且既然每个数据类型一致, 我们使用迭代方式, 就能以固定速度所以数组中的任意数据. <code>O(1)</code>.</p>
+
+<p></br></p>
+
+<h1 id="数组的声明和初始化">数组的声明和初始化</h1>
+
+<hr />
+
+<p><strong>声明一个数组:</strong></p>
+
+<ol>
+<li>要储存的数据类型.</li>
+<li>要储存的数据类型大小.</li>
+</ol>
+
+<pre><code class="language-go">// 声明一个包含5个整型数据的数组
+var array [5]int
+// 类型 int
+// 大小 5
+</code></pre>
+
+<p>要注意, 一旦数组被声明, 那么它的长度跟类型都是不能更改的. 如果你发现数组大小满足不了使用需求, 那么你需要重新建立一个<code>新</code>的<code>更大</code>的数组, 然后把数据从原来的数组里面拷贝到新的数组里, 再接着使用.</p>
+
+<p>go的一个特性就是, 当一个变量被声明的时候, 它们总是被赋予对应类型的初始值(0值 or zero value). 数组也不例外. 比如上述定义的大小为5的整型数组, 在声明后, 它的初始值其实是{0,0,0,0,0}.</p>
+
+<p><strong>初始化:</strong>
+初始化没什么好讲的, 很直接:</p>
+
+<pre><code class="language-go">// [...] 表明 数组大小由初始化的数量决定.
+array := [...]int{10,20,30,40,50}
+</code></pre>
+
+<p></br>
+<code>初始化小技巧</code>: 利用0值特性, 有些情况下, 我们只对数组里的部分元素进行赋值. 在数组初始化时, 我们可以通过使用通过元素的位置, 来完成上诉操作.</p>
+
+<pre><code class="language-go">array :=[5]int{1:10, 2:20}
+</code></pre>
+
+<p>这样初始化以后, 我们得到的array值是{0,10,20,0,0}.</p>
+
+<p></br></p>
+
+<h1 id="数组的使用">数组的使用</h1>
+
+<hr />
+
+<p>访问数组中的单个元素:</p>
+
+<pre><code class="language-go">array := [5]int{10,20,30,40,50}
+
+//把第三个元素值改为35
+array[2] = 35
+</code></pre>
+
+<p>抛开储存值外, 数组也可以用来储存指针.</p>
+
+<pre><code class="language-go">array := [5]*int{0: new(int), 1: new(int)}
+// 给元素1和元素2赋值
+*array[0] = 10
+*array[1] = 20
+</code></pre>
+
+<div class='align-center'>
+  <p>附: 上面定义的array的内部示意图
+<img src="https://user-images.githubusercontent.com/1768412/38558753-ad3c544c-3d03-11e8-88ba-17bd0d124317.png" alt="image" /></p>
+
+</div>
+
+<p>在go里面, 数组是个value(值类型). 也就是说数组可以用来彼此之间赋值. 因为可以用变量名代表整个数组, 因此同样类型的数组可以通过变量名赋值. 比如<code>array1 = array2</code> 如果类型不一致, 编译器则会在编译的时候报错.</p>
+
+<p>当然, 复制指针型数组时, 被赋值的是指针值(地址), 而不是指针指向的实际类型值.</p>
+
+<pre><code class="language-go">//声明第一个字符串型指针数组
+var array1 [3]*string
+
+//声明第二个字符串指针型数组并给每个数组元素初始化0值
+array2 := [3]*string {new(string), new(string), new(string)}
+
+*array1[0] = &quot;Red&quot;
+*array1[1] = &quot;Blue&quot;
+*array1[2] = &quot;Green&quot;
+
+// 把数组2的值赋值给数组1
+array1 = array2
+</code></pre>
+
+<div class='align-center'>
+  <p>赋值完之后的数组1和数组2示意图
+<img src="https://user-images.githubusercontent.com/1768412/38559153-d3e91624-3d04-11e8-838a-018812570106.png" alt="image" /></p>
+
+</div>
+
+<p>要注意的是, 因为是上面定义的两个数组包含的是指针类型, 所以这时候如果我们修改任一数组元素指针指向值, 那么对应的的另一个数组指针指向值也会发生变化.</p>
+
+<pre><code class="language-go">//修改数组1第一个元素指向值
+*array1[1] = &quot;Black&quot;
+fmt.Println(*array2[1])
+//输出: black
+</code></pre>
+
+<p></br></p>
+
+<h1 id="多维数组">多维数组</h1>
+
+<hr />
+
+<p>在做数据分析, AI 或者machine learning时, 通常需要用到多维数组. 在go里面, 数组本身是一维的, 但可以通过组合, 很方便的得到多维数组.</p>
+
+<pre><code class="language-go">//定义一个2x2整型数组
+var array [2][2]int
+
+// 访问第二排第二列元素,并复制其为10
+array[1][1] = 10
+</code></pre>
+
+<p>跟数组一样, 只要类型一致, 也可以彼此之间直接赋值.</p>
+
+<pre><code class="language-go">var array2 [2][2]int
+// 为每个元素赋值
+array2[0][0] = 10
+array2[0][1] = 20
+array2[1][0] = 30
+array2[1][1] = 40
+// 将 array2 的值复制给 array1
+array1 = array2
+</code></pre>
+
+<p></br></p>
+
+<h1 id="数组在函数之间的传递">数组在函数之间的传递</h1>
+
+<hr />
+
+<p>根据内存和性能来讲, 在函数之间如果通过值传递(pass by value)来传递数组的话, 是一项开销很大的操作.
+举个🌰: 声明一个大小为1M的<strong>int</strong>数组,在64位架构,意味着800万字节, 也就是8MB内存.
+反之, 使用数组指针, 则只需要8个字节即可.</p>
+
+<pre><code class="language-go">//定义一个100万大小的整型数组
+var array [1e6] int
+
+// 传给函数foo
+foo(&amp;array)
+
+// 函数foo 接受一个指向100万个整型值数组指针
+func foo(array *[1e6]int){
+    ...
+}
+</code></pre>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-10</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action_slice/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（五）：Slice 切片</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action_tools/">
+            <span class="next-text nav-default">go实战读书笔记（三）：go tools 开发工具</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

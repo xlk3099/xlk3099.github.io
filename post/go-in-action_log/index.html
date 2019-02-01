@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（十七）: 标准库 - Log - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="go提供了很强大的标准库, 其中经常被用到的就是log, json 跟 io. 这篇我们看下log的使用. log在go开发中被使用的很多, 无论是用来debug程" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action_log/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（十七）: 标准库 - Log" />
+<meta property="og:description" content="go提供了很强大的标准库, 其中经常被用到的就是log, json 跟 io. 这篇我们看下log的使用. log在go开发中被使用的很多, 无论是用来debug程" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action_log/" />
+<meta property="article:published_time" content="2018-04-17T20:17:20&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-17T20:17:20&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（十七）: 标准库 - Log">
+<meta itemprop="description" content="go提供了很强大的标准库, 其中经常被用到的就是log, json 跟 io. 这篇我们看下log的使用. log在go开发中被使用的很多, 无论是用来debug程">
+
+
+<meta itemprop="datePublished" content="2018-04-17T20:17:20&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-17T20:17:20&#43;08:00" />
+<meta itemprop="wordCount" content="2469">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（十七）: 标准库 - Log"/>
+<meta name="twitter:description" content="go提供了很强大的标准库, 其中经常被用到的就是log, json 跟 io. 这篇我们看下log的使用. log在go开发中被使用的很多, 无论是用来debug程"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（十七）: 标准库 - Log</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-17 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#log-包基本使用">log 包基本使用</a></li>
+<li><a href="#logger-输出原理">logger 输出原理</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>go提供了很强大的标准库, 其中经常被用到的就是log, json 跟 io. 这篇我们看下log的使用.</p>
+
+<p>log在go开发中被使用的很多, 无论是用来debug程序, 还是用来帮助添加日志分析程序运行健康与否, 都基本离不开它.
+关于log的起源, 其实是来自linux系统日志, 随后逐渐各大应用程序都有了自己的日志系统, 便于开发, 维护人员尽早发现程序问题.</p>
+
+<p>现阶段, 比较容易接受的log信息是这样的:</p>
+
+<blockquote>
+<p>[Severity]-[TimeStamp]-[Application ID]-[ThreadID]-[Call Depth]-[MSG]</p>
+</blockquote>
+
+<p>其中, [Applicatoin ID] 跟 [Thread ID] 在并行或是并发环境中很有必要, 在分布式系统上如果有多个版本应用程序运行, 可能还要加上[Application Version] 等额外信息方便迅速找到问题. 但最最基本的
+[Severity] [TimeStamp] [Msg] 肯定是要有的.</p>
+
+<p><code>msg</code> 一般而言是string格式, 但好多主流开源软件也支持json输出格式, 或者[KV] pair输出格式.
+比如go社区比较出名的<a href="https://github.com/sirupsen/logrus"><code>logrus</code></a></p>
+
+<p>关于severity, 根据<a href="https://tools.ietf.org/html/rfc5424#section-6.3.5">RFC5424</a> 对于系统日志, 有8个级别, 但对于应用程序, 最常用的是六个级别, 按严重程度从低到高排序: Trace, Info, Debug, Warn, Error, Fatal.</p>
+
+<p>那么, 我们看看如何使用go自带的log包 实现我们自己的log库, 我们希望输出符合:</p>
+
+<blockquote>
+<p>[Severity]-[TimeStamp]-[Call Depth]-[Msg]</p>
+</blockquote>
+
+<h1 id="log-包基本使用">log 包基本使用</h1>
+
+<hr />
+
+<p>一个典型的跟踪日志输出, 由log包产生:</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;log&quot;
+)
+
+func main() {
+	log.Println(&quot;log 使用demo&quot;)
+}
+/// output
+2018/04/17 20:25:18 log 使用demo
+</code></pre>
+
+<p>上述代码可以看到, 由log包产生的日志包含了, 日期-时间, 源文件代码所在行, 最后是日志消息.
+用法看上去跟<code>fmt.Println</code>很相似, 区别是从<code>fmt.Println</code>变成了<code>log.Println</code>, 而且输出前添加了时间信息而已.
+但这跟标准的log信息有些出入.</p>
+
+<p>好在go的log包邮很多参数可以设置, 让我们看下log的支持参数设置跟方法.</p>
+
+<pre><code class="language-go">const (
+	Ldate         = 1 &lt;&lt; iota     // 设置开启日志前缀日期: 2009/01/23
+	Ltime                         // 设置开启日志前缀时间: 01:23:23
+	Lmicroseconds                 // 设置开启日志前缀时间毫秒级: 01:23:23.123123.
+	Llongfile                     // 设置开启日志前缀完整文件路径跟行数: /a/b/c/d.go:23
+	Lshortfile                    // 设置开启日志前缀最终文件名跟行数: d.go:23. 会覆盖Llongfile设置
+	LUTC                          // 如果Ldate活着Ltime被开启, 那么采用UTC格式
+	LstdFlags     = Ldate | Ltime // 初始flags设置, 开启时间日期.
+)
+</code></pre>
+
+<p>1 &lt;&lt; iota 是go给参数设置值的一种常见方法, 这里就不介绍了, 感兴趣的小伙伴可以自己搜索下.
+上面的设置其实就是:</p>
+
+<pre><code class="language-go">const (
+	Ldate         = 1
+	Ltime         = 2
+	Lmicroseconds = 4
+	Llongfile     = 8
+	Lshortfile    = 16
+	LUTC          = 32
+	LstdFlags     = Ldate | Ltime
+)
+</code></pre>
+
+<p>log包里提供了方法<code>SetFlags</code> 来开关这些设置.
+还是最初的例子, 设置日志输出按照 <code>日期 时间精准到毫秒 长文件行数 信息</code> 格式:</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;log&quot;
+)
+
+func init() {
+	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Llongfile)
+}
+
+func main() {
+	log.Println(&quot;log 使用demo&quot;)
+}
+</code></pre>
+
+<p>得到输出:</p>
+
+<pre><code>➜  xlk3099 go run main.go
+2018/04/17 21:02:34.081423 /Users/qianqian/go/src/github.com/xlk3099/main.go:12: log 使用demo
+</code></pre>
+
+<p>在上面, 我们添加了一个新的函数<code>init</code>, 在里面我们设置<code>log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Llongfile)</code>. 一般而言, 配置信息都会放在每个<code>init</code>函数里, 是go编程里的一个通用习惯.</p>
+
+<p>上面就是log包自带的配置方式, 采用的是常见的通过bitwise <code>OR</code> operation, 来实现多个参数同时支持.</p>
+
+<p>离我们文章一开始要求只差一步, 就是<code>Level</code> 信息.</p>
+
+<p>Log包有很多方法, 其中之一就是设置SetPrefix.
+修改之前的init函数:</p>
+
+<pre><code class="language-go">func init() {
+	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Llongfile)
+	log.SetPrefix(&quot;[Trace]&quot;)
+}
+</code></pre>
+
+<p>再运行main, 输出变成了:</p>
+
+<pre><code class="language-go">[Trace] 2018/04/17 21:48:49.646283 /Users/qianqian/go/src/github.com/xlk3099/main.go:13: log 使用demo
+</code></pre>
+
+<p>方便时方便, 但这只是一个Trace级别的输出, 很多情况下我们需要WARN, ERRO, 甚至是FATAL的输出, 不可能每次输出前都SetPrefix.</p>
+
+<p>再仔细看下log包, 发现log包支持构造自己的Logger类型</p>
+
+<pre><code class="language-go">type Logger struct {
+	mu     sync.Mutex // ensures atomic writes; protects the following fields
+	prefix string     // prefix to write at beginning of each line
+	flag   int        // properties
+	out    io.Writer  // destination for output
+	buf    []byte     // for accumulating text to write
+}
+</code></pre>
+
+<p>先看下Logger的结构类型, 有四个字段:</p>
+
+<ul>
+<li>mu 互斥锁, 保证原子级别的写操作, 并保护多goroutine下prefix, flag, out, buf.</li>
+<li>prefix 用户自定义前缀</li>
+<li>flag 日志配置设定</li>
+<li>out 输出目的地</li>
+<li>buf 日志文本缓冲, 用于最后输出</li>
+</ul>
+
+<p>而我们上面调用的<code>.SetPrefix</code>, <code>Println</code> 其实是用的log包默认的Logger <code>std</code>.
+到这里就比较简单了.</p>
+
+<p>为了满足支持不同Level的log, 我们可以声明6个不同级别的logger, 然后在init里初始化它们.</p>
+
+<pre><code class="language-go">// 定义不同级别的logger
+var (
+	Trace *log.Logger
+	Debug *log.Logger
+	Info  *log.Logger
+	Warn  *log.Logger
+	Error *log.Logger
+	Fatal *log.Logger
+)
+
+func init() {
+	Trace = log.New(os.Stdout, &quot;[Trace]: &quot;, log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
+	Debug = log.New(os.Stdout, &quot;[Debug]: &quot;, log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
+	Info = log.New(os.Stdout, &quot;[Info]: &quot;, log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
+	Warn = log.New(os.Stdout, &quot;[Warn]: &quot;, log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
+	Error = log.New(os.Stdout, &quot;[Error]: &quot;, log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
+	Fatal = log.New(os.Stdout, &quot;[Fatal]: &quot;, log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
+}
+</code></pre>
+
+<p>测试:</p>
+
+<pre><code class="language-go">func main() {
+	Trace.Println(&quot;这是Trace&quot;)
+	Debug.Println(&quot;这是Debug&quot;)
+	Info.Println(&quot;这是Info&quot;)
+	Warn.Println(&quot;这是Warn&quot;)
+	Error.Println(&quot;这是Error&quot;)
+	Fatal.Println(&quot;这是Fatal&quot;)
+}
+</code></pre>
+
+<p>输出:</p>
+
+<pre><code>&gt; xlk3099 go run main.go
+[Trace]: 2018/04/17 21:59:40.679369 main.go:28: 这是Trace
+[Debug]: 2018/04/17 21:59:40.679435 main.go:29: 这是Debug
+[Info]: 2018/04/17 21:59:40.679453 main.go:30: 这是Info
+[Warn]: 2018/04/17 21:59:40.679457 main.go:31: 这是Warn
+[Error]: 2018/04/17 21:59:40.679460 main.go:32: 这是Error
+[Fatal]: 2018/04/17 21:59:40.679475 main.go:33: 这是Fatal
+</code></pre>
+
+<p>这样就完成了一个简单版的支持不同级别的logger.</p>
+
+<h1 id="logger-输出原理">logger 输出原理</h1>
+
+<hr />
+
+<p>再细看log包, 观察logger的工厂函数.</p>
+
+<pre><code class="language-go">func New(out io.Writer, prefix string, flag int) *Logger {
+	return &amp;Logger{out: out, prefix: prefix, flag: flag}
+}
+</code></pre>
+
+<p>需要的三个参数都是Logger的内置字段. 注意到out是个io.Writter类型, 也就是说, logger的输出其实是不止stdout, 也可以是file(文件), 凡是实现了io.Writer接口Write的类型都可以. 最后看一下Output函数,</p>
+
+<pre><code class="language-go">func (l *Logger) Output(calldepth int, s string) error {
+	now := time.Now() // get this early.
+	var file string
+	var line int
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if l.flag&amp;(Lshortfile|Llongfile) != 0 {
+		// Release lock while getting caller info - it's expensive.
+		l.mu.Unlock()
+		var ok bool
+		_, file, line, ok = runtime.Caller(calldepth)
+		if !ok {
+			file = &quot;???&quot;
+			line = 0
+		}
+		l.mu.Lock()
+	}
+	l.buf = l.buf[:0]
+	l.formatHeader(&amp;l.buf, now, file, line)
+	l.buf = append(l.buf, s...)
+	if len(s) == 0 || s[len(s)-1] != '\n' {
+		l.buf = append(l.buf, '\n')
+	}
+	_, err := l.out.Write(l.buf)
+	return err
+}
+</code></pre>
+
+<p>其实实现原理很简单, 就是将所要求的信息, 按照定义格式写入到logger的 buf类别里, 最后写入到out.</p>
+
+<p>到这里logger就讲完了. 有兴趣的小伙伴可以在这个基础上尝试添加更多很多logger格式:</p>
+
+<ul>
+<li>给stdout(命令行)输出的log 添加颜色, (仅限linux or mac系统)</li>
+<li>给输出格式化, 用成kv模式.</li>
+<li>用一个logger实现Trace, Debug, Info, Warn, Error, Fatal的不同级别输出.</li>
+<li>可以尝试log输出到文件, 邮件, git 甚至是slack里.</li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-17</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action_json/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（十八）: 标准库 - JSON</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action_work/">
+            <span class="next-text nav-default">go实战读书笔记（十六）: 并发模式 - Work</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

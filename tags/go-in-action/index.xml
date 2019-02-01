@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go in Action on Even - A super concise theme for Hugo</title>
+    <link>http://localhost:1313/tags/go-in-action/</link>
+    <description>Recent content in Go in Action on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 22 Apr 2018 20:54:32 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/tags/go-in-action/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>go实战读书笔记（二十一）: benchmark</title>
+      <link>http://localhost:1313/post/go-in-action_benchmark/</link>
+      <pubDate>Sun, 22 Apr 2018 20:54:32 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_benchmark/</guid>
+      <description>基准测试, 又名性能测试, 很多时候同一问题有多个解决方案, 我们需要查看哪种解决方案性能更好的时候, 基准测试就很有用. 基准测试也可以用来测试某段</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（二十）: 单元测试</title>
+      <link>http://localhost:1313/post/go-in-action_testing/</link>
+      <pubDate>Sun, 22 Apr 2018 15:42:11 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_testing/</guid>
+      <description>go的单测. go的测试文件都已*_test.go结尾. 不管是单元测试, 还是benchmark测试. 执行go测试文件指令为: go test [测试文件]|</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十九）: 标准库 - Input &amp; Output</title>
+      <link>http://localhost:1313/post/go-in-action_input_output/</link>
+      <pubDate>Thu, 19 Apr 2018 21:36:30 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_input_output/</guid>
+      <description>unix 系统(包括linux&amp;amp;macos) 一个很好用的地方就是一个程序的输出可以作为另一个程序的输入. 把多个不同作用的小程序整合到一起, 写</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十八）: 标准库 - JSON</title>
+      <link>http://localhost:1313/post/go-in-action_json/</link>
+      <pubDate>Wed, 18 Apr 2018 19:03:13 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_json/</guid>
+      <description>go经常遇到的一个问题就是JSON解码, 现在很多data serialization 都是JSON格式. 可以说是现在后端跟前端最常用的通信数据格式. 比如REST API啊</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十七）: 标准库 - Log</title>
+      <link>http://localhost:1313/post/go-in-action_log/</link>
+      <pubDate>Tue, 17 Apr 2018 20:17:20 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_log/</guid>
+      <description>go提供了很强大的标准库, 其中经常被用到的就是log, json 跟 io. 这篇我们看下log的使用. log在go开发中被使用的很多, 无论是用来debug程</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十六）: 并发模式 - Work</title>
+      <link>http://localhost:1313/post/go-in-action_work/</link>
+      <pubDate>Mon, 16 Apr 2018 18:45:06 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_work/</guid>
+      <description>work 包利用了无缓冲通道来创建一个goroutine池, (注意, 上一章我们创建了一个资源池, 这里我们创建的是goroutine池) 这些gorou</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十五）: 并发模式 - Pool</title>
+      <link>http://localhost:1313/post/go-in-action_pool/</link>
+      <pubDate>Mon, 16 Apr 2018 15:49:32 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_pool/</guid>
+      <description>上一节介绍了用go实现Runner, 这一节会介绍利用go的缓冲区通道跟goroutines实现资源池开发. 资源池用来管理任意数量的gorou</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十四）: 并发模式 - Runner</title>
+      <link>http://localhost:1313/post/go-in-action_runner/</link>
+      <pubDate>Sun, 15 Apr 2018 17:53:27 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_runner/</guid>
+      <description>在前几章中, 学到了go的并发, 通道是如何工作的, 接下来会介绍三种go常见的并发模式, runner, pool, worker. 本篇会展示使用通道来监视程序的执行时间, 生命周期,</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十三）: channel</title>
+      <link>http://localhost:1313/post/go-in-action_channel/</link>
+      <pubDate>Sun, 15 Apr 2018 16:12:23 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_channel/</guid>
+      <description>中文书里把channel翻译成通道, 虽然很形象, 还是不喜欢, 就保持英文名channel吧. 在上一篇介绍了race condition, 以及通过使用mutex或者</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十二）: race conditions 竞争状态</title>
+      <link>http://localhost:1313/post/go-in-action_race_condition/</link>
+      <pubDate>Sun, 15 Apr 2018 15:00:28 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_race_condition/</guid>
+      <description>并发中的一大难点就是访问共享资源时, 多个线程或(goroutines in go) 尝试同时对这个资源进行读写, 这种状态叫做 race condition, 非常容易引起问题. 一般而</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十一）: goroutine</title>
+      <link>http://localhost:1313/post/go-in-action-goroutine/</link>
+      <pubDate>Sun, 15 Apr 2018 12:02:23 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action-goroutine/</guid>
+      <description>之前我们提到过, go 语法和运行时直接内置了对并发的支持(通过goroutine跟channel). go的并发同步模型是来自于一个叫做通信顺讯进</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十）: export &amp; unexport</title>
+      <link>http://localhost:1313/post/go-in-action_export_unexport/</link>
+      <pubDate>Sat, 14 Apr 2018 22:23:29 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_export_unexport/</guid>
+      <description>go在包level支持标识符的公开或者隐藏. 关于如何公开还是不公开的规则很简单, 如果要公开包里的类型, 或者方法, 参数, 只需要将该类型, 方法,</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（九）: Type embedding 类型嵌入</title>
+      <link>http://localhost:1313/post/go-in-action_embeded_type/</link>
+      <pubDate>Sat, 14 Apr 2018 21:51:35 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_embeded_type/</guid>
+      <description>go开发一段时间, 大家就会发现, 如果我想改已有原始类型添加方法怎么办? 可以通过类型嵌入来实现. 类型嵌入是将已有类型直接声明在新的结构类型里,</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（八）: interface 接口</title>
+      <link>http://localhost:1313/post/go-in-action_interface/</link>
+      <pubDate>Sat, 14 Apr 2018 20:31:15 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_interface/</guid>
+      <description>多态是所有现代高级编程语言最基本的一个特性. 多态指代码能根据类型的具体实现采取不同行为的能力, 在go里, 多态的实现通过实现interface</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（七）: struct 结构类型</title>
+      <link>http://localhost:1313/post/go-in-action_struct/</link>
+      <pubDate>Sat, 14 Apr 2018 16:41:13 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_struct/</guid>
+      <description>在介绍篇就强调过, go是静态语言类型. 当编译器了解到数据类型信息的时候, 它可以保障程序用一种安全的方式在处理数据. 每一种数据类型都告诉了编译</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（六）：Map 映射</title>
+      <link>http://localhost:1313/post/go-in-action_map/</link>
+      <pubDate>Sat, 14 Apr 2018 13:43:58 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_map/</guid>
+      <description>不喜欢中文名映射, 还是用map吧&amp;hellip; Map 是一种用来存储一系列K/V键值对的数据结构. Map是无序的. Map的内部构成 先看一下map</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（五）：Slice 切片</title>
+      <link>http://localhost:1313/post/go-in-action_slice/</link>
+      <pubDate>Sat, 14 Apr 2018 11:18:08 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_slice/</guid>
+      <description>上一篇讲了数组， 但数组有个局限， 就是一旦数组被声明， 大小不可变. 切片弥补了数组的短板，可以按需求自动增长缩小， 可以当做动态数组使用。 *切片的</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（四）：Array 数组</title>
+      <link>http://localhost:1313/post/go-in-action-array/</link>
+      <pubDate>Tue, 10 Apr 2018 20:35:36 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action-array/</guid>
+      <description>在大多数编程语言中, 数组都是最常见的数据储存类型. go也不例外, 而且在go里, slice, map 的底层都是通过数组实现的. 数组的内部实现 在go 里, 数组是一</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（三）：go tools 开发工具</title>
+      <link>http://localhost:1313/post/go-in-action_tools/</link>
+      <pubDate>Mon, 09 Apr 2018 22:38:33 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_tools/</guid>
+      <description>go 本身是一个非常强大的命令工具. 打开命令行, 输入go, 敲击回车: ➜ ~ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files and cached files doc show documentation for package or symbol</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（二）：package 包管理</title>
+      <link>http://localhost:1313/post/go-in-action_package/</link>
+      <pubDate>Tue, 03 Apr 2018 22:20:10 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_package/</guid>
+      <description>包的结构跟命名 所有go程序都由若干个包组成, 每个包里面可以包含若干go文件. 举个🌰, go自带的http包: net/http/ cgi/ cookiejar/ testdata/ fcgi/ httptest/ httputil/ pprof/ testdata/ 在这里http是</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（一） ：go简介 </title>
+      <link>http://localhost:1313/post/go-in-action_introduction/</link>
+      <pubDate>Mon, 02 Apr 2018 22:08:46 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_introduction/</guid>
+      <description>开发速度 相比C跟C++，go的编译器更为简洁快速，在编译一个go项目的时候，编译器只需要查找直接引用的包，而不需要像java，C或者C++那</description>
+    </item>
+    
+  </channel>
+</rss>

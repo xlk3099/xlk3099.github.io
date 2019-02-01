@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ci on Even - A super concise theme for Hugo</title>
+    <link>http://localhost:1313/tags/ci/</link>
+    <description>Recent content in Ci on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 23 Jul 2018 10:24:55 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/tags/ci/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Designing Data-Intensive Applications 1 - 可靠，可扩展，可维护的应用程序</title>
+      <link>http://localhost:1313/post/ddia-chapter-1/</link>
+      <pubDate>Mon, 23 Jul 2018 10:24:55 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ddia-chapter-1/</guid>
+      <description>这本书从今年一月就开始看了， 一开始是思源推荐给我的，因为之前在欧特克的工作没有怎么接触大规模的数据需求项目，期间读了几次断断续续，也没完整读</description>
+    </item>
+    
+    <item>
+      <title>使用travis 搭建blog的 continuous deployment</title>
+      <link>http://localhost:1313/post/ci-travis-blog/</link>
+      <pubDate>Mon, 19 Mar 2018 10:24:55 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ci-travis-blog/</guid>
+      <description>使用hugo build static blogs 确实很方便，但有个问题，尤其是经常写blog的话。 每次更新一篇日志，都得用hugo -t [theme] 重新build 一遍，然后再推送到对应</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tech on Even - A super concise theme for Hugo</title>
+    <link>http://localhost:1313/categories/tech/</link>
+    <description>Recent content in Tech on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 19 Jan 2019 17:48:02 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/categories/tech/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Designing Data-Intensive Applications 5: Replication</title>
+      <link>http://localhost:1313/post/ddia_chapter5/</link>
+      <pubDate>Sat, 19 Jan 2019 17:48:02 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ddia_chapter5/</guid>
+      <description>Replication 定义 Keep a copy of the same data on multiple machines via networks 作用 Increase availability keep the system running, even one machine (or several machines, or even one data center) goes down place data geographically close to users, so users can interact with the data faster Increase reliability allow disconnected operation: allow an application continue working even when there is a network interruption. e.g. 日历</description>
+    </item>
+    
+    <item>
+      <title>利用ssh config维护github多个private repo的deploy keys</title>
+      <link>http://localhost:1313/post/ssh_handle_multiple_github_deploy_keys/</link>
+      <pubDate>Thu, 15 Nov 2018 10:50:10 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ssh_handle_multiple_github_deploy_keys/</guid>
+      <description>有时候会遇上这样的需求：在一个或者多个服务器上，不想通过账号密码拉取存放在 github 上的多个 private repo，典型的例子便是 CI/CD 工具。 CI/CD 自动推送中，很关键的</description>
+    </item>
+    
+    <item>
+      <title>用circle ci 跟flask做自动化集成测试的一次经历</title>
+      <link>http://localhost:1313/post/circleci_and_flask/</link>
+      <pubDate>Wed, 14 Nov 2018 16:35:40 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/circleci_and_flask/</guid>
+      <description>需求 最近手头工作的项目代码是放在公网github，作为private repo，采用的CI是circle ci，但需要跑的集成测试，是部署在AW</description>
+    </item>
+    
+    <item>
+      <title>golang slice cut 分析</title>
+      <link>http://localhost:1313/post/golang-slice-cut-analysis/</link>
+      <pubDate>Wed, 31 Oct 2018 10:37:01 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/golang-slice-cut-analysis/</guid>
+      <description>昨天在刷Leetcode的时候， 碰到一题：Remove Duplicates from Sorted Array II, 当时第一反应就是直接用slice的cut技巧，直接移除重复部分。 这道题目提醒</description>
+    </item>
+    
+    <item>
+      <title>gopher的ppt：slide</title>
+      <link>http://localhost:1313/post/golang_present_slide/</link>
+      <pubDate>Tue, 30 Oct 2018 15:28:18 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/golang_present_slide/</guid>
+      <description>slide是随着go语言诞生而产生的一种幻灯片格式。 官方文档 有记录present的各种syntax以及例子， 想了想，还是做个简单的翻译放入自</description>
+    </item>
+    
+    <item>
+      <title>高性能MySQL 第五章: 高效索引</title>
+      <link>http://localhost:1313/post/high_performance_mysql_chapter5_summary/</link>
+      <pubDate>Sun, 28 Oct 2018 22:42:36 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/high_performance_mysql_chapter5_summary/</guid>
+      <description>第五章整体来讲是非常有价值的, 读几遍都不过分, 珠玉非常多, 先记下部分深有感触的部分. 排序类查询优化 我个人近期对这个感触是比较深的, 如果fil</description>
+    </item>
+    
+    <item>
+      <title>LRU golang 实现</title>
+      <link>http://localhost:1313/post/leet_code_lru/</link>
+      <pubDate>Sat, 27 Oct 2018 11:57:27 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/leet_code_lru/</guid>
+      <description>今天刷leetcode的时候就做到了LRU实现 链接: https://leetcode.com/problems/lru-cache/description/. 也是巧, 前两天刚发布一篇关于给redis list添加expire属性, 其实跟LRU思路</description>
+    </item>
+    
+    <item>
+      <title>给Redis的list添加超时属性</title>
+      <link>http://localhost:1313/post/redis_sorted_list_expire/</link>
+      <pubDate>Thu, 25 Oct 2018 17:28:39 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/redis_sorted_list_expire/</guid>
+      <description>Redis里简单的K/V Pair默认是有expire属性的，当设定超时时间，一旦超时，设置的k/v对会自动被清除，但对于在list的item</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu下，golang myzsh 快速搭建</title>
+      <link>http://localhost:1313/post/ubuntu-go-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link>
+      <pubDate>Wed, 25 Jul 2018 14:02:00 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ubuntu-go-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid>
+      <description>安装build essential sudo apt-get install build-essential 安装oh-my-zsh apt install zsh sh -c &amp;quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&amp;quot; 安装最新的golang sudo apt-get update sudo apt-get -y upgrade wget https://dl.google.com/go/go1.10.3.linux-amd64.tar.gz sudo tar -xvf go1.10.3.linux-amd64.tar.gz sudo mv go /usr/local 更新golang 环境</description>
+    </item>
+    
+    <item>
+      <title>Linux 指令备忘录</title>
+      <link>http://localhost:1313/post/linux-useful/</link>
+      <pubDate>Tue, 24 Apr 2018 10:08:11 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/linux-useful/</guid>
+      <description>Linux 下有用的top monitoring tool： top - original tool htop - adds support to multicore/cpu iotop - input/output monitoring iftop - network monitoring atop - merges previous elements into a single overview gtop - fancy visuals of system stats slabtop – displays a listing of the top caches Linux 下给指定用户读写执行权利</description>
+    </item>
+    
+    <item>
+      <title>golang: Slice tricks 切片技巧</title>
+      <link>http://localhost:1313/post/go-slice-tricks/</link>
+      <pubDate>Sat, 14 Apr 2018 15:18:08 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-slice-tricks/</guid>
+      <description>好吧, 看到标题, 可能会想为什么有slice tricks 但没有 map tricks? 事实上map 就是用来储存查询,K/V pair在语言里也没啥别的用途了. 但slice 不一</description>
+    </item>
+    
+    <item>
+      <title>使用travis 搭建blog的 continuous deployment</title>
+      <link>http://localhost:1313/post/ci-travis-blog/</link>
+      <pubDate>Mon, 19 Mar 2018 10:24:55 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ci-travis-blog/</guid>
+      <description>使用hugo build static blogs 确实很方便，但有个问题，尤其是经常写blog的话。 每次更新一篇日志，都得用hugo -t [theme] 重新build 一遍，然后再推送到对应</description>
+    </item>
+    
+  </channel>
+</rss>

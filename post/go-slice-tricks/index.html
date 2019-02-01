@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>golang: Slice tricks 切片技巧 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="好吧, 看到标题, 可能会想为什么有slice tricks 但没有 map tricks? 事实上map 就是用来储存查询,K/V pair在语言里也没啥别的用途了. 但slice 不一" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-slice-tricks/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="golang: Slice tricks 切片技巧" />
+<meta property="og:description" content="好吧, 看到标题, 可能会想为什么有slice tricks 但没有 map tricks? 事实上map 就是用来储存查询,K/V pair在语言里也没啥别的用途了. 但slice 不一" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-slice-tricks/" />
+<meta property="article:published_time" content="2018-04-14T15:18:08&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-14T15:18:08&#43;08:00"/>
+
+<meta itemprop="name" content="golang: Slice tricks 切片技巧">
+<meta itemprop="description" content="好吧, 看到标题, 可能会想为什么有slice tricks 但没有 map tricks? 事实上map 就是用来储存查询,K/V pair在语言里也没啥别的用途了. 但slice 不一">
+
+
+<meta itemprop="datePublished" content="2018-04-14T15:18:08&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-14T15:18:08&#43;08:00" />
+<meta itemprop="wordCount" content="540">
+
+
+
+<meta itemprop="keywords" content="tricks," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="golang: Slice tricks 切片技巧"/>
+<meta name="twitter:description" content="好吧, 看到标题, 可能会想为什么有slice tricks 但没有 map tricks? 事实上map 就是用来储存查询,K/V pair在语言里也没啥别的用途了. 但slice 不一"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">golang: Slice tricks 切片技巧</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-14 </span>
+        <div class="post-category">
+            
+              <a href="/categories/tech/"> tech </a>
+            
+              <a href="/categories/tricks/"> tricks </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#常用技巧">常用技巧</a>
+<ul>
+<li><a href="#append-a-new-slice">Append a new slice</a></li>
+<li><a href="#copy">Copy</a></li>
+<li><a href="#cut">Cut</a></li>
+<li><a href="#delete">Delete</a></li>
+<li><a href="#delete-without-preserving-order">Delete without preserving order</a></li>
+<li><a href="#expand">Expand</a></li>
+<li><a href="#extend">Extend</a></li>
+<li><a href="#insert">Insert</a></li>
+<li><a href="#insertvector">InsertVector</a></li>
+<li><a href="#pop-shift-slice-这样就具备了-queue的功能">Pop/Shift : slice 这样就具备了 queue的功能</a></li>
+<li><a href="#pop-back">Pop Back</a></li>
+<li><a href="#push-back-rpush">Push Back/RPUSH</a></li>
+<li><a href="#push-front-unshift-lpush">Push Front/Unshift/LPUSH</a></li>
+</ul></li>
+<li><a href="#高阶技巧">高阶技巧</a>
+<ul>
+<li><a href="#filtering-without-allocation">Filtering without allocation</a></li>
+<li><a href="#reversing">Reversing</a></li>
+<li><a href="#shuffling">Shuffling</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>好吧, 看到标题, 可能会想为什么有<code>slice tricks</code> 但没有 <code>map tricks</code>? 事实上map 就是用来储存查询,K/V pair在语言里也没啥别的用途了. 但slice 不一样, slice可以用来搭建更多的数据结构. 比如stack &amp; queue.</p>
+
+<p>本文参考自 <a href="https://github.com/golang/go/wiki/SliceTricks">SliceTricks</a></p>
+
+<p></br></p>
+
+<h1 id="常用技巧">常用技巧</h1>
+
+<hr />
+
+<h2 id="append-a-new-slice">Append a new slice</h2>
+
+<pre><code class="language-go">a = append(a, b...)
+</code></pre>
+
+<h2 id="copy">Copy</h2>
+
+<pre><code class="language-go">b = make([[]T, len(a))
+copy(b,a)
+// or
+b = append([]T(nil), a...)
+</code></pre>
+
+<h2 id="cut">Cut</h2>
+
+<pre><code class="language-go">a = append(a[:i],a[j:]...)
+</code></pre>
+
+<h2 id="delete">Delete</h2>
+
+<pre><code class="language-go">a = append(a[:i], a[i+1:]...)
+// or
+a = a[:i+copy(a[i:],a[i+1:])]
+</code></pre>
+
+<h2 id="delete-without-preserving-order">Delete without preserving order</h2>
+
+<pre><code class="language-go">a[i] = a[len(a)-1]
+a = a[:len(a)-1]
+</code></pre>
+
+<p><strong>NOTE</strong> 加入切片里的数据类型是指针或者是一个带有指针元素的数据结构, 再删除数据之后, 我们需要进行GC处理. 那么上面的Cut跟Delete可能会导致内存溢出问题: 因为其它的一些数据可能还在引用a, 所以被a删掉的数据不能被GC. 使用下面代码能解决这些问题.(说白了就是需要,手动GC..)</p>
+
+<blockquote>
+<p>Cut</p>
+</blockquote>
+
+<pre><code class="language-go">copy(a[i:], a[j:])
+for k, n := len(a)-j+i, len(a); k &lt; n; k++ {
+    a[k] = nil // or the zero value of T
+}
+a = a[:len(a)-j+i]
+
+</code></pre>
+
+<blockquote>
+<p>Delete</p>
+</blockquote>
+
+<pre><code class="language-go">copy(a[i:], a[i+1:])
+a[len(a)-1] = nil // or the zero value of T
+a = a[:len(a)-1]
+</code></pre>
+
+<blockquote>
+<p>Delete without preserving order</p>
+</blockquote>
+
+<pre><code class="language-go">a[i] = a[len(a)-1]
+a[len(a)-1] = nil
+a = a[:len(a)-1]
+</code></pre>
+
+<h2 id="expand">Expand</h2>
+
+<pre><code class="language-go">a = append(a[:i], append(make([]T, j), a[i:]...)...)
+</code></pre>
+
+<h2 id="extend">Extend</h2>
+
+<pre><code class="language-go">a = append(a, make([]T, j)...)
+</code></pre>
+
+<h2 id="insert">Insert</h2>
+
+<pre><code class="language-go">a = append(a[:i], append([]T{x}, a[i:]...)...)
+</code></pre>
+
+<blockquote>
+<p>Insert 进阶:</p>
+</blockquote>
+
+<pre><code class="language-go">s = append(s, 0)
+copy(s[i+1:], s[i:])
+s[i] = x
+</code></pre>
+
+<h2 id="insertvector">InsertVector</h2>
+
+<pre><code class="language-go">a = append(a[:i], append(b, a[i:]...)...)
+</code></pre>
+
+<h2 id="pop-shift-slice-这样就具备了-queue的功能">Pop/Shift : slice 这样就具备了 queue的功能</h2>
+
+<pre><code class="language-go">a = append(a[:i], append(b, a[i:]...)...)
+</code></pre>
+
+<h2 id="pop-back">Pop Back</h2>
+
+<pre><code class="language-go">x, a = a[len(a)-1], a[:len(a)-1]
+</code></pre>
+
+<h2 id="push-back-rpush">Push Back/RPUSH</h2>
+
+<pre><code class="language-go">a = append(a, x)
+</code></pre>
+
+<h2 id="push-front-unshift-lpush">Push Front/Unshift/LPUSH</h2>
+
+<pre><code class="language-go">a = append([]T{x}, a...)
+</code></pre>
+
+<p></br></p>
+
+<h1 id="高阶技巧">高阶技巧</h1>
+
+<hr />
+
+<h2 id="filtering-without-allocation">Filtering without allocation</h2>
+
+<p>利用了切片底层数组可以共享</p>
+
+<pre><code class="language-go">b := a[:0]
+for _, x := range a {
+    if f(x) {
+        b = append(b, x)
+    }
+}
+
+</code></pre>
+
+<h2 id="reversing">Reversing</h2>
+
+<p>To replace the contents of a slice with same elements but in reverse order. 亮点是只用了<code>len(a)/2</code></p>
+
+<pre><code class="language-go">for i := len(a)/2-1; i &gt;= 0; i-- {
+    opp := len(a)-1-i
+    a[i], a[opp] = a[opp], a[i]
+}
+</code></pre>
+
+<h2 id="shuffling">Shuffling</h2>
+
+<p>Fisher-Yates algorithm:</p>
+
+<pre><code class="language-go">for i := len(a) - 1; i &gt; 0; i-- {
+    j := rand.Intn(i + 1)
+    a[i], a[j] = a[j], a[i]
+}
+</code></pre>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-14</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/tricks/">tricks</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action_struct/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（七）: struct 结构类型</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action_map/">
+            <span class="next-text nav-default">go实战读书笔记（六）：Map 映射</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

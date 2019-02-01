@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Golang on Even - A super concise theme for Hugo</title>
+    <link>http://localhost:1313/tags/golang/</link>
+    <description>Recent content in Golang on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 31 Oct 2018 10:37:01 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>golang slice cut 分析</title>
+      <link>http://localhost:1313/post/golang-slice-cut-analysis/</link>
+      <pubDate>Wed, 31 Oct 2018 10:37:01 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/golang-slice-cut-analysis/</guid>
+      <description>昨天在刷Leetcode的时候， 碰到一题：Remove Duplicates from Sorted Array II, 当时第一反应就是直接用slice的cut技巧，直接移除重复部分。 这道题目提醒</description>
+    </item>
+    
+    <item>
+      <title>gopher的ppt：slide</title>
+      <link>http://localhost:1313/post/golang_present_slide/</link>
+      <pubDate>Tue, 30 Oct 2018 15:28:18 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/golang_present_slide/</guid>
+      <description>slide是随着go语言诞生而产生的一种幻灯片格式。 官方文档 有记录present的各种syntax以及例子， 想了想，还是做个简单的翻译放入自</description>
+    </item>
+    
+  </channel>
+</rss>

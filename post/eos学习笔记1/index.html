@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>EOS 学习笔记 智能合约(一） - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="lekai" />
+  <meta name="description" content="contract 其实说简单了就是在给定一系列的输入，会产生可预期的输出行为的一种协议。比如游戏里的移动，商业协议里面的财产转移等等。 EOS smart contract 简介 EOS的 contract 在" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="EOS 学习笔记 智能合约(一）" />
+<meta property="og:description" content="contract 其实说简单了就是在给定一系列的输入，会产生可预期的输出行为的一种协议。比如游戏里的移动，商业协议里面的财产转移等等。 EOS smart contract 简介 EOS的 contract 在" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/" />
+<meta property="article:published_time" content="2018-07-31T14:36:45&#43;08:00"/>
+<meta property="article:modified_time" content="2018-07-31T14:36:45&#43;08:00"/>
+
+<meta itemprop="name" content="EOS 学习笔记 智能合约(一）">
+<meta itemprop="description" content="contract 其实说简单了就是在给定一系列的输入，会产生可预期的输出行为的一种协议。比如游戏里的移动，商业协议里面的财产转移等等。 EOS smart contract 简介 EOS的 contract 在">
+
+
+<meta itemprop="datePublished" content="2018-07-31T14:36:45&#43;08:00" />
+<meta itemprop="dateModified" content="2018-07-31T14:36:45&#43;08:00" />
+<meta itemprop="wordCount" content="1736">
+
+
+
+<meta itemprop="keywords" content="EOS," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="EOS 学习笔记 智能合约(一）"/>
+<meta name="twitter:description" content="contract 其实说简单了就是在给定一系列的输入，会产生可预期的输出行为的一种协议。比如游戏里的移动，商业协议里面的财产转移等等。 EOS smart contract 简介 EOS的 contract 在"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">EOS 学习笔记 智能合约(一）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-31 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#eos-smart-contract-简介">EOS smart contract 简介</a></li>
+<li><a href="#编写eos-smart-contract-需求">编写EOS Smart Contract 需求</a></li>
+<li><a href="#通信模型">通信模型</a>
+<ul>
+<li><a href="#inline-communication">Inline Communication</a></li>
+<li><a href="#deferred-communication">Deferred Communication</a></li>
+<li><a href="#transaction-跟action-的区别">Transaction 跟action 的区别</a></li>
+<li><a href="#context-free-actions-独立actions">Context-Free Actions (独立actions)</a></li>
+<li><a href="#transaction-不足之处">Transaction 不足之处</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p><code>contract</code> 其实说简单了就是在给定一系列的输入，会产生可预期的输出行为的一种协议。比如游戏里的移动，商业协议里面的财产转移等等。</p>
+
+<h2 id="eos-smart-contract-简介">EOS smart contract 简介</h2>
+
+<ol>
+<li>EOS的 <code>contract</code> 在区块链上注册，在EOSIO 的<code>nodes</code>是执行。</li>
+<li>EOS smart contract 定义了一系列接口：actions, parameters, 数据，以及实现该接口的代码。</li>
+<li>contract code 会被编译成标准化字节，所以nodes可以执行。</li>
+<li>blockchain会储存contract产生的transactions，例如 游戏移动，资产转移。</li>
+<li>每一个contract必须要有一个Ricardian Contract 来定义binding terms and context（使用规范）</li>
+</ol>
+
+<h2 id="编写eos-smart-contract-需求">编写EOS Smart Contract 需求</h2>
+
+<ol>
+<li>C/C++ 经验：EOSIO 大量使用WASM（web-assembly)，当前clang/llvm算是最方便讲程序编译成WASM的工具。</li>
+<li>Linux/Mac OS 开发经验</li>
+</ol>
+
+<h2 id="通信模型">通信模型</h2>
+
+<ol>
+<li>EOS 的智能合约包含了一系列的<code>actions</code>定义跟类型定义
+
+<ul>
+<li>action 定义跟实现了contract的支持的行为</li>
+<li>类型 定义了该合约需要的内容跟数据结构</li>
+<li>action 主要在message-based 通信结构里运作</li>
+<li>client 调用action，将消息发送到nodeos，nodeos将消息分解成实现了该合约的WASM代码，再继续执行action</li>
+<li>合约之间可以互相调用，一个合约可以调用另一个合约的action</li>
+</ul></li>
+<li>智能合约的两种通信模型
+
+<ul>
+<li>inline 在当前transaction处理的操作成为inline</li>
+<li>deferred 激活一个新的transaction</li>
+</ul></li>
+<li>合约之间的通信应该是异步的
+
+<ul>
+<li>资源限制算法会负责管理异步通信可能产生的垃圾</li>
+</ul></li>
+</ol>
+
+<h3 id="inline-communication">Inline Communication</h3>
+
+<p>Inline action 采用的形式是，要求其它actions是作为其本身一部分。可以当成nested transactions。
+如果任何一个action 失败，那么会放弃执行剩余的actions，<strong>调用trasaction里面的inline action 不会对外界产生任何通知，无论成败与否</strong>。</p>
+
+<h3 id="deferred-communication">Deferred Communication</h3>
+
+<p>Defferred communication 相当于将action 传给一个peer transaction，deferred action 会被安排在之后的transaction执行，根据producer‘s 排序。
+<strong>而且deferred action 并不被保证一定会被执行</strong>。</p>
+
+<ol>
+<li>起源transaction， 只能用来判断request 有没有被成功提交，不能判断有没有被成功执行。</li>
+<li><strong>一个transaction 是具有cancel一个deferred transaction 能力</strong>。</li>
+</ol>
+
+<h3 id="transaction-跟action-的区别">Transaction 跟action 的区别</h3>
+
+<ol>
+<li>action 只是代表单个操作，transaction 是一系列action的集合（多个操作）.</li>
+<li>contract，account 的交流通信 是基于action的。</li>
+<li>action 可以被单独发送，也可以 <strong>复和模式</strong> 被一起执行。</li>
+</ol>
+
+<blockquote>
+<p>Transaction with one action</p>
+</blockquote>
+
+<pre><code class="language-json">{
+  &quot;expiration&quot;: &quot;2018-04-01T15:20:44&quot;,
+  &quot;region&quot;: 0,
+  &quot;ref_block_num&quot;: 42580,
+  &quot;ref_block_prefix&quot;: 3987474256,
+  &quot;net_usage_words&quot;: 21,
+  &quot;kcpu_usage&quot;: 1000,
+  &quot;delay_sec&quot;: 0,
+  &quot;context_free_actions&quot;: [],
+  &quot;actions&quot;: [{
+      &quot;account&quot;: &quot;eosio.token&quot;,
+      &quot;name&quot;: &quot;issue&quot;,
+      &quot;authorization&quot;: [{
+          &quot;actor&quot;: &quot;eosio&quot;,
+          &quot;permission&quot;: &quot;active&quot;
+        }
+      ],
+      &quot;data&quot;: &quot;00000000007015d640420f000000000004454f5300000000046d656d6f&quot;
+    }
+  ],
+  &quot;signatures&quot;: [
+    &quot;&quot;
+  ],
+  &quot;context_free_data&quot;: []
+}
+</code></pre>
+
+<blockquote>
+<p>Transaction with multiple actions</p>
+</blockquote>
+
+<pre><code class="language-json">{
+  &quot;expiration&quot;: &quot;...&quot;,
+  &quot;region&quot;: 0,
+  &quot;ref_block_num&quot;: ...,
+  &quot;ref_block_prefix&quot;: ...,
+  &quot;net_usage_words&quot;: ..,
+  &quot;kcpu_usage&quot;: ..,
+  &quot;delay_sec&quot;: 0,
+  &quot;context_free_actions&quot;: [],
+  &quot;actions&quot;: [{
+      &quot;account&quot;: &quot;...&quot;,
+      &quot;name&quot;: &quot;...&quot;,
+      &quot;authorization&quot;: [{
+          &quot;actor&quot;: &quot;...&quot;,
+          &quot;permission&quot;: &quot;...&quot;
+        }
+      ],
+      &quot;data&quot;: &quot;...&quot;
+    }, {
+      &quot;account&quot;: &quot;...&quot;,
+      &quot;name&quot;: &quot;...&quot;,
+      &quot;authorization&quot;: [{
+          &quot;actor&quot;: &quot;...&quot;,
+          &quot;permission&quot;: &quot;...&quot;
+        }
+      ],
+      &quot;data&quot;: &quot;...&quot;
+    }
+  ],
+  &quot;signatures&quot;: [
+    &quot;&quot;
+  ],
+  &quot;context_free_data&quot;: []
+}
+</code></pre>
+
+<h3 id="context-free-actions-独立actions">Context-Free Actions (独立actions)</h3>
+
+<ol>
+<li>Action Name 限制：action的类型通常是base32 加密的 int64。2</li>
+<li>Transaction 确认：交易一旦确认，会有receipt产生（倒是跟以太坊一样），收到transaction hash 不代表transaction
+已经被确认，只代表节点成功收到交易。
+确认一个交易被执行，需要在交易历史记录里查询该交易的区块包含该交易。
+所有的action必须在transaction里面被执行，一旦transaction fails，那么里面的所有actions都应该被roll back。</li>
+<li>在处理一个action 之前，eosio会给该action分配一个clean的工作内存。这里面会储存该action所需要的变量。每个action的working memory
+都只能该action 访问。actions之间唯一pass 状态的方法是存储到db再从db里获取。</li>
+<li>action的副作用：
+
+<ul>
+<li>改变EOSIO DB的state状态</li>
+<li>通知当前transaction的接收者</li>
+<li>给receiver发送inline action</li>
+<li>产生心得deferred transactions</li>
+<li>取消现有的deferred transactions</li>
+</ul></li>
+</ol>
+
+<h3 id="transaction-不足之处">Transaction 不足之处</h3>
+
+<p>每一个transaction必须在30ms之内倍执行。如果一个transaction有多个action，并且执行这些action耗时超过30ms，那么整个transaction就会fail。
+在没有并发需求的情况下，可以将action分别写到几个不同的transaction里。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">lekai</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-31</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/eos/">EOS</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">EOS学习笔记 智能合约（二）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/mysql-useful-tricks/">
+            <span class="next-text nav-default">Mysql Useful Tricks</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

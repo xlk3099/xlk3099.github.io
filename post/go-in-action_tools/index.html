@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（三）：go tools 开发工具 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="go 本身是一个非常强大的命令工具. 打开命令行, 输入go, 敲击回车: ➜ ~ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files and cached files doc show documentation for package or symbol" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action_tools/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（三）：go tools 开发工具" />
+<meta property="og:description" content="go 本身是一个非常强大的命令工具. 打开命令行, 输入go, 敲击回车: ➜ ~ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files and cached files doc show documentation for package or symbol" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action_tools/" />
+<meta property="article:published_time" content="2018-04-09T22:38:33&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-09T22:38:33&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（三）：go tools 开发工具">
+<meta itemprop="description" content="go 本身是一个非常强大的命令工具. 打开命令行, 输入go, 敲击回车: ➜ ~ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files and cached files doc show documentation for package or symbol">
+
+
+<meta itemprop="datePublished" content="2018-04-09T22:38:33&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-09T22:38:33&#43;08:00" />
+<meta itemprop="wordCount" content="1283">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（三）：go tools 开发工具"/>
+<meta name="twitter:description" content="go 本身是一个非常强大的命令工具. 打开命令行, 输入go, 敲击回车: ➜ ~ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files and cached files doc show documentation for package or symbol"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（三）：go tools 开发工具</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-09 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#go-vet">go vet</a></li>
+<li><a href="#go-fmt">go fmt</a></li>
+<li><a href="#go-doc-or-godoc">go doc (or godoc)</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>go 本身是一个非常强大的命令工具.</p>
+
+<p>打开命令行, 输入<code>go</code>, 敲击回车:</p>
+
+<pre><code>➜  ~ go
+Go is a tool for managing Go source code.
+
+Usage:
+
+	go command [arguments]
+
+The commands are:
+
+	build       compile packages and dependencies
+	clean       remove object files and cached files
+	doc         show documentation for package or symbol
+	env         print Go environment information
+	bug         start a bug report
+	fix         update packages to use new APIs
+	fmt         gofmt (reformat) package sources
+	generate    generate Go files by processing source
+	get         download and install packages and dependencies
+	install     compile and install packages and dependencies
+	list        list packages
+	run         compile and run Go program
+	test        test packages
+	tool        run specified go tool
+	version     print Go version
+	vet         report likely mistakes in packages
+
+Use &quot;go help [command]&quot; for more information about a command.
+
+Additional help topics:
+
+	c           calling between Go and C
+	buildmode   build modes
+	cache       build and test caching
+	filetype    file types
+	gopath      GOPATH environment variable
+	environment environment variables
+	importpath  import path syntax
+	packages    package lists
+	testflag    testing flags
+	testfunc    testing functions
+
+Use &quot;go help [topic]&quot; for more information about that topic.
+</code></pre>
+
+<p>我们可以看到go 提供了很多指令集合,<code>build</code>,<code>clean</code>,<code>doc</code>,<code>env</code>,<code>bug</code> , <code>test</code> 等等.</p>
+
+<p>在这篇文章里,我们会cover go几个最基本的指令.</p>
+
+<p></br></p>
+
+<h1 id="go-vet">go vet</h1>
+
+<hr />
+
+<p><code>go vet</code> 是一个非常实用的指令, 它可以用来帮助检测代码中的常见错误.</p>
+
+<ol>
+<li>Printf 类函数调用时,类型匹配错误的参数.</li>
+<li>定义常用方法时,方法签名的错误.</li>
+<li>错误的结构标签.</li>
+<li>没有指定字段名的结构字面量. &gt;&gt;&gt; <code>讲真, what the hell is this?</code> &lt;&lt;&lt;</li>
+</ol>
+
+<p>书中的例子</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	fmt.Printf(&quot;The quick brown fox, jumped over lazy dogs&quot;, 3.14)
+}
+
+</code></pre>
+
+<p>对这段代码进行<code>go vet</code> 检测,</p>
+
+<pre><code>go vet main.go
+</code></pre>
+
+<p>我们得到:</p>
+
+<pre><code>./playground.go:6: Printf call has arguments but no formatting directives
+</code></pre>
+
+<p>当然更为方便的方法, 是在你的<code>code editor</code> 里面安装<code>go vet</code>的插件. 比如<code>vscode</code>, 安装完go插件后, 设置好<code>GOPATH</code>, 每次编辑结束, 保存代码, go插件会自动运行<code>go vet</code> 在代码里会高亮各种不符合规范的代码.</p>
+
+<p></br></p>
+
+<h1 id="go-fmt">go fmt</h1>
+
+<hr />
+
+<p><code>fmt</code>是<code>format</code>的简称, <code>go fmt</code> 是go语言社区非常受欢迎的一个命令. <code>fmt</code> 会将开发人员的代码布局格式成跟go源码类似风格. 举个🌰:</p>
+
+<pre><code class="language-go">if err != nil { return err }
+</code></pre>
+
+<p>在运行<code>go fmt</code>之后, 代码会自动调整成:</p>
+
+<pre><code class="language-go">if err != nil {
+	return err
+}
+</code></pre>
+
+<p>跟<code>go vet</code>一样, 也可以在你的code editor 或者IDE里面安装<code>fmt</code>插件. 这样每次保存代码会自动进行format.</p>
+
+<p></br></p>
+
+<h1 id="go-doc-or-godoc">go doc (or godoc)</h1>
+
+<hr />
+
+<p>开发软件时, 我们最常听到的一句吐槽就是: 找不到对应文档. go提供了两种非常方便的文档查看方式, 在命令行输入 <code>go help doc</code> 指令</p>
+
+<pre><code>~ go help doc
+usage: go doc [-u] [-c] [package|[package.]symbol[.methodOrField]]
+</code></pre>
+
+<p>我们会发现, <code>go doc</code> 能接受的参数有<code>包</code>,<code>方法</code>,<code>结构体</code>.</p>
+
+<ul>
+<li><p>终端查看文档: 对于喜欢使用命令行开发程序的人员(vim),用终端查看文档会很方便. 举个🌰, 查看<code>archive/tar</code> 包的文档.</p>
+
+<pre><code>➜  ~ go doc tar
+package tar // import &quot;archive/tar&quot;
+
+Package tar implements access to tar archives.
+
+Tape archives (tar) are a file format for storing a sequence of files that
+can be read and written in a streaming manner. This package aims to cover
+most variations of the format, including those produced by GNU and BSD tar
+tools.
+
+const TypeReg = '0' ...
+var ErrHeader = errors.New(&quot;archive/tar: invalid tar header&quot;) ...
+type Format int
+    const FormatUnknown Format ...
+type Header struct{ ... }
+    func FileInfoHeader(fi os.FileInfo, link string) (*Header, error)
+type Reader struct{ ... }
+    func NewReader(r io.Reader) *Reader
+type Writer struct{ ... }
+    func NewWriter(w io.Writer) *Writer
+</code></pre></li>
+
+<li><p>浏览器查看: 有时候我们需要跳转到其他文档查看相关细节.这时候用命令行就显得很麻烦.
+好在go同时提供了浏览器查看的方式. 打开终端,输入:</p>
+
+<pre><code>➜  ~ godoc -http=:6060 
+</code></pre>
+
+<p>这个指令会在端口<code>6060</code> 启动web服务器. 打开浏览器,导航到<code>http://localhost:6060</code> 我们
+就可以查看所有的go 标准库, 和<code>GOPATH</code>下所有的go源代码文档.</p>
+
+<div class='align-center'>
+  <img src="https://user-images.githubusercontent.com/1768412/38507056-0cc3602e-3c4e-11e8-9fc6-de7eeafc449d.png" alt="image" title="png" />
+</div></li>
+</ul>
+
+<p>go文档工具最棒的地方在于, 支持开发人员自己写的代码. 如果开发人员遵从简单的柜子来写代码, 比如大写的method 代表<code>export</code>, 需要添加注释等等, 这些代码的文档也会自动包含在godoc生成的文档里. 这个会在后面的章节里提到&hellip;</p>
+
+<pre><code>&gt;&gt;&gt;还是那句话,在你的IDE里面安装好go插件, 会自动提醒你文档规则.&lt;&lt;&lt;
+</code></pre>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-09</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action-array/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（四）：Array 数组</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action_package/">
+            <span class="next-text nav-default">go实战读书笔记（二）：package 包管理</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

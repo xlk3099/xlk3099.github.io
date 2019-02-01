@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>读书 on Even - A super concise theme for Hugo</title>
+    <link>http://localhost:1313/categories/%E8%AF%BB%E4%B9%A6/</link>
+    <description>Recent content in 读书 on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 19 Jan 2019 17:48:02 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/categories/%E8%AF%BB%E4%B9%A6/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Designing Data-Intensive Applications 5: Replication</title>
+      <link>http://localhost:1313/post/ddia_chapter5/</link>
+      <pubDate>Sat, 19 Jan 2019 17:48:02 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ddia_chapter5/</guid>
+      <description>Replication 定义 Keep a copy of the same data on multiple machines via networks 作用 Increase availability keep the system running, even one machine (or several machines, or even one data center) goes down place data geographically close to users, so users can interact with the data faster Increase reliability allow disconnected operation: allow an application continue working even when there is a network interruption. e.g. 日历</description>
+    </item>
+    
+  </channel>
+</rss>

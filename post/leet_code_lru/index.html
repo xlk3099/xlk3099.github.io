@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>LRU golang 实现 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="lekai" />
+  <meta name="description" content="今天刷leetcode的时候就做到了LRU实现 链接: https://leetcode.com/problems/lru-cache/description/. 也是巧, 前两天刚发布一篇关于给redis list添加expire属性, 其实跟LRU思路" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/leet_code_lru/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="LRU golang 实现" />
+<meta property="og:description" content="今天刷leetcode的时候就做到了LRU实现 链接: https://leetcode.com/problems/lru-cache/description/. 也是巧, 前两天刚发布一篇关于给redis list添加expire属性, 其实跟LRU思路" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/leet_code_lru/" />
+<meta property="article:published_time" content="2018-10-27T11:57:27&#43;08:00"/>
+<meta property="article:modified_time" content="2018-10-27T11:57:27&#43;08:00"/>
+
+<meta itemprop="name" content="LRU golang 实现">
+<meta itemprop="description" content="今天刷leetcode的时候就做到了LRU实现 链接: https://leetcode.com/problems/lru-cache/description/. 也是巧, 前两天刚发布一篇关于给redis list添加expire属性, 其实跟LRU思路">
+
+
+<meta itemprop="datePublished" content="2018-10-27T11:57:27&#43;08:00" />
+<meta itemprop="dateModified" content="2018-10-27T11:57:27&#43;08:00" />
+<meta itemprop="wordCount" content="1562">
+
+
+
+<meta itemprop="keywords" content="leetcode,data structures,lru," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LRU golang 实现"/>
+<meta name="twitter:description" content="今天刷leetcode的时候就做到了LRU实现 链接: https://leetcode.com/problems/lru-cache/description/. 也是巧, 前两天刚发布一篇关于给redis list添加expire属性, 其实跟LRU思路"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">LRU golang 实现</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-27 </span>
+        <div class="post-category">
+            
+              <a href="/categories/tech/"> tech </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#思路"><strong>思路</strong></a></li>
+<li><a href="#实现"><strong>实现</strong></a>
+<ul>
+<li><a href="#get-方法需要考虑的点"><strong>Get 方法需要考虑的点</strong></a></li>
+<li><a href="#put方法需要考虑的点"><strong>Put方法需要考虑的点</strong></a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>今天刷leetcode的时候就做到了LRU实现 链接: <a href="https://leetcode.com/problems/lru-cache/description/">https://leetcode.com/problems/lru-cache/description/</a>. 也是巧, 前两天刚发布一篇关于给redis list添加<code>expire</code>属性, 其实跟LRU思路非常相似.</p>
+
+<p>LRU 要求
+* 实现<code>Get(key)</code>: 要求能在O(1) 时间返回, 找不到便返回-1.
+* 实现<code>Put(key, value)</code>: 要求O(1)时间返回, 如果cache已经达到capcity, 那么就删除最少使用的K/V pair.</p>
+
+<h3 id="思路"><strong>思路</strong></h3>
+
+<ol>
+<li><code>Get</code> 方法要求在O(1), 这不摆明是用map么, 但很显然, 一个map不够, 因为光map并不能满足第二个条件.</li>
+<li>需要一个数据结构, 将所有的数据按时间排序.</li>
+<li>每次获取或插入一个键值对, 会从新更新数据结构里的排序, 但这里的顺序更新变化很小, 如果是获取, 在该键值对顺序之前的键值对排序不用变, 之后的都需要<code>rank-1</code>.</li>
+<li>每次更新时, 需要记录最少使用的键值对, 因为一旦超过cache的容量, 要将最少使用的键值对删除.</li>
+<li>操作需要达到O(1), 这里不能采用遍历, 结合2,3 就变得很明显了, 需要一个<code>double linked list</code>.</li>
+</ol>
+
+<p>除了double linked list, 还需要额外两个pointer, head跟tail用来分别记录最新查询的键值对跟最久之前查询的键值对, 不然还是要遍历list, 达不到O(1)的操作.</p>
+
+<h3 id="实现"><strong>实现</strong></h3>
+
+<p>按照上述思路,先实现LRUCache struct, 需要一个map 跟一个double linked list, 跟两个指针, 还有一个capcity 属性用来记录cache是否超出.</p>
+
+<pre><code class="language-go">type LRUCache struct {
+    nodes map[int]*Node
+    tail *Node
+    head *Node
+    capacity int
+}
+
+func Constructor(capacity int) LRUCache {
+    var lru LRUCache
+    lru.capacity = capacity
+    lru.nodes = make(map[int]*Node, capacity)
+    return lru
+}
+
+type Node struct {
+    val int
+    prev *Node
+    next *Node
+}
+</code></pre>
+
+<h4 id="get-方法需要考虑的点"><strong>Get 方法需要考虑的点</strong></h4>
+
+<ol>
+<li>不存在情况, 按要求返回-1</li>
+<li>如果存在, 要给键值对重新排序, 最后返回该值.
+
+<ul>
+<li>如果取值对象是double linked list的头部, 那无需任何操作.</li>
+<li>如果取值对象是double linked list的尾部, 需要如何更新顺序.</li>
+<li>如果取值对象是double linked list的中间,(一般情况), 需要如何更新顺序.</li>
+</ul></li>
+</ol>
+
+<p>这样一思考, <code>Get</code>方法实现就很直接了, 只需要处理下double linked list的排序操作即可, <strong>这一块一直是我弱项, 每次都要prev, next, head, tail的绕来绕去&hellip;甚是麻烦</strong></p>
+
+<pre><code class="language-go">func (this *LRUCache) Get(key int) int {
+    // if key not exist, return -1
+    if _, ok:= this.nodes[key]; !ok {
+        return -1
+    }
+    // if key exist
+    this.updateSeq(key)
+    return this.nodes[key].val
+}
+
+func (this *LRUCache) updateSeq (key int) {
+    // if key happens to be the head.
+    n := this.nodes[key]
+    if this.head == n {
+        return
+    }
+    // if key happens to be the tail
+    if this.tail == n  {
+        this.head.next = n
+        n.prev = this.head
+        this.tail = n.next
+        this.tail.prev = nil
+        this.head = n
+        this.head.next = nil
+    }else{ // general case
+        n.prev.next = n.next
+        n.next.prev = n.prev
+        this.head.next = n
+        n.prev = this.head
+        this.head = n
+        n.next = nil
+    }
+    return
+}
+</code></pre>
+
+<h4 id="put方法需要考虑的点"><strong>Put方法需要考虑的点</strong></h4>
+
+<ol>
+<li>corner cases:
+
+<ul>
+<li>capcity 为 0的情况.</li>
+<li>cache 为空, 第一次插入.</li>
+</ul></li>
+<li>插入对象已经存在时, 我们同样需要像Get一样, 更新顺序</li>
+<li>插入对象不存在时
+
+<ul>
+<li>容量未超出情况</li>
+<li>容量超出情况, 我们需要从map里删除tail</li>
+</ul></li>
+</ol>
+
+<p>为了实现<code>容量超出情况, 我们需要从map里删除tail</code>达到O(1)需求, 也就是说我们的tail除了记录value外, 还需要记录key, 那么之前的double linked list数据结构得稍作修改.</p>
+
+<pre><code class="language-go">type Node struct {
+    key int
+    val int
+    prev *Node
+    next *Node
+}
+</code></pre>
+
+<p>按照上述思路, 实现Put 方法</p>
+
+<pre><code class="language-golang">func (this *LRUCache) Put(key int, value int)  {
+    // corner case, map is empty
+    if this.capacity == 0 {
+        return
+    }
+    // when cache is empty
+    if len(this.nodes) == 0 {
+        this.nodes[key] = &amp;Node{
+            key: key,
+            val: value,
+            prev: nil,
+            next: nil,
+        }
+        this.head =this.nodes[key]
+        this.tail = this.nodes[key]
+        return
+    }
+    // if key exist in the map, just need to update the sequence.
+    if _, ok:= this.nodes[key]; ok {
+        this.nodes[key].val = value
+         this.updateSeq(key)
+         return
+    }
+    // if key not exist in the map
+    var n = &amp;Node{}
+    n.key = key
+    n.val = value
+    n.next = nil
+    n.prev = this.head
+    this.head.next = n
+    this.head = n
+    // when capacity has been reached, need to delete the tail node.
+    if len(this.nodes) == this.capacity {
+        delete(this.nodes, this.tail.key)
+        this.tail = this.tail.next
+        this.tail.prev = nil
+    }
+    this.nodes[key] = n
+    return
+}
+</code></pre>
+
+<p>这样就实现了LRU.
+附上Leetcode 完整代码.</p>
+
+<pre><code class="language-go">type LRUCache struct {
+    nodes map[int]*Node
+    tail *Node
+    head *Node
+    capacity int
+}
+
+type Node struct {
+    key int
+    val int
+    prev *Node
+    next *Node
+}
+
+func Constructor(capacity int) LRUCache {
+    var lru LRUCache
+    lru.capacity = capacity
+    lru.nodes = make(map[int]*Node, capacity)
+    return lru
+}
+
+func (this *LRUCache) Get(key int) int {
+    // if key not exist, return -1
+    if _, ok:= this.nodes[key]; !ok {
+        return -1
+    }
+    // if key exist
+    this.updateSeq(key)
+    return this.nodes[key].val
+}
+
+func (this *LRUCache) updateSeq (key int) {
+    // if key happens to be the head.
+    n := this.nodes[key]
+    if this.head == n {
+        return
+    }
+    // if key happens to be the tail
+    if this.tail == n  {
+        this.head.next = n
+        n.prev = this.head
+        this.tail = n.next
+        this.tail.prev = nil
+        this.head = n
+        this.head.next = nil
+    }else{ // general case
+        n.prev.next = n.next
+        n.next.prev = n.prev
+        this.head.next = n
+        n.prev = this.head
+        this.head = n
+        n.next = nil
+    }
+    return
+}
+
+func (this *LRUCache) updateSeq (key int) {
+    // if key happens to be the head.
+    n := this.nodes[key]
+    if this.head == n {
+        return
+    }
+    // if key happens to be the tail
+    if this.tail == n  {
+        this.head.next = n
+        n.prev = this.head
+        this.tail = n.next
+        this.tail.prev = nil
+        this.head = n
+        this.head.next = nil
+    }else{ // general case
+        n.prev.next = n.next
+        n.next.prev = n.prev
+        this.head.next = n
+        n.prev = this.head
+        this.head = n
+        n.next = nil
+    }
+    return
+}
+</code></pre>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">lekai</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-10-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/leetcode/">leetcode</a>
+          
+          <a href="/tags/data-structures/">data structures</a>
+          
+          <a href="/tags/lru/">lru</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/high_performance_mysql_chapter5_summary/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">高性能MySQL 第五章: 高效索引</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/redis_sorted_list_expire/">
+            <span class="next-text nav-default">给Redis的list添加超时属性</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

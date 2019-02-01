@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（五）：Slice 切片 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="上一篇讲了数组， 但数组有个局限， 就是一旦数组被声明， 大小不可变. 切片弥补了数组的短板，可以按需求自动增长缩小， 可以当做动态数组使用。 *切片的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action_slice/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（五）：Slice 切片" />
+<meta property="og:description" content="上一篇讲了数组， 但数组有个局限， 就是一旦数组被声明， 大小不可变. 切片弥补了数组的短板，可以按需求自动增长缩小， 可以当做动态数组使用。 *切片的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action_slice/" />
+<meta property="article:published_time" content="2018-04-14T11:18:08&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-14T11:18:08&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（五）：Slice 切片">
+<meta itemprop="description" content="上一篇讲了数组， 但数组有个局限， 就是一旦数组被声明， 大小不可变. 切片弥补了数组的短板，可以按需求自动增长缩小， 可以当做动态数组使用。 *切片的">
+
+
+<meta itemprop="datePublished" content="2018-04-14T11:18:08&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-14T11:18:08&#43;08:00" />
+<meta itemprop="wordCount" content="2575">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（五）：Slice 切片"/>
+<meta name="twitter:description" content="上一篇讲了数组， 但数组有个局限， 就是一旦数组被声明， 大小不可变. 切片弥补了数组的短板，可以按需求自动增长缩小， 可以当做动态数组使用。 *切片的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（五）：Slice 切片</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-14 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#切片的内部构成">切片的内部构成</a></li>
+<li><a href="#切片的创建和初始化">切片的创建和初始化</a></li>
+<li><a href="#使用切片">使用切片</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>上一篇讲了数组， 但数组有个局限， 就是一旦数组被声明， 大小不可变.
+切片弥补了数组的短板，可以按需求自动增长缩小， 可以当做动态数组使用。</p>
+
+<p>*切片的动态增长通过内置函数 <strong>append</strong> 来实现， 动态缩小通过对切片进行进一步切分.*</p>
+
+<h1 id="切片的内部构成">切片的内部构成</h1>
+
+<hr />
+
+<p>切片是一个很小的对象， 切片由三个字段构成:</p>
+
+<ol>
+<li>指向底层数组的指针.</li>
+<li>切片包含的元素个数. (长度)</li>
+<li>切片允许的容量.</li>
+</ol>
+
+<div class='align-center'>
+  <p>1.1 切片构造示意图:
+<img src="https://user-images.githubusercontent.com/1768412/38764258-59a17532-3fde-11e8-9502-073092ca834c.png" alt="image" /></p>
+
+</div>
+
+<p></br></p>
+
+<h1 id="切片的创建和初始化">切片的创建和初始化</h1>
+
+<hr />
+
+<ol>
+<li><p>通过<code>make</code> 创建</p>
+
+<pre><code class="language-go">// 创建一个字符串切片， 默认长度为3， 容量为5.
+slice := make([]string， 3， 5)
+</code></pre>
+
+<p>在make函数里面， 第一个参数是切片类型， 第二个是底层数组的初始长度， 第三个是底层数组的容量.</p></li>
+
+<li><p>通过切片字面声明创建</p>
+
+<pre><code class="language-go">// 创建字符串切片， 其长度和容量都是5.
+slice := []string{&quot;Red&quot;， &quot;Blue&quot;， &quot;Green&quot;， &quot;Yellow&quot;， &quot;Pink&quot;}
+</code></pre></li>
+
+<li><p>创建空切片:</p>
+
+<p>切片的0值是<code>nil</code>， 所以如果想要创建一个nil切片， 创建的时候， 不需要赋值即可.</p>
+
+<pre><code class="language-go">var slice []string
+// or
+slice := make([]string， 0)
+// or
+slice := []string{}
+</code></pre>
+
+<p><div class='align-center'>
+  <p>2.1 空切片结构示意图
+    <img src="https://user-images.githubusercontent.com/1768412/38764350-93d4bdf8-3fdf-11e8-90d7-6c402056a25c.png" alt="image" /></p>
+
+</div>
+空切片使用场景:</p>
+
+<ul>
+<li>函数要求返回一个切片， 但错误发生， 可返回空切片.</li>
+<li>数据库查询返回0个结果.</li>
+</ul></li>
+</ol>
+
+<p></br></p>
+
+<h1 id="使用切片">使用切片</h1>
+
+<hr />
+
+<ul>
+<li><p><strong>赋值</strong>:
+切片里面赋值跟数组里面的操作一致. e.g.</p>
+
+<pre><code class="language-go">// 创建一个长度为5的整型切片.
+slice := []int{1，2，3，4，5}
+// 把第二个元素的值改为6.
+slice[1] = 6
+</code></pre>
+
+<p>切片这个名字有个好处， <strong>是将给定切片或者数组切分就可以创建一个新的切片</strong> e.g.</p>
+
+<pre><code class="language-go">// 创建一个新的长度为5的整型切片.
+slice := []int{10，20，30，40，50}
+// 基于给定切片， 创建一个新的长度为2， 容量为4的切片.
+newSlice := slice[1，3]
+</code></pre>
+
+<div class='align-center'>
+  <p>3.1 上述两个切片内部结构示意图
+     <img src="https://user-images.githubusercontent.com/1768412/38764430-60e6085a-3fe1-11e8-8eba-b85f17c1ae0a.png" alt="image" /></p>
+
+</div>
+
+<p><strong>Tips: 计算切片长度和容量.</strong></p>
+
+<p>对于底层数组容量是k的切片slice[i:j]来说:</p>
+
+<ul>
+<li>长度: j-i</li>
+<li>容量: k-i</li>
+</ul>
+
+<p>这里要引起注意的是， 前面讲过， 切片内部三个数据最主要的就是指向数组的指针. 因为指针的缘故， 所以在这里， 当修改任一一个切片中某一个成员时， 其它跟其共享底层数组的切片内部成员也会发生变化.</p></li>
+
+<li><p><strong>切片增长</strong>:
+切片比起数组最大的优势就是可以动态增长. 切片通过go内置方程 <code>append</code> 来实现切片的增长.
+注意:</p>
+
+<ol>
+<li>当append时， 增加新的元素后， 没有超过原切片的容量， 那新元素会被安置到对应底层数组里.</li>
+<li>当append时， 增加新的元素后， 超过了原切片的容量， 那么go会新建一个容量更大新的切片， 并把原切片的数据拷贝到新切片里， 在添加要增加的新元素.</li>
+</ol>
+
+<p>第一种情况:</p>
+
+<pre><code class="language-go">// 创建一个新的长度为5的整型切片.
+slice := []int{10，20，30，40，50}
+// 基于上述切片， 创建一个新的长度为2， 容量为4的切片.
+newSlice := slice[1，3]
+
+newSlice = append(newSlice. 60)
+</code></pre>
+
+<p>根据之前的容量公式， <code>newSlice</code> 的长度是3-1=2， 容量是 5-1 = 4. 所以在append的时候， newSlice 还有足够容量， 因此在增加了元素60之后， slice[3] 的值现在也被更新成了60.
+<div class='align-center'>
+  <p>3.2 append之后的切片内部示意图
+    <img src="https://user-images.githubusercontent.com/1768412/38764524-5b24aadc-3fe3-11e8-8411-4f56ca6e6277.png" alt="image" /></p>
+
+</div></p>
+
+<p>第二种情况:</p>
+
+<pre><code class="language-go">// 创建一个新的长度为5的整型切片.
+slice := []int{10，20，30，40}
+// 基于上述切片， 创建一个新的长度为2， 容量为4的切片.
+newSlice := append(slice， 50)
+</code></pre>
+
+<p>当append操作结束之后， 因为超过了原切片底层数组的容量. 因此go给newSlice建了一个新的数组， 把原数组的数据拷贝到了新的数组， newSlice的数组指针也指向了新的数组.
+<div class='align-center'>
+  <p>3.3 append结束后， newSlice 有了新的底层数组
+    <img src="https://user-images.githubusercontent.com/1768412/38764564-0d483ab2-3fe4-11e8-9e3c-50e10487f18c.png" alt="image" /></p>
+
+</div>
+小伙伴可能会好奇， append如何处理底层数组容量增长: <strong>当切片底层数组的容量小于1000时， 超容时， 总是会成倍的增加容量. 而一旦数组大小超过1000时， 容量每次增长度为之25%.</strong></p>
+
+<p>再看一下append函数:</p>
+
+<pre><code class="language-go">func append(s []T， vs ...T) []T
+</code></pre>
+
+<p>发现 append的参数是一个可变类型， 也即是再使用append时， 可以添加多个元素.</p>
+
+<pre><code class="language-go">slice := []int{1，2，3}
+slice = append(slice， 4，5，6)
+</code></pre>
+
+<p>append也可以添加一个slice， 不过最后要加上&rdquo;&hellip;&ldquo;， 表示将第二个slice的全部元素添加到第一个slice里.
+```go
+slice1 := []int{1，2，3}
+slice2 := []int{4，5，6}</p>
+
+<p>slice3 := append(slice1， slice2&hellip;)</p></li>
+
+<li><p><strong>创建切片3个索引</strong>:
+在前面的几个例子， 基于已知切片创建新切片时， 都只用了两个索引(开始，结束)， 实际上是可以有三个索引可以使用， 分别表示: <code>开始</code>， <code>结束</code>， <code>容量</code>.
+例子</p>
+
+<pre><code class="language-go">// 创建一个水果切片， 长度跟容量都是5.
+fruits := []string{&quot;apple&quot;， &quot;orange&quot;， &quot;plum&quot;， &quot;banana&quot;， &quot;grape&quot;}
+// 基于水果slice 创建一个新的切片.
+slice := fruits[2:3:4]
+</code></pre>
+
+<p>第三个索引的作用主要是用来限制新切片的容量， 给底层数组提供保护， 避免 图3.2 在append时候，修改了公用底层数组.</p>
+
+<p>新的长度，容量计算公式， 给定slice[i:j:k]</p>
+
+<ul>
+<li>长度: j-i</li>
+<li>容量: k-i</li>
+</ul></li>
+
+<li><p><strong>迭代切片</strong>:
+切片是一个集合， 在go里， 只要数据是个集合， 就可以使用<code>range</code> 来进行对集合的元素进行迭代. 前章谈到的数组. 跟之后要讲到的<code>map</code>， <code>channel</code> 都可以通过range 来进行迭代.</p>
+
+<p>举个🌰:</p>
+
+<pre><code class="language-go">// Create a slice of integers.
+// Contains a length and capacity of 4 elements.
+slice := []int{10， 20， 30， 40}
+
+// Iterate over each element and display each value.
+for index， value := range slice {
+fmt.Printf(&quot;Index: %d  Value: %d\n&quot;， index， value)
+}
+
+Output:
+Index: 0  Value: 10
+Index: 1  Value: 20
+Index: 2  Value: 30
+Index: 3  Value: 40
+</code></pre>
+
+<p><div class='align-center'>
+  <p>4.1 range迭代示意图
+    <img src="https://user-images.githubusercontent.com/1768412/38764811-64b42d02-3fe8-11e8-85e3-008fe32ec14e.png" alt="image" /></p>
+
+</div>
+当然也是可以通过</p>
+
+<blockquote>
+<p>for i:=0; i &lt; len(array); i++ {&hellip;}</p>
+</blockquote>
+
+<p>循环进行迭代， 这里就不赘述了.</p></li>
+
+<li><p><strong>多维切片</strong>:
+和数组一样， 切片也可以是多维的， 也是通过组合多个切片来构造多维切片.</p>
+
+<pre><code class="language-go">// Create a slice of a slice of integers.
+slice := [][]int{{10}， {100， 200}}
+</code></pre></li>
+
+<li><p><strong>在函数之间传递切片</strong>:
+跟数组不同， 前面已经分析了切片的构成. 由三个数据结构， 一个指针(8个byte)， 两个整型(64位上是8个byte). 也即是总共24个byte， 考虑到在函数间传递24个byte是非常快速的， 因此没有必要在函数传递切片的时候， 采用指针类型. 而且函数间值传递， 复制的只是切片数据本身， 底层的数组并没有被复制.</p>
+
+<p>事实上 go 在处理pass by value， 跟 pass by reference 的时候， 处理起来前者更高效.</p>
+
+<p>这里吐槽下 <code>protobuf</code>， 在声明proto文件之后， 转换成对应的go文件， <code>repeated</code>的数据类型对应的<code>slice</code>， 其传递方式用的是指针传递而不是值传递.</p></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-14</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action_map/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（六）：Map 映射</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action-array/">
+            <span class="next-text nav-default">go实战读书笔记（四）：Array 数组</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

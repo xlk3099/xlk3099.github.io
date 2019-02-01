@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（七）: struct 结构类型 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="在介绍篇就强调过, go是静态语言类型. 当编译器了解到数据类型信息的时候, 它可以保障程序用一种安全的方式在处理数据. 每一种数据类型都告诉了编译" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action_struct/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（七）: struct 结构类型" />
+<meta property="og:description" content="在介绍篇就强调过, go是静态语言类型. 当编译器了解到数据类型信息的时候, 它可以保障程序用一种安全的方式在处理数据. 每一种数据类型都告诉了编译" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action_struct/" />
+<meta property="article:published_time" content="2018-04-14T16:41:13&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-14T16:41:13&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（七）: struct 结构类型">
+<meta itemprop="description" content="在介绍篇就强调过, go是静态语言类型. 当编译器了解到数据类型信息的时候, 它可以保障程序用一种安全的方式在处理数据. 每一种数据类型都告诉了编译">
+
+
+<meta itemprop="datePublished" content="2018-04-14T16:41:13&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-14T16:41:13&#43;08:00" />
+<meta itemprop="wordCount" content="2234">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（七）: struct 结构类型"/>
+<meta name="twitter:description" content="在介绍篇就强调过, go是静态语言类型. 当编译器了解到数据类型信息的时候, 它可以保障程序用一种安全的方式在处理数据. 每一种数据类型都告诉了编译"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（七）: struct 结构类型</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-14 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#自定义类型">自定义类型</a></li>
+<li><a href="#值传递还是指针传递">值传递还是指针传递?</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>在介绍篇就强调过, go是静态语言类型. 当编译器了解到数据类型信息的时候, 它可以保障程序用一种安全的方式在处理数据.</p>
+
+<p>每一种数据类型都告诉了编译器两个关键的信息: 1. 要分配多少内存.  2. 这段内所表示的含义.</p>
+
+<p>在go 很多内置类型, 它们的命名上就已经提供了这两点信息, 比如 <code>int8</code>, <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>等等.</p>
+
+<p>在go里, 我们通过关键词<code>struct</code>来自定义数据类型.</p>
+
+<p></br></p>
+
+<h1 id="自定义类型">自定义类型</h1>
+
+<hr />
+
+<ul>
+<li><p>创建自定义类型</p>
+
+<pre><code class="language-go">// 创建一个新类型 user.
+type user struct{
+    name    string
+    email   string
+    mobile  string
+    admin   bool
+}
+
+// 声明一个用户变量.
+var bill user
+</code></pre>
+
+<p>在声明变量的时候, 变量的值总是被初始化的. 如果没有提供自己的数值, 该变量被初始化为其对应的0值. 在go里, 任何时候, 定义一个变量并使其初始化为0值, 符合规范的做法是使用 关键词<code>var</code> 来定义. 如果该变量需要被初始化其它值, 那我们应该使用短变量声明模式.</p>
+
+<pre><code class="language-go">lisa := user {
+    name: &quot;Lisa&quot;,
+    email: &quot;lisa@email.com&quot;,
+    mobile: &quot;123121213&quot;,
+    admin: false,
+}
+</code></pre>
+
+<p>用来初始化的时候, 上述一种常见的声明方式, 对每一个field进行复制的时候, 同时声明了field的名字, 还一种初始化赋值方式, 忽略了所有的field名, 但要求按照定义类型里的filed顺序排序.</p>
+
+<pre><code class="language-go">lisa := user {&quot;Lisa&quot;, &quot;lisa@email.com&quot;, 123, false}
+</code></pre>
+
+<p>老实说, 第一种方式更为常见, 阅读性也更佳.</p></li>
+
+<li><p>类型嵌套</p>
+
+<p>go允许定义一个新的类型, 并且其成员可以是其它自定义类型.</p>
+
+<pre><code class="language-go">// 定义一个新的类型, 并以user 作为其field 之一.
+type admin struct {
+    person user
+    level string
+}
+</code></pre>
+
+<p>在这里 admin 有个field person, 其数据类型为刚定义的user.</p></li>
+
+<li><p>重定义已有类型</p>
+
+<p>还有一种方式创建自定义类型是重新定义已有类型.</p>
+
+<pre><code class="language-go">type Duration int64
+</code></pre>
+
+<p>在这里我们定义一个新的类型<code>Duration</code>, 实际它是基于内置类型<code>int64</code>.</p>
+
+<p>虽然<code>Duration</code>值是<code>int64</code>, 但在程序中, 并不能把<code>Duration</code>的变量直接复制给<code>int64</code>的变量, 反之亦然, 不然编译器会报错.</p>
+
+<p>重定义已有类型非常有用, 可以通过重定义已有类型, 来给已有类型加上更多函数, 据我个人经验, 数据转化中是非常有用的, 一大方面便是JSON Marshal 跟 Unmarshal. 在golang 1.9 之后加入了 <code>alias</code>, 顾名思义, 别名只是对已有类型的另一种称呼, 虽然很方便, 但他不能增加新的函数, 之后会有单独一章介绍alias.</p></li>
+
+<li><p>给自定义类型添加方法</p>
+
+<p>方法给自定义类型增添了用户行为, 方法就是函数但在关键词func跟函数名中加了额外的参数. 那个参数被称为接收者(receiver)</p>
+
+<p>函数:</p>
+
+<pre><code class="language-go">func min(a, b int) int{
+    if a &lt; b {
+        return a
+    }
+    return b
+}
+</code></pre>
+
+<p>这里 <code>min</code> 就是一个函数, 接受两个input 参数, 并输出其中较小值.</p>
+
+<p>方法:</p>
+
+<pre><code class="language-go">// 以我们上文定义的用户为例, 给用户增加一个方法: shout 用来喊出他的名字.
+type user struct{
+    name string
+    email string
+}
+
+func (u user) shout (){
+    fmt.Println(u.name)
+}
+
+func main(){
+    bob := user{
+        name: &quot;bob&quot;,
+        email: &quot;abc@abc.com&quot;,
+    }
+    bob.Shout()
+}
+</code></pre>
+
+<p>调用方法也非常简单, 声明自定义类型变量后, 在后面加上<code>.</code>, 就可以调用该类型方法. 跟从<code>package</code> 里调用一个函数类似.</p>
+
+<p>在go中, 方法有两种接收者, 一是值, 二是指针.</p>
+
+<p>紧接着上面的例子.</p>
+
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+)
+
+type user struct {
+    name  string
+    email string
+}
+
+func (u user) shout() {
+    fmt.Println(u.name)
+}
+
+func (u *user) showEmail() {
+    fmt.Println(u.email)
+}
+
+func main() {
+    bob := user{
+        name:  &quot;bob&quot;,
+        email: &quot;abc@abc.com&quot;,
+    }
+    bob.shout()
+    bob.showEmail()
+}
+
+// output
+// bob
+// abc@abc.com
+</code></pre>
+
+<p>在这里, 细心的大家可能会发现, 为什么showEmail()的接收者是指针类型, 可bob是值类型, bob也能调用showEmail(). 这是go编译器提供的一个便利,它会自动把接收者类型转换成满足该方法合法的接收者类型.</p></li>
+</ul>
+
+<p></br></p>
+
+<h1 id="值传递还是指针传递">值传递还是指针传递?</h1>
+
+<hr />
+
+<p>在我们给自定义类型添加方法的时候, 是使用值传递还是指针传递? 我们需要了解该类型本质, 一个原则是, 假如给这个类型添加或者删除某个值, 是要创建新值, 还是更改当前值? 如果是前者, 那么该类型方法适合值接收者. 如果是后者, 那么适合使用指针接收者. 这同样适用于程式里函数的传递, 保持传递类型的一致性很重要.</p>
+
+<ol>
+<li><p><strong>原始数据类型:</strong>
+go提供了很多内置类型, <code>int</code>, <code>boolean</code>, <code>string</code>等. 这些类型是原始类型, 因此当对这些值进行操作的时候, 一个新的值应该被创建. 基于这个本质, 内置类型在方法或者函数里的传递应该是值传递. 举个🌰, string的一个函数Trim.</p>
+
+<pre><code class="language-go">func Trim(s string, cutset string) string{
+    if s == &quot;&quot; || cutset == &quot;&quot; {
+        return s
+    }
+    return TrimFunc(s, makeCutsetFunc(cutset))
+}
+</code></pre>
+
+<p>Trim 函数的作用是, 给定一个字符串, 在给定一个字符集合, 从该字符串中剔除所有在字符集合里的字符并返还. 因为最终目标是生成一个新的字符串, 而且不想让原始字符串受到影响, 所以这里用值传递更为妥当.</p></li>
+
+<li><p><strong>引用类型:</strong>
+在go里, 引用类型是指slice, map, channel, interface 以及函数这些类型. 当我们声明一个变量是上述这些类型之一的时候, 生成的变量值其实被曾为header value. 所有的head values(来自这些引用类型)都包含一个指向底层数据的指针, 之前我们在切片跟map里已经强调过, 当然也有其他几个不同的成员用来管理底层结构, 比如slice 里面的len, cap等. 所以包含引用类型跟原始类型一致,也是通过值传递的.</p></li>
+
+<li><p><strong>结构类型:</strong>
+结构类型我们上面已经接触到了, 里面包含一系列其它不同的数据类型, 可以是原始的, 也可以是引用类型.
+关于结构类型按值传递还是指针传递, 结构类型按值传递还是指针传递比较复杂. 单单靠方法或者函数会不会修改传入值并不能决定采用值传递还是指针传递, 但有几个基本原则(按重要性排序):</p>
+
+<ul>
+<li>struct本身性质: 如果struct本身就是用来share的, 那不管怎样, 使用指针, 比如<code>File</code>, <code>DB</code>.</li>
+<li>如果struct size 很大: 用指针, 道理很简单, 因为这时候再使用值传递代价很大.</li>
+<li>如果变量不能被更改, 只能新建, 那用值传递, 反之使用指针.</li>
+</ul>
+
+<p>有人可能会问, 干嘛这么麻烦, 全部使用引用传递不就得了&hellip;事实上, 全采用指针传递会引起各种冲突, 比如GC回收不当, 而且go里面<code>pass by value</code>比<code>pass by pointers</code>高效. 所以不要嫌麻烦, case by case 处理.</p></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-14</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action_interface/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（八）: interface 接口</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-slice-tricks/">
+            <span class="next-text nav-default">golang: Slice tricks 切片技巧</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

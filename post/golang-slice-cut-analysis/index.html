@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>golang slice cut 分析 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="lekai" />
+  <meta name="description" content="昨天在刷Leetcode的时候， 碰到一题：Remove Duplicates from Sorted Array II, 当时第一反应就是直接用slice的cut技巧，直接移除重复部分。 这道题目提醒" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/golang-slice-cut-analysis/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="golang slice cut 分析" />
+<meta property="og:description" content="昨天在刷Leetcode的时候， 碰到一题：Remove Duplicates from Sorted Array II, 当时第一反应就是直接用slice的cut技巧，直接移除重复部分。 这道题目提醒" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/golang-slice-cut-analysis/" />
+<meta property="article:published_time" content="2018-10-31T10:37:01&#43;08:00"/>
+<meta property="article:modified_time" content="2018-10-31T10:37:01&#43;08:00"/>
+
+<meta itemprop="name" content="golang slice cut 分析">
+<meta itemprop="description" content="昨天在刷Leetcode的时候， 碰到一题：Remove Duplicates from Sorted Array II, 当时第一反应就是直接用slice的cut技巧，直接移除重复部分。 这道题目提醒">
+
+
+<meta itemprop="datePublished" content="2018-10-31T10:37:01&#43;08:00" />
+<meta itemprop="dateModified" content="2018-10-31T10:37:01&#43;08:00" />
+<meta itemprop="wordCount" content="435">
+
+
+
+<meta itemprop="keywords" content="golang," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="golang slice cut 分析"/>
+<meta name="twitter:description" content="昨天在刷Leetcode的时候， 碰到一题：Remove Duplicates from Sorted Array II, 当时第一反应就是直接用slice的cut技巧，直接移除重复部分。 这道题目提醒"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">golang slice cut 分析</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-31 </span>
+        <div class="post-category">
+            
+              <a href="/categories/tech/"> tech </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <p>昨天在刷Leetcode的时候， 碰到一题：<a href="https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/description/">Remove Duplicates from Sorted Array II</a>, 当时第一反应就是直接用slice的cut技巧，直接移除重复部分。</p>
+
+<p>这道题目提醒了我，用了这么久的append，我从没想过append操作的space cost，之前在<a href="./go-in-action-slice.md">Go In Action:Slice</a>里面有提到过，slice的结构其实是一个指针，跟两个整型（length跟capcity），指针指向一个array。那么当slice对进行cut的时候，会对底层array进行怎样的操作？是直接在底层array上面进行操作, 还是建了一个新的array（<code>space cost O(n)</code>). 虽然直觉应该是前者，还是自己跑下代码更放心。</p>
+
+<p>对于简单的代码，我比较喜欢用<code>print</code>方法调试。</p>
+
+<p><strong>测试代码</strong></p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+func main() {
+	slice := []int{1, 2, 3, 4}
+	for i, v := range slice {
+		fmt.Println(&quot;address&quot;, &amp;slice[i], v)
+	}
+	s := append(slice[:1], slice[2:]...)
+	for i, v := range s {
+		fmt.Println(&quot;address&quot;, &amp;s[i], v)
+	}
+}
+</code></pre>
+
+<p><strong>Output</strong></p>
+
+<pre><code class="language-go">address 0xc0000181c0 1
+address 0xc0000181c8 2
+address 0xc0000181d0 3
+address 0xc0000181d8 4
+address 0xc0000181c0 1
+address 0xc0000181c8 3
+address 0xc0000181d0 4
+</code></pre>
+
+<p>可以清晰的看到，cut操作是直接在底层array上操作的。</p>
+
+<p>顺带看了眼appen的实现方式，有兴趣的小伙伴可以参考下。
+* <a href="https://github.com/golang/go/blob/master/src/cmd/compile/internal/gc/ssa.go">https://github.com/golang/go/blob/master/src/cmd/compile/internal/gc/ssa.go</a>
+* <a href="https://github.com/golang/go/blob/master/src/runtime/slice.go">https://github.com/golang/go/blob/master/src/runtime/slice.go</a></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">lekai</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-10-31</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/golang/">golang</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/understand_explain_in_mysql/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">理解MySQL 执行计划 Explain</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/golang_present_slide/">
+            <span class="next-text nav-default">gopher的ppt：slide</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

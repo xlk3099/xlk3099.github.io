@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（十八）: 标准库 - JSON - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="go经常遇到的一个问题就是JSON解码, 现在很多data serialization 都是JSON格式. 可以说是现在后端跟前端最常用的通信数据格式. 比如REST API啊" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action_json/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（十八）: 标准库 - JSON" />
+<meta property="og:description" content="go经常遇到的一个问题就是JSON解码, 现在很多data serialization 都是JSON格式. 可以说是现在后端跟前端最常用的通信数据格式. 比如REST API啊" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action_json/" />
+<meta property="article:published_time" content="2018-04-18T19:03:13&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-18T19:03:13&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（十八）: 标准库 - JSON">
+<meta itemprop="description" content="go经常遇到的一个问题就是JSON解码, 现在很多data serialization 都是JSON格式. 可以说是现在后端跟前端最常用的通信数据格式. 比如REST API啊">
+
+
+<meta itemprop="datePublished" content="2018-04-18T19:03:13&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-18T19:03:13&#43;08:00" />
+<meta itemprop="wordCount" content="2865">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（十八）: 标准库 - JSON"/>
+<meta name="twitter:description" content="go经常遇到的一个问题就是JSON解码, 现在很多data serialization 都是JSON格式. 可以说是现在后端跟前端最常用的通信数据格式. 比如REST API啊"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（十八）: 标准库 - JSON</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-18 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#json-编码">JSON 编码</a></li>
+<li><a href="#json-解码">JSON 解码</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>go经常遇到的一个问题就是JSON解码, 现在很多data serialization 都是JSON格式. 可以说是现在后端跟前端最常用的通信数据格式.
+比如REST API啊, 包括JSON RPC, response 都是JSON format.</p>
+
+<p><strong>注意:这里我没有参照go-in-action, json 那节</strong> 它JSON encoding decoding的logic讲的不是很清楚.</p>
+
+<p>这篇文章主要参考自<a href="https://medium.com/go-walkthrough/go-walkthrough-encoding-json-package-9681d1d37a8f">https://medium.com/go-walkthrough/go-walkthrough-encoding-json-package-9681d1d37a8f</a></p>
+
+<p><br/></p>
+
+<h1 id="json-编码">JSON 编码</h1>
+
+<hr />
+
+<p>JSON package 包提供了两种方式对value进行JSON 编码. 第一个是比较试用于stream data, json.Encoder会将数据编码成io.Writer类型.</p>
+
+<pre><code class="language-go">type Encoder struct{}
+
+func NewEncoder(w io.Writer) *Encoder
+
+func (enc *Encoder) Encode(v interface{}) error
+</code></pre>
+
+<p>还有一种方式是json.Marshal() 会将你需要的编码的数据变成内存里的byte slice.</p>
+
+<pre><code class="language-go">func Marshal(v interface{}) ([]byte, error)
+</code></pre>
+
+<p>当数据被传入到JSON encoder的时候, json 库会经过一系列复杂的类型检测, 编译编码器, 并且recursively 处理你的数据.</p>
+
+<ol>
+<li><p>Type Insepection
+当数据被传入到编码器时, json包第一步是检查被传入的数据类型. 数据类型可以通过go 的 reflect包来检查, 而且json包里有一个默认的类型匹配表. 对于go<code>原始类型</code>比如int, string, map,  struct, 跟slice. 它们在json包里都有对应的encoder, 比如intEncoder, stringEncoder. 被转换成json类型的时候也相对比较简单, <code>stringEncoder</code> 比如会将string值加上双引号以及插入适当的逃逸字符, 以及intEncoder会将整型转换成字符串格式.</p></li>
+
+<li><p>Encoder 编译
+对于非自带类型, go会创建一个encoder. 第一步, encoder会检查该类型有没有实现json包里的接口Marshaler.</p>
+
+<pre><code class="language-go">type Marshaler interface {
+MarshalJSON() ([]byte, error)
+}
+</code></pre>
+
+<p>如果有的话, 那么marshaling 函数会采用该类型自定义的MarshalJSON 类型. 这个方法真的很实用, 尤其是你的自定义类型有特殊的JSON编码格式.</p></li>
+</ol>
+
+<p>接下来会检查该类型有没有实现TextMarshaler接口.</p>
+
+<pre><code class="language-go">type TextMrshaler interface {
+    MarshalText() (text []byte, err error)
+}
+</code></pre>
+
+<p>如果有的话, 那么json包会调用这个方法, 然后再把生成的数据转换成json字符串格式. 比如time.Time 就定义了MarshalText方法.</p>
+
+<p>如果上面两个接口都没有被实现, 那么json包会recursively 会依据原始编码器创建一个encoder. 比如, 一个类型包含了一个struct, 里面有两个字段, 一个整型字段更一个字符串字段, 那么json包会给这个struct生成一个structEncoder, 里面包含了一个intEncoder, 跟stringEncoder. 这里需要指出的是, 生成的该structEncoder只会被build一次, 然后会被保存在内存里.</p>
+
+<ol>
+<li>针对每个字段的Tag option
+我们上面讲过, json包里是带有struct encoder的, 关于struct encoder 一个重要的信息是,
+他会读取字段的tags来了解encoding时的一些设定. tags 是用 <code>` `</code> 包围的字符串.
+比如:
+<code>go
+type User struct {
+    Name    string `json:&quot;name&quot;`
+    Age     int    `json:&quot;age,omitempty&quot;`
+    Zipcode int    `json:&quot;zipcode,string&quot;`
+}
+</code>
+通过tag, 可以做到</li>
+<li>修改field在json中显示的filed名. 比如在json中, 每个field都是camel格式, 所以保持这种规范是有必要的.</li>
+<li><code>omitempty</code> 可以帮助移除空值. 在json中不显示.</li>
+
+<li><p>string 可以帮助强制转换一些非字符串格式成string格式, 比如整型.</p></li>
+
+<li><p>递归解析
+当编码发生的时候, 所有的值都会被写入到encodeState, 一个内部buffer. 所有类型的encoder 比如intEncoder, stringEncoder都会把转换的值append到encodeState的bytes里.</p></li>
+</ol>
+
+<p><br/></p>
+
+<h1 id="json-解码">JSON 解码</h1>
+
+<hr />
+
+<p>把json编码的bytes解码成对应的数据类型相当于把上述的过程反转.
+有两种方式对JSON数据进行解码, 第一种也是针对stream-based json:</p>
+
+<pre><code class="language-go">type Decoder struct {}
+func NewDecoder(r io.Reader) *Decoder
+func (dec *Decoder) Decode(v interface{}) error
+</code></pre>
+
+<p>或者也可以使用json.Unmarshal()函数:</p>
+
+<pre><code class="language-go">func Unmarshal(data []byte, v interface{}) error
+</code></pre>
+
+<p>解码分两步操作:
+* <code>scanner</code> 会tokenize输入数据
+* <code>decodeState</code> 将那生成的token转成go数据类型.</p>
+
+<ol>
+<li><p>Scanning JSON
+scanner是内部一个用来parse json数据的状态机. 第一步, 它会检查第一个byte, 如果第一个byte是<code>{</code>, 那么意味着需要解析的是一个object类型, 如果第一个byte是<code>[</code>, 那么对应的需要解析的是一个数组. 这也适用于简单数据类型, 如果是双引号开头, 那么标志着字符串的开始, 如果是<code>t</code>, 或者<code>f</code>, 那表示解析的对象是一个布尔值, 0-9对应了数字的开始.
+一旦定下需要解析的类型, 那么scanner会将剩下的工作转到类型相关的函数, 比如string scan, number scan 等等. 对于负责的类型, 比如map或者数组, 会有一个stack用来最终关闭的括号.可能是<code>]</code>, <code>}</code>.</p></li>
+
+<li><p>Lookahead buffers
+json scanning 一个比较有意思的是lookahead buffer. JSON是<code>LL(1) parseable</code>, 意味着每次它只需要一个byte buffer用来scan. 这个buffer会用来瞥一眼下一个byte.
+举个🌰, number scanning 函数会一直扫描bytes直到它扫到一个非数字类型的byte. 然后, 那个byte其实已经被读了, 这时候需要将它放回buffer里给下一个scanning function采用.</p></li>
+
+<li><p>解码tokens
+一旦所有的tokens都被扫描完毕, 它们需要被解析, 被还原. 这个任务交给了decodeState. 在这一个过程中, 每一个token都会被还原成与input值(其实是类型)对应的数据类型.
+举个🌰, 假如给Unmarshal第二个参数 是一个struct类型. 那么需要得到的第一个token应该是<code>{</code>, 任何其他类型的token都会报错. 整个过程, 将token转换成struct型数据的时候, 会大量的时候reflect package. 跟encoder不一样的是, decoders不会被cache, 所以reflection每一次decode都会被重做一遍.</p></li>
+
+<li><p>自定义unmarshaling
+跟encoding一样, decoding也支持自定义. 对应的数据类型实现下面两个接口即可:</p>
+
+<pre><code class="language-go">type Unmarshaler interface {
+    UnmarshalJSON([]byte) error
+}
+</code></pre>
+
+<p>或者</p>
+
+<pre><code class="language-go">type TextUnmarshaler interface {
+    UnmarshalText(text []byte) error
+}
+</code></pre></li>
+</ol>
+
+<p><strong><strong>注意</strong></strong>: json.Unmarshaler 有个alternative就是 json.RawMessage type. 当一个数据类型被声明成json.RawMessage, 那么这个数据可以一直保存到unmarshaling complete之后再做额外处理. 好处就是可以根据另一个字段的值来进行动态处理.</p>
+
+<pre><code class="language-go">type T struct {
+        Type  string          `json:&quot;type&quot;`
+        Value json.RawMessage `json:&quot;value&quot;`
+}
+func (t *T) Val() (interface{}, error) {
+        switch t.Type {
+        case &quot;foo&quot;:
+                // parse &quot;t.Value&quot; as Foo
+        case &quot;bar&quot;:
+                // parse &quot;t.Value&quot; as Bar
+        default:
+                return nil, errors.New(&quot;invalid type&quot;)
+       }
+}
+</code></pre>
+
+<p>还有一个要引起注意的就是json number decoder会默认将数据转换成float64 如果对对应的字段类型是interface{}的话.</p>
+
+<p><br/></p>
+
+<p>在go里, 得到json或者将值转成json之后, 对应的json值是一个长串bytes, 没有任何的intent. 读起来会比较麻烦. json包里提供了Indent方法来将其美化 这里就不拓展了.</p>
+
+<p><strong>结篇:</strong> go的json包提供了非常强大的功能, 基本可以满足所有json encoding/decoding的需求. 我前前后后也碰到了很多json encoding/decoding的问题, 日后可能做一个整理来方便参考.</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-18</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action_input_output/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（十九）: 标准库 - Input &amp; Output</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action_log/">
+            <span class="next-text nav-default">go实战读书笔记（十七）: 标准库 - Log</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

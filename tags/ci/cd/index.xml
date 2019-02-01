@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ci/Cd on Even - A super concise theme for Hugo</title>
+    <link>http://localhost:1313/tags/ci/cd/</link>
+    <description>Recent content in Ci/Cd on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 15 Nov 2018 10:50:10 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/tags/ci/cd/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>利用ssh config维护github多个private repo的deploy keys</title>
+      <link>http://localhost:1313/post/ssh_handle_multiple_github_deploy_keys/</link>
+      <pubDate>Thu, 15 Nov 2018 10:50:10 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ssh_handle_multiple_github_deploy_keys/</guid>
+      <description>有时候会遇上这样的需求：在一个或者多个服务器上，不想通过账号密码拉取存放在 github 上的多个 private repo，典型的例子便是 CI/CD 工具。 CI/CD 自动推送中，很关键的</description>
+    </item>
+    
+    <item>
+      <title>用circle ci 跟flask做自动化集成测试的一次经历</title>
+      <link>http://localhost:1313/post/circleci_and_flask/</link>
+      <pubDate>Wed, 14 Nov 2018 16:35:40 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/circleci_and_flask/</guid>
+      <description>需求 最近手头工作的项目代码是放在公网github，作为private repo，采用的CI是circle ci，但需要跑的集成测试，是部署在AW</description>
+    </item>
+    
+  </channel>
+</rss>

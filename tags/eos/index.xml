@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Eos on Even - A super concise theme for Hugo</title>
+    <link>http://localhost:1313/tags/eos/</link>
+    <description>Recent content in Eos on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 02 Aug 2018 13:40:58 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/tags/eos/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>EOS 主网节点搭建</title>
+      <link>http://localhost:1313/post/eos-mainnet-setup/</link>
+      <pubDate>Thu, 02 Aug 2018 13:40:58 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/eos-mainnet-setup/</guid>
+      <description>一旦eos代码下载完成，编译完成，可使用下列代码来搭建一个主网同步节点。 注意：这里搭建的是一个non-producer节点。 EOS 主网setup</description>
+    </item>
+    
+    <item>
+      <title>EOS学习笔记 智能合约（二）</title>
+      <link>http://localhost:1313/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/</link>
+      <pubDate>Tue, 31 Jul 2018 15:46:53 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/</guid>
+      <description>Smart Contract 文件格式 eosiocpp 可以使得创建新的contract简单化，它会帮忙创建一个新的contract 模板。 包含两个文件.hpp 跟.cpp文件。 apply action handler and</description>
+    </item>
+    
+    <item>
+      <title>EOS 学习笔记 智能合约(一）</title>
+      <link>http://localhost:1313/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</link>
+      <pubDate>Tue, 31 Jul 2018 14:36:45 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</guid>
+      <description>contract 其实说简单了就是在给定一系列的输入，会产生可预期的输出行为的一种协议。比如游戏里的移动，商业协议里面的财产转移等等。 EOS smart contract 简介 EOS的 contract 在</description>
+    </item>
+    
+  </channel>
+</rss>

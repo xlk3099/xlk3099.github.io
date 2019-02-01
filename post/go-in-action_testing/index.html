@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（二十）: 单元测试 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="go的单测. go的测试文件都已*_test.go结尾. 不管是单元测试, 还是benchmark测试. 执行go测试文件指令为: go test [测试文件]|" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action_testing/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（二十）: 单元测试" />
+<meta property="og:description" content="go的单测. go的测试文件都已*_test.go结尾. 不管是单元测试, 还是benchmark测试. 执行go测试文件指令为: go test [测试文件]|" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action_testing/" />
+<meta property="article:published_time" content="2018-04-22T15:42:11&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-22T15:42:11&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（二十）: 单元测试">
+<meta itemprop="description" content="go的单测. go的测试文件都已*_test.go结尾. 不管是单元测试, 还是benchmark测试. 执行go测试文件指令为: go test [测试文件]|">
+
+
+<meta itemprop="datePublished" content="2018-04-22T15:42:11&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-22T15:42:11&#43;08:00" />
+<meta itemprop="wordCount" content="2676">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（二十）: 单元测试"/>
+<meta name="twitter:description" content="go的单测. go的测试文件都已*_test.go结尾. 不管是单元测试, 还是benchmark测试. 执行go测试文件指令为: go test [测试文件]|"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（二十）: 单元测试</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-22 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#基础单元测试">基础单元测试</a></li>
+<li><a href="#表组测试">表组测试</a></li>
+<li><a href="#模仿测试">模仿测试</a></li>
+<li><a href="#测试服务端点">测试服务端点</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>go的单测.</p>
+
+<p>go的测试文件都已<code>*_test.go</code>结尾. 不管是单元测试, 还是benchmark测试.
+执行go测试文件指令为:</p>
+
+<blockquote>
+<p><code>go test [测试文件]|[指定路径下所有测试文件]</code></p>
+</blockquote>
+
+<h1 id="基础单元测试">基础单元测试</h1>
+
+<hr />
+
+<p>先看下书中示例:</p>
+
+<pre><code class="language-go">package listing01
+
+import (
+	&quot;net/http&quot;
+	&quot;testing&quot;
+)
+
+const checkMark = &quot;\u2713&quot;
+const ballotX = &quot;\u2717&quot;
+
+// TestDownload validates the http Get function can download content.
+func TestDownload(t *testing.T) {
+	url := &quot;https://medium.com/tag/golang&quot;
+	statusCode := 200
+
+	t.Log(&quot;Given the need to test downloading content.&quot;)
+	{
+		t.Logf(&quot;\tWhen checking \&quot;%s\&quot; for status code \&quot;%d\&quot;&quot;,
+			url, statusCode)
+		{
+			resp, err := http.Get(url)
+			if err != nil {
+				t.Fatal(&quot;\t\tShould be able to make the Get call.&quot;,
+					ballotX, err)
+			}
+			t.Log(&quot;\t\tShould be able to make the Get call.&quot;,
+				checkMark)
+
+			defer resp.Body.Close()
+
+			if resp.StatusCode == statusCode {
+				t.Logf(&quot;\t\tShould receive a \&quot;%d\&quot; status. %v&quot;,
+					statusCode, checkMark)
+			} else {
+				t.Errorf(&quot;\t\tShould receive a \&quot;%d\&quot; status. %v %v&quot;,
+					statusCode, ballotX, resp.StatusCode)
+			}
+		}
+	}
+}
+</code></pre>
+
+<p>这个测试<code>TestDownload</code>用来测试<code>http.Get</code>函数: 在给定URL的情况下, 能否返回期待的response.</p>
+
+<p>开头定义了两个常量: <code>checkMark</code> 跟<code>ballotX</code> 在命令行输出其实是<code>✓</code>, <code>✗</code>.</p>
+
+<p>定义一个能被go识别的测试函数:</p>
+
+<ul>
+<li>测试函数命名必须是公开函数.</li>
+<li>测试函数必须以<code>Test</code>开头.</li>
+<li>测试函数必须接受一个指向testing.T的指针, 并且不返回任何值.</li>
+</ul>
+
+<p>testing.T这个参数很重要, 这个指针可以用来帮助记录每个测试的输出和状态.
+尽管go没有定义测试输出格式, 但作为一个TDD粉, 我也是很中意书中的例子.
+例子中使用了 <code>t.Log</code> 跟<code>t.Logf</code> 来记录测试输出, 让大家更容易理解这个测试具体测什么, 测试结果如何.
+比如运行上述测试:</p>
+
+<pre><code>=== RUN   TestDownload
+--- PASS: TestDownload (1.93s)
+	listing01_test.go:16: Given the need to test downloading content.
+	listing01_test.go:18: 	When checking &quot;https://medium.com/tag/golang&quot; for status code &quot;200&quot;
+	listing01_test.go:26: 		Should be able to make the Get call. ✓
+	listing01_test.go:32: 		Should receive a &quot;200&quot; status. ✓
+PASS
+ok  	command-line-arguments	1.939s
+</code></pre>
+
+<p>从上述输出中, 我们可以很清楚的看到, <code>TestDownload</code> 这个测试正在被运行, 这个测试会下载指定内容, 查看能不能successfully 生成一个指定地址的Http.Get, 如果能, 应该返回一个200的response编码.</p>
+
+<p>如果和fail一个testcase? 在go单测中, 可以使用<code>t.Fatal</code> <code>t.Error</code>来使一个测试失败, 区别在于, <code>t.Fatal</code>会停止当前测试,而<code>t.Error</code>会继续当前测试.</p>
+
+<h1 id="表组测试">表组测试</h1>
+
+<hr />
+
+<p>上面的测试, 我们讲述了一组输出对应组测试结果. 但有时候我们有大量数据来测试同一个函数, 如果因为不同输入而创建不同的测试函数显得冗余. go里面的表组测试可以用来测试一组不同的输入值跟期待的返回结果.
+看下面的例子:</p>
+
+<pre><code class="language-go">package listing08
+
+import (
+	&quot;net/http&quot;
+	&quot;testing&quot;
+)
+
+const checkMark = &quot;\u2713&quot;
+const ballotX = &quot;\u2717&quot;
+
+// TestDownload validates the http Get function can download
+// content and handles different status conditions properly.
+func TestDownload(t *testing.T) {
+	var urls = []struct {
+		url        string
+		statusCode int
+	}{
+		{
+			&quot;http://www.goinggo.net/feeds/posts/default?alt=rss&quot;,
+			http.StatusOK,
+		},
+		{
+			&quot;http://rss.cnn.com/rss/cnn_topstbadurl.rss&quot;,
+			http.StatusNotFound,
+		},
+	}
+
+	t.Log(&quot;Given the need to test downloading different content.&quot;)
+	{
+		for _, u := range urls {
+			t.Logf(&quot;\tWhen checking \&quot;%s\&quot; for status code \&quot;%d\&quot;&quot;,
+				u.url, u.statusCode)
+			{
+				resp, err := http.Get(u.url)
+				if err != nil {
+					t.Fatal(&quot;\t\tShould be able to Get the url.&quot;,
+						ballotX, err)
+				}
+				t.Log(&quot;\t\tShould be able to Get the url.&quot;,
+					checkMark)
+
+				defer resp.Body.Close()
+
+				if resp.StatusCode == u.statusCode {
+					t.Logf(&quot;\t\tShould have a \&quot;%d\&quot; status. %v&quot;,
+						u.statusCode, checkMark)
+				} else {
+					t.Errorf(&quot;\t\tShould have a \&quot;%d\&quot; status. %v %v&quot;,
+						u.statusCode, ballotX, resp.StatusCode)
+				}
+			}
+		}
+	}
+}
+</code></pre>
+
+<p>跟之前的基础单元测试不同的地方是, 我们定义了一个urls的数据切片被将其初始化.</p>
+
+<pre><code class="language-go">	var urls = []struct {
+		url        string
+		statusCode int
+	}{
+		{
+			&quot;http://www.goinggo.net/feeds/posts/default?alt=rss&quot;,
+			http.StatusOK,
+		},
+		{
+			&quot;http://rss.cnn.com/rss/cnn_topstbadurl.rss&quot;,
+			http.StatusNotFound,
+		},
+	}
+</code></pre>
+
+<p>urls的切片对象是一个匿名数据结构, 里面包含了两个参数, 用来<code>测试的url</code>, 跟期待的<code>返回response</code>.</p>
+
+<p>下面的部分跟单元测试基本一致, 除了多了一个迭代结构, 从表组里迭代每一个要测试的url, 看测试函数是否返回表组里对应url的期待response.</p>
+
+<h1 id="模仿测试">模仿测试</h1>
+
+<hr />
+
+<p>很多时候, 我们写的函数会包含跟服务器, 数据库或者其他services之间的互动. 对于这类函数的测试, 使用真正的服务器, 数据库会给测试带来很多不便, 比如服务器不运行, 返回时间过长. 数据库数据因为测试受污染等等. 搭建测试服务器或者数据库成本又不是那么低廉. 然而我们的关注点是, 我们的函数能不能准确的处理服务器或者数据库返回的值, 其实对能不能链接真正的服务器或者数据库反而不是那么在意. 这时候, 我们需要模仿服务器或者数据库的behavior.</p>
+
+<p>关于服务器模拟. go里提供了<code>httptest</code>包, 用来帮助我们模拟服务器返回的response.</p>
+
+<p>书中的例子:</p>
+
+<pre><code class="language-go">package listing12
+
+import (
+	&quot;encoding/xml&quot;
+	&quot;fmt&quot;
+	&quot;net/http&quot;
+	&quot;net/http/httptest&quot;
+	&quot;testing&quot;
+)
+
+const checkMark = &quot;\u2713&quot;
+const ballotX = &quot;\u2717&quot;
+
+// feed is mocking the XML document we except to receive.
+var feed = `&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;rss&gt;
+&lt;channel&gt;
+    &lt;title&gt;Going Go Programming&lt;/title&gt;
+    &lt;description&gt;Golang : https://github.com/goinggo&lt;/description&gt;
+    &lt;link&gt;http://www.goinggo.net/&lt;/link&gt;
+    &lt;item&gt;
+        &lt;pubDate&gt;Sun, 15 Mar 2015 15:04:00 +0000&lt;/pubDate&gt;
+        &lt;title&gt;Object Oriented Programming Mechanics&lt;/title&gt;
+        &lt;description&gt;Go is an object oriented language.&lt;/description&gt;
+        &lt;link&gt;http://www.goinggo.net/2015/03/object-oriented&lt;/link&gt;
+    &lt;/item&gt;
+&lt;/channel&gt;
+&lt;/rss&gt;`
+
+// mockServer returns a pointer to a server to handle the get call.
+func mockServer() *httptest.Server {
+	f := func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(200)
+		w.Header().Set(&quot;Content-Type&quot;, &quot;application/xml&quot;)
+		fmt.Fprintln(w, feed)
+	}
+
+	return httptest.NewServer(http.HandlerFunc(f))
+}
+
+// Item defines the fields associated with the item tag in
+// the buoy RSS document.
+type Item struct {
+	XMLName     xml.Name `xml:&quot;item&quot;`
+	Title       string   `xml:&quot;title&quot;`
+	Description string   `xml:&quot;description&quot;`
+	Link        string   `xml:&quot;link&quot;`
+}
+
+// Channel defines the fields associated with the channel tag in
+// the buoy RSS document.
+type Channel struct {
+	XMLName     xml.Name `xml:&quot;channel&quot;`
+	Title       string   `xml:&quot;title&quot;`
+	Description string   `xml:&quot;description&quot;`
+	Link        string   `xml:&quot;link&quot;`
+	PubDate     string   `xml:&quot;pubDate&quot;`
+	Items       []Item   `xml:&quot;item&quot;`
+}
+
+// Document defines the fields associated with the buoy RSS document.
+type Document struct {
+	XMLName xml.Name `xml:&quot;rss&quot;`
+	Channel Channel  `xml:&quot;channel&quot;`
+	URI     string
+}
+
+// TestDownload validates the http Get function can download content
+// and the content can be unmarshaled and clean.
+func TestDownload(t *testing.T) {
+	statusCode := http.StatusOK
+
+	server := mockServer()
+	defer server.Close()
+
+	t.Log(&quot;Given the need to test downloading content.&quot;)
+	{
+		t.Logf(&quot;\tWhen checking \&quot;%s\&quot; for status code \&quot;%d\&quot;&quot;,
+			server.URL, statusCode)
+		{
+			resp, err := http.Get(server.URL)
+			if err != nil {
+				t.Fatal(&quot;\t\tShould be able to make the Get call.&quot;,
+					ballotX, err)
+			}
+			t.Log(&quot;\t\tShould be able to make the Get call.&quot;,
+				checkMark)
+
+			defer resp.Body.Close()
+
+			if resp.StatusCode != statusCode {
+				t.Fatalf(&quot;\t\tShould receive a \&quot;%d\&quot; status. %v %v&quot;,
+					statusCode, ballotX, resp.StatusCode)
+			}
+			t.Logf(&quot;\t\tShould receive a \&quot;%d\&quot; status. %v&quot;,
+				statusCode, checkMark)
+
+			var d Document
+			if err := xml.NewDecoder(resp.Body).Decode(&amp;d); err != nil {
+				t.Fatal(&quot;\t\tShould be able to unmarshal the response.&quot;,
+					ballotX, err)
+			}
+			t.Log(&quot;\t\tShould be able to unmarshal the response.&quot;,
+				checkMark)
+
+			if len(d.Channel.Items) == 1 {
+				t.Log(&quot;\t\tShould have \&quot;1\&quot; item in the feed.&quot;,
+					checkMark)
+			} else {
+				t.Error(&quot;\t\tShould have \&quot;1\&quot; item in the feed.&quot;,
+					ballotX, len(d.Channel.Items))
+			}
+		}
+	}
+}
+</code></pre>
+
+<p>还是先前那个示例, <code>TestDownload</code> 用来测试http.Get. 这里我们定义了一个mockServer, mockServer对任意访问的request都会返回我们预先定义好的response <code>feed</code>.</p>
+
+<p>这时候测试http.Get函数, 只需要将mockServr.URL 作为其参数即可.</p>
+
+<h1 id="测试服务端点">测试服务端点</h1>
+
+<hr />
+
+<p>比起测试服务器response, 更多的时候我们需要测试自己写的API. 做测试的时候, 我们希望可以直接测试API, 而不需要启动服务器.
+httptest也可以帮我们实现这点.</p>
+
+<p>先看一个简单的服务器例子:</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;log&quot;
+	&quot;net/http&quot;
+
+	&quot;github.com/goinaction/code/chapter9/listing17/handlers&quot;
+)
+
+func main() {
+	handlers.Routes()
+	log.Println(&quot;监听: 启动, 监听端口: 4000.&quot;)
+	http.ListenAndServe(&quot;:4000&quot;, nil)
+}
+
+</code></pre>
+
+<pre><code class="language-go">package handlers
+
+import (
+	&quot;encoding/json&quot;
+	&quot;net/http&quot;
+)
+func Routes() {
+	http.HandleFunc(&quot;/sendjson&quot;, SendJSON)
+}
+
+func SendJSON(rw http.ResponseWriter, r *http.Request) {
+	u := struct {
+		Name  string
+		Email string
+	}{
+		Name:  &quot;Bill&quot;,
+		Email: &quot;bill@ardanstudios.com&quot;,
+	}
+
+	rw.Header().Set(&quot;Content-Type&quot;, &quot;applicatoin/json&quot;)
+	rw.WriteHeader(200)
+	json.NewEncoder(rw).Encode(&amp;u)
+}
+
+</code></pre>
+
+<p>这里我们有一个handler包, 里面定义了一个路由, 定义了一个&rdquo;/sendjson&rdquo; API, 当用户访问这个API时, 会返回一个JSON字符串, 里面包含了用户的姓名跟邮箱.</p>
+
+<p>在主函数里, 我们定义该路由一个实例, 开启一个服务器济监听端口<code>:4000</code>.</p>
+
+<p>如果我们想要对这个API进行测试, 一个方法是, 一直开启这个服务器, 然后采取之前的测试方式. 但不可能一直开着服务器做测试啊&hellip;</p>
+
+<p>这个时候我们可以通过外部对API的网络请求进行测试.</p>
+
+<pre><code class="language-go">func init() {
+	handlers.Routes()
+}
+
+func TestSendJSON(t *testing.T) {
+	t.Log(&quot;Given the need to test the SendJSON endpoint.&quot;)
+	{
+		req, err := http.NewRequest(&quot;GET&quot;, &quot;/sendjson&quot;, nil)
+		if err != nil {
+			t.Fatal(&quot;\tShould be able to create a request.&quot;,
+				ballotX, err)
+		}
+		t.Log(&quot;\tShould be able to create a request.&quot;,
+			checkMark)
+
+		rw := httptest.NewRecorder()
+		http.DefaultServeMux.ServeHTTP(rw, req)
+
+		if rw.Code != 200 {
+			t.Fatal(&quot;\tShould receive \&quot;200\&quot;&quot;, ballotX, rw.Code)
+		}
+		t.Log(&quot;\tShould receive \&quot;200\&quot;&quot;, checkMark)
+
+		u := struct {
+			Name  string
+			Email string
+		}{}
+
+		if err := json.NewDecoder(rw.Body).Decode(&amp;u); err != nil {
+			t.Fatal(&quot;\tShould decode the response.&quot;, ballotX)
+		}
+		t.Log(&quot;\tShould decode the response.&quot;, checkMark)
+
+		if u.Name == &quot;Bill&quot; {
+			t.Log(&quot;\tShould have a Name.&quot;, checkMark)
+		} else {
+			t.Error(&quot;\tShould have a Name.&quot;, ballotX, u.Name)
+		}
+
+		if u.Email == &quot;bill@ardanstudios.com&quot; {
+			t.Log(&quot;\tShould have an Email.&quot;, checkMark)
+		} else {
+			t.Error(&quot;\tShould have an for Email.&quot;, ballotX, u.Email)
+		}
+	}
+}
+</code></pre>
+
+<p>这个例子, 我们没有启动任何HTTP服务器, 但是通过httptest.NewRecorder() 创建了一个ResponseWriter. 并通过调用<code>http.DefaultServeMux.ServeHTTP</code> 模拟了外部对<code>/sendjson</code> API的调用请求.</p>
+
+<p>go test 提供了许多其他功能, 比如写完测试, 要查看测试覆盖率, 可以使用 <code>go test -cover [对应测试文件]</code>
+感兴趣的小伙伴可以通过<code>go  test -help</code> 了解更多.</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-22</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action_benchmark/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（二十一）: benchmark</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action_input_output/">
+            <span class="next-text nav-default">go实战读书笔记（十九）: 标准库 - Input &amp; Output</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（二）：package 包管理 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="包的结构跟命名 所有go程序都由若干个包组成, 每个包里面可以包含若干go文件. 举个🌰, go自带的http包: net/http/ cgi/ cookiejar/ testdata/ fcgi/ httptest/ httputil/ pprof/ testdata/ 在这里http是" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action_package/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（二）：package 包管理" />
+<meta property="og:description" content="包的结构跟命名 所有go程序都由若干个包组成, 每个包里面可以包含若干go文件. 举个🌰, go自带的http包: net/http/ cgi/ cookiejar/ testdata/ fcgi/ httptest/ httputil/ pprof/ testdata/ 在这里http是" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action_package/" />
+<meta property="article:published_time" content="2018-04-03T22:20:10&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-03T22:20:10&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（二）：package 包管理">
+<meta itemprop="description" content="包的结构跟命名 所有go程序都由若干个包组成, 每个包里面可以包含若干go文件. 举个🌰, go自带的http包: net/http/ cgi/ cookiejar/ testdata/ fcgi/ httptest/ httputil/ pprof/ testdata/ 在这里http是">
+
+
+<meta itemprop="datePublished" content="2018-04-03T22:20:10&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-03T22:20:10&#43;08:00" />
+<meta itemprop="wordCount" content="1969">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（二）：package 包管理"/>
+<meta name="twitter:description" content="包的结构跟命名 所有go程序都由若干个包组成, 每个包里面可以包含若干go文件. 举个🌰, go自带的http包: net/http/ cgi/ cookiejar/ testdata/ fcgi/ httptest/ httputil/ pprof/ testdata/ 在这里http是"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（二）：package 包管理</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-03 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#包的结构跟命名">包的结构跟命名</a>
+<ul>
+<li><a href="#包命名规范">包命名规范</a></li>
+<li><a href="#main-包">main 包</a></li>
+</ul></li>
+<li><a href="#包的导入">包的导入</a>
+<ul>
+<li><a href="#远程导入">远程导入</a></li>
+<li><a href="#命名导入">命名导入</a></li>
+<li><a href="#导入"><code>.</code> 导入</a></li>
+<li><a href="#导入-1"><code>_</code> 导入</a></li>
+</ul></li>
+<li><a href="#包的init函数">包的init函数</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h1 id="包的结构跟命名">包的结构跟命名</h1>
+
+<hr />
+
+<p>所有go程序都由若干个包组成, 每个包里面可以包含若干go文件.
+举个🌰, go自带的http包:</p>
+
+<pre><code>    net/http/
+        cgi/
+        cookiejar/
+            testdata/
+        fcgi/
+        httptest/
+        httputil/
+        pprof/
+        testdata/
+</code></pre>
+
+<p>在这里<code>http</code>是一个包,http下面的<code>cgi</code>,<code>fcgi</code>等等也都是一个个单独的包.</p>
+
+<p><strong><em>注意</em></strong>: 在所有的go文件里, 第一行代码必须是声明该文件所属的包.</p>
+
+<h2 id="包命名规范">包命名规范</h2>
+
+<ol>
+<li>一般而言, 包的名字都跟自己所在的目录名(文件夹名)一致((测试文件除外), 这也使得查询代码更为方便.</li>
+<li>在go里, 包的名字并不需要独一无二, 因为在导入的时候,采取的方式是全路径.</li>
+<li>go的包名一般都是小写,由单个单词组成, 没有必要使用<code>下划线</code>,或者大小写方式.</li>
+</ol>
+
+<p>除开包的命名规范, 包里的开放函数或者数据类型命名时也要引起一定的注意, 避免跟包名冗余. 在引入包时, 调用者会使用包名来调用包里的内容, 所以一个包里的函数, 或者属性命名也需要适当调整. 比如, golang常见的<code>bufio</code>包,里面的<code>Reader</code>数据类型, 而不是叫<code>BufReader</code>. 调用的时候,<code>bufio.BufReader</code> 存在冗余, <code>bufio</code>跟<code>Buf</code>实际上是一样的意思,显的变扭. 上下代码可能更明显:</p>
+
+<pre><code>```go
+package api
+
+import &quot;fmt&quot;
+
+func APIGet(){
+    fmt.Println(&quot;Hello, I am Get function in package api&quot;)
+}
+
+```
+
+在这里我们定义了一个包为`api`, 里面有一个函数 `APIGet`, 当另一个go文件导入`api`包,调用`APIGet`时, 会被这样调用:
+
+```go
+package main
+
+import &quot;api&quot;
+
+func main() {
+    api.APIGet()
+}
+```
+`api.APIGet()`此时就显得不简洁. 
+一个更常见的case就是构造函数. 举个🌰,现在还是有很多人会这样定义数据库副本的构造函数:`NewDB()`, 假设数据库操纵相关的包名是`db`, 那么我们创建一个新的数据库副本的时候, 是这样调用的:
+```
+db.NewDB()
+```
+这也不是很简洁. 事实上`db.New()` 就足以.
+</code></pre>
+
+<h2 id="main-包">main 包</h2>
+
+<p>在go的程序里, <code>main</code>包时比较独特的存在. go的编译器会试图把main包编译成可执行文件, 所以每一个go程序都有唯一的一个<code>main</code>包, 而且这个<code>main</code>包里也必须要有一个<code>main</code>函数.</p>
+
+<p></br></p>
+
+<h1 id="包的导入">包的导入</h1>
+
+<hr />
+
+<p>在golang里 试用关键词<code>import</code>来导入一个包, 包名用双引号修饰.
+要注意的是,当导入多个包时, 习惯是讲`import包装在一个导入块中. 举个🌰:</p>
+
+<pre><code class="language-go">import (
+    &quot;fmt&quot;
+    &quot;strings&quot;
+)
+</code></pre>
+
+<p>golang的编译器试用go的环境变量<code>GOPATH</code>来查找磁盘上的包. 标准库的包则是在安装go的位置找到(GOROOT).
+<code>查找顺序</code>:编译器会首先查找Go的安装目录, 然后才会按顺序呢查找GOPATH变量列出的目录. 如果GOPATH也找不到,那编译器会报错.
+反之,如果go文件里面导入了一个不在代码里使用的包时,编译会也会失败报错.</p>
+
+<p><em>Tips</em>: 可以再命令行输入 <code>go env</code>  查看关于go的环境变量.</p>
+
+<h2 id="远程导入">远程导入</h2>
+
+<p>目前编程环境的大趋势是使用分布式版本控制系统(Distributed Version Control Systems, <strong>DVCS</strong>)来分享跟管理代码. 如github, go工具本身支持从网站获取源代码. e.g.</p>
+
+<pre><code class="language-go">import &quot;github.com/spf13/viper&quot;
+</code></pre>
+
+<p>go build 编译器会使用GOPATH环境变量搜索这个包,上述对应的包实际磁盘地址 <code>$GOPATH/src/github.com/spf13/viper</code></p>
+
+<h2 id="命名导入">命名导入</h2>
+
+<p>当不同目录下的包具有相同名字的时候,会有重名冲突. 举个🌰: 当我们需要<code>network/convert</code> 包来转换从网络读取的数据,又需要<code>file/convert</code>, 就会同时导入两个名叫<code>convert</code>的包. 我们可以通过命名导入来解决冲突.</p>
+
+<pre><code class="language-go">package main
+
+import(
+    &quot;fmt&quot;
+    myfmt &quot;mylib/fmt&quot;
+)
+
+func main() {
+    fmt.Println(&quot;Standard Library&quot;)
+    myfmt.Println(&quot;mylib/fmt&quot;)
+}
+</code></pre>
+
+<h2 id="导入"><code>.</code> 导入</h2>
+
+<p>go里面有种特殊的导入, 只在一些特殊情况或者测试时使用. 在导入包时, 在需要导入的包前加上前缀<code>.</code>, 这样就可以忽略包名, 直接调用该包所有开放的内容. 举个🌰:</p>
+
+<pre><code class="language-go">package main
+
+import(
+    . &quot;fmt&quot;
+)
+
+func main() {
+    Println(&quot;Standard Library&quot;)
+}
+</code></pre>
+
+<h2 id="导入-1"><code>_</code> 导入</h2>
+
+<p>go每个包文件都<code>若干个</code> <code>init</code>函数(注意是n个), 当你导入该go文件时, 假设你只是想调用它的<code>init</code>函数, 对其它包里的函数不感兴趣, 这个时候就可以在该包前面加上<code>_</code>前缀. 这样可避免由于不使用该包函数而导致的编译错误.
+具体例子可以看下面的init函数.</p>
+
+<p></br></p>
+
+<h1 id="包的init函数">包的init函数</h1>
+
+<hr />
+
+<p><code>init</code>函数会在程序执行开始的时候被调用. 所有的<code>init</code>函数都会在<code>main</code>函数之前执行.<code>init</code>函数用在初始化变量,引导工作或者是设计<code>adapter pattern</code>的时候很有用.</p>
+
+<p>举个数据库驱动的例子. go提供了<code>database/sql</code>包, 包里抽象了<code>sql</code>的数据库以及操作的基本方法, 基本适用于所有的sql数据库, 比如<code>mysql</code>跟<code>postgresql</code>. 但使用这个包时, 需要提供具体sql数据库的driver, 比如你实际使用的是postgresql数据库, 那么就需要提供对应的postgresql的driver. 但是我们在实际操作的时候, 只需要使用<code>database/sql</code>提供的函数, 而对于driver是怎么实现的, 根本不care. 这时候, postgresql driver包可以在它init函数里调用sql的Register函数, 将其注册到<code>database/sql</code>作为实际的数据库类型.</p>
+
+<pre><code class="language-go">//postgresql driver
+import (
+    &quot;database/sql&quot;
+)
+
+func init(){
+    sql.Register(&quot;postgres&quot;, new(PostgresDriver))
+}
+</code></pre>
+
+<pre><code class="language-go">package main
+
+import (
+    &quot;database/sql&quot;
+    _ &quot;github.com/goinaction/code/chapter3/dbdriver/postgres&quot; // 用&quot;_&quot;避免未使用包错误
+)
+
+func main(){
+    sql.Open(&quot;postgres&quot;, &quot;mydb&quot;)
+}
+
+</code></pre>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action_tools/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（三）：go tools 开发工具</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action_introduction/">
+            <span class="next-text nav-default">go实战读书笔记（一） ：go简介 </span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

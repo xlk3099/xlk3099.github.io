@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>EOS 主网节点搭建 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="lekai" />
+  <meta name="description" content="一旦eos代码下载完成，编译完成，可使用下列代码来搭建一个主网同步节点。 注意：这里搭建的是一个non-producer节点。 EOS 主网setup" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/eos-mainnet-setup/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="EOS 主网节点搭建" />
+<meta property="og:description" content="一旦eos代码下载完成，编译完成，可使用下列代码来搭建一个主网同步节点。 注意：这里搭建的是一个non-producer节点。 EOS 主网setup" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/eos-mainnet-setup/" />
+<meta property="article:published_time" content="2018-08-02T13:40:58&#43;08:00"/>
+<meta property="article:modified_time" content="2018-08-02T13:40:58&#43;08:00"/>
+
+<meta itemprop="name" content="EOS 主网节点搭建">
+<meta itemprop="description" content="一旦eos代码下载完成，编译完成，可使用下列代码来搭建一个主网同步节点。 注意：这里搭建的是一个non-producer节点。 EOS 主网setup">
+
+
+<meta itemprop="datePublished" content="2018-08-02T13:40:58&#43;08:00" />
+<meta itemprop="dateModified" content="2018-08-02T13:40:58&#43;08:00" />
+<meta itemprop="wordCount" content="687">
+
+
+
+<meta itemprop="keywords" content="EOS," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="EOS 主网节点搭建"/>
+<meta name="twitter:description" content="一旦eos代码下载完成，编译完成，可使用下列代码来搭建一个主网同步节点。 注意：这里搭建的是一个non-producer节点。 EOS 主网setup"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">EOS 主网节点搭建</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-02 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#eos-主网搭建的几个坑">EOS 主网搭建的几个坑</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>一旦eos代码下载完成，编译完成，可使用下列代码来搭建一个主网同步节点。</p>
+
+<p><strong>注意</strong>：这里搭建的是一个non-producer节点。</p>
+
+<p>EOS 主网setup script 参考自 <a href="https://medium.com/@cc32d9/running-a-full-eos-mainnet-node-d7da2d3b154f">https://medium.com/@cc32d9/running-a-full-eos-mainnet-node-d7da2d3b154f</a></p>
+
+<pre><code>mkdir $HOME/node
+cd $HOME/node
+cat &gt;config.ini &lt;&lt;'EOF'
+chain-state-db-size-mb = 12288
+get-transactions-time-limit = 3
+block-log-dir = &quot;blocks&quot;
+http-server-address = 0.0.0.0:8888
+p2p-listen-endpoint = 0.0.0.0:9856
+p2p-server-address = :9856
+allowed-connection = any
+log-level-net-plugin = info
+max-clients = 100
+connection-cleanup-period = 30
+network-version-match = 0
+sync-fetch-span = 2000
+enable-stale-production = false
+required-participation = 33
+plugin = eosio::chain_plugin
+plugin = eosio::chain_api_plugin
+plugin = eosio::history_plugin
+plugin = eosio::history_api_plugin
+filter-on = *
+plugin = eosio::db_size_api_plugin
+p2p-peer-address = 106.10.42.238:9876
+p2p-peer-address = 130.211.59.178:9876
+p2p-peer-address = 159.65.214.150:9876
+p2p-peer-address = 18.191.33.148:59876
+p2p-peer-address = 185.253.188.1:19876
+p2p-peer-address = 185.253.188.1:19877
+p2p-peer-address = 34.252.209.121:5556
+p2p-peer-address = 807534da.eosnodeone.io:19872
+p2p-peer-address = api-full1.eoseoul.io:9876
+p2p-peer-address = api-full2.eoseoul.io:9876
+p2p-peer-address = api.eosuk.io:12000
+p2p-peer-address = boot.eostitan.com:9876
+p2p-peer-address = bp.cryptolions.io:9876
+p2p-peer-address = bp.eosbeijing.one:8080
+p2p-peer-address = bp.eosmedi.com:9877
+p2p-peer-address = bp.libertyblock.io:9800
+p2p-peer-address = br.eosrio.io:9876
+p2p-peer-address = dc1.eosemerge.io:9876
+p2p-peer-address = eos-seed-de.privex.io:9876
+p2p-peer-address = eos.nodepacific.com:9876
+p2p-peer-address = eos.staked.us:9870
+p2p-peer-address = eosapi.blockmatrix.network:13546
+p2p-peer-address = eosboot.chainrift.com:9876
+p2p-peer-address = eosbp.buildteam.io:8532
+p2p-peer-address = eu-west-nl.eosamsterdam.net:9876
+p2p-peer-address = eu1.eosdac.io:49876
+p2p-peer-address = fn001.eossv.org:443
+p2p-peer-address = fullnode.eoslaomao.com:443
+p2p-peer-address = m.eosvibes.io:9876
+p2p-peer-address = mainnet-eos.wancloud.cloud:55576
+p2p-peer-address = mainnet.eoscalgary.io:5222
+p2p-peer-address = mainnet.eoseco.com:10010
+p2p-peer-address = mainnet.eosoasis.io:9876
+p2p-peer-address = mainnet.eospay.host:19876
+p2p-peer-address = mars.fnp2p.eosbixin.com:443
+p2p-peer-address = node.eosflare.io:1883
+p2p-peer-address = node.eosio.lt:9878
+p2p-peer-address = node.eosmeso.io:9876
+p2p-peer-address = node1.eoscannon.io:59876
+p2p-peer-address = node1.eosnewyork.io:6987
+p2p-peer-address = node2.eosnewyork.io:6987
+p2p-peer-address = p.jeda.one:3322
+p2p-peer-address = p2p.eos.bitspace.no:9876
+p2p-peer-address = p2p.eosdetroit.io:3018
+p2p-peer-address = p2p.eosholding.ca:9876
+p2p-peer-address = p2p.eosio.cr:1976
+p2p-peer-address = p2p.eosio.cr:5418
+p2p-peer-address = p2p.genereos.io:9876
+p2p-peer-address = p2p.mainnet.eosgermany.online:9876
+p2p-peer-address = p2p.mainnet.eospace.io:88
+p2p-peer-address = p2p.saltblock.io:19876
+p2p-peer-address = p2p.unlimitedeos.com:15555
+p2p-peer-address = peer.eosjrr.io:9876
+p2p-peer-address = peer.eosn.io:9876
+p2p-peer-address = peer.main.alohaeos.com:9876
+p2p-peer-address = peer1.mainnet.helloeos.com.cn:80
+p2p-peer-address = peer2.eosthu.com:8080
+p2p-peer-address = peer2.mainnet.helloeos.com.cn:80
+p2p-peer-address = peering.mainnet.eoscanada.com:9876
+p2p-peer-address = peering1.mainnet.eosasia.one:80
+p2p-peer-address = peering2.mainnet.eosasia.one:80
+p2p-peer-address = pub0.eosys.io:6637
+p2p-peer-address = pub1.eostheworld.io:9876
+p2p-peer-address = pub1.eosys.io:6637
+p2p-peer-address = pub2.eostheworld.io:9876
+p2p-peer-address = publicnode.cypherglass.com:9876
+p2p-peer-address = seed1.greymass.com:9876
+p2p-peer-address = seed2.greymass.com:9876
+EOF
+wget https://raw.githubusercontent.com/CryptoLions/EOS-MainNet/master/genesis.json
+screen -L 
+nodeos --data-dir . --config-dir . --genesis-json genesis.json
+## Ctrl-a Ctrl-d to detach from screen
+## screen -R to re-attach to the screen
+</code></pre>
+
+<blockquote>
+<p>吐槽下，速度真的奇慢无比&hellip;.</p>
+</blockquote>
+
+<h2 id="eos-主网搭建的几个坑">EOS 主网搭建的几个坑</h2>
+
+<ol>
+<li><p>EOS 官方github 无效
+官方source code下载的EOS <a href="https://github.com/EOSIO/eos">https://github.com/EOSIO/eos</a>
+用来搭建主网，反正我试了好几个版本，浪费了好几天，基本都是同步到不同的高度crash，然后根据社区的replay什么的都不好使。。。
+可参考<a href="https://github.com/EOS-Mainnet">https://github.com/EOS-Mainnet</a> 搭建教程</p></li>
+
+<li><p>node的内存一定要超过7个G， 当然也可以修改build_eosio.sh来跳过检验。</p></li>
+
+<li><p>node的硬盘要超过20个G， 可修改build_eosio.sh跳过，但考虑到作为主网同步机器，还是至少20G的好。</p></li>
+
+<li><p>主网搭建完毕后
+要使用<code>get transaction</code>, <code>get actions</code>， 记得<code>config.ini</code>里面 设置<code>filter-on=*</code></p></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">lekai</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-02</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/eos/">EOS</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/eth_explorer_summary/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Eth Explorer 开发回顾</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/">
+            <span class="next-text nav-default">EOS学习笔记 智能合约（二）</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>用circle ci 跟flask做自动化集成测试的一次经历 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="lekai" />
+  <meta name="description" content="需求 最近手头工作的项目代码是放在公网github，作为private repo，采用的CI是circle ci，但需要跑的集成测试，是部署在AW" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/circleci_and_flask/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="用circle ci 跟flask做自动化集成测试的一次经历" />
+<meta property="og:description" content="需求 最近手头工作的项目代码是放在公网github，作为private repo，采用的CI是circle ci，但需要跑的集成测试，是部署在AW" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/circleci_and_flask/" />
+<meta property="article:published_time" content="2018-11-14T16:35:40&#43;08:00"/>
+<meta property="article:modified_time" content="2018-11-14T16:35:40&#43;08:00"/>
+
+<meta itemprop="name" content="用circle ci 跟flask做自动化集成测试的一次经历">
+<meta itemprop="description" content="需求 最近手头工作的项目代码是放在公网github，作为private repo，采用的CI是circle ci，但需要跑的集成测试，是部署在AW">
+
+
+<meta itemprop="datePublished" content="2018-11-14T16:35:40&#43;08:00" />
+<meta itemprop="dateModified" content="2018-11-14T16:35:40&#43;08:00" />
+<meta itemprop="wordCount" content="916">
+
+
+
+<meta itemprop="keywords" content="CI/CD,circle ci,flask," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="用circle ci 跟flask做自动化集成测试的一次经历"/>
+<meta name="twitter:description" content="需求 最近手头工作的项目代码是放在公网github，作为private repo，采用的CI是circle ci，但需要跑的集成测试，是部署在AW"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">用circle ci 跟flask做自动化集成测试的一次经历</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-11-14 </span>
+        <div class="post-category">
+            
+              <a href="/categories/tech/"> tech </a>
+            
+              <a href="/categories/tricks/"> tricks </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#需求"><strong>需求</strong></a></li>
+<li><a href="#flask-web-服务"><strong>Flask web 服务</strong></a></li>
+<li><a href="#小结"><strong>小结</strong></a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h3 id="需求"><strong>需求</strong></h3>
+
+<p>最近手头工作的项目代码是放在公网github，作为private repo，采用的CI是circle ci，但需要跑的<strong>集成测试</strong>，是部署在AWS EC2上面，内网环境。</p>
+
+<p>总结下需求:</p>
+
+<ul>
+<li>每次当CIRCLE CI 成功build最新的代码时，需要向内网发送通知 build成功，使用最新的commit来跑集成测试。</li>
+<li>内网收到通知，下载最新代码，编译，运行最新的集成测试代码。</li>
+<li>生成测试报告，返回结果给CIRCLE CI。</li>
+</ul>
+
+<p>第一直觉就是在内网搭一个CI/CD不就了事，可以找个EC2 instance，搭建一个circle ci或者jenkins服务即可。</p>
+
+<p>但这次想着试试自己reinvent wheel，看看能不能自己写个服务来handle自动build测试部署等等。</p>
+
+<h3 id="flask-web-服务"><strong>Flask web 服务</strong></h3>
+
+<p>为啥用flask？跑个小服务而已，人生苦短，我用python。</p>
+
+<p>flask服务需求：</p>
+
+<ul>
+<li>能handle来自circle ci的request，兄台，XXXbuild结束，该跑它的测试了。</li>
+<li>能pull + build 指定的代码</li>
+<li>能运行集成测试</li>
+<li>能显示测试报告</li>
+<li>返回集成测试结果给circle ci</li>
+<li>给bearychat推送测试结果</li>
+</ul>
+
+<p>CIRCLE CI 能获取到当前build的<code>user</code>， <code>branch</code>， <code>commit id</code> 等信息。
+集成测试是用pytest写的，pytest使用pytest-html plugin能自动生成报告。</p>
+
+<p>所以主要是两个接口:
+* POST. 用来handle build request，利用来自circl ci的project的信息， 用来pull，build最新commit的代码。
+* GET. 用来handle 展示test report的request。</p>
+
+<p>Python代码:</p>
+
+<pre><code class="language-python">@app.route('/report', methods=['GET'])
+def test_report():
+    &quot;&quot;&quot;
+    返回测试报告
+    :return:
+    &quot;&quot;&quot;
+    return send_from_directory(TEST_RESULT_DIR, &quot;result.html&quot;)
+
+@app.route('/circle/build', methods=['POST'])
+def build():
+    &quot;&quot;&quot;
+    接受build request
+    :return:
+    &quot;&quot;&quot;
+    req = request.get_json()
+    user = req[&quot;user&quot;]
+    branch = req[&quot;branch&quot;]
+    commit = req[&quot;commit&quot;]
+    os.chdir(PROJECT_ROOT)  
+    try:
+        subprocess.run(&quot;make clean;\
+                       git fetch --all;\
+                       git checkout {0}&quot;.format(req['commit']), shell=True, check=True)
+        subprocess.run(&quot;make build&quot;, shell=True, check=True)
+        ethx_pid = start_ethx() # 启动项目服务
+        pytest.main([PROJECT_TEST_PASH, &quot;-Wi&quot;, &quot;--html={0}/result.html&quot;.format(TEST_RESULT_DIR)])
+        stop_ethx(ethx_pid)     # 停止项目
+        send_notification(user, branch, commit) # 发送推送消息
+        if result[&quot;failed&quot;] &gt; 0:
+            return TEST_REPORT_URL
+        else:
+            return &quot;success&quot;
+    except subprocess.CalledProcessError as err:
+        print(&quot;subprocess error: {0}&quot;.format(err))
+</code></pre>
+
+<h3 id="小结"><strong>小结</strong></h3>
+
+<p>其实可以做的更复杂，比如可以</p>
+
+<ul>
+<li>展示历史test result</li>
+<li>监听多个project变动（我实际项目里是监听3个）</li>
+<li>跟circle ci 互动，执行完毕启动下一个job</li>
+<li>插件化</li>
+</ul>
+
+<p>关于管理多个项目，如何避免输用户名密码，可以参考<a href="./ssh_handle_multiple_github_deploy_keys.md">运用ssh处理多个github deploy keys</a>
+但越做越像jenkins，也没啥必要，不过这次经历还是不错的。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">lekai</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-11-14</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/ci/cd/">CI/CD</a>
+          
+          <a href="/tags/circle-ci/">circle ci</a>
+          
+          <a href="/tags/flask/">flask</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/ssh_handle_multiple_github_deploy_keys/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">利用ssh config维护github多个private repo的deploy keys</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/understand_explain_in_mysql/">
+            <span class="next-text nav-default">理解MySQL 执行计划 Explain</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

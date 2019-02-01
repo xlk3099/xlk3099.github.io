@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Mysql Useful Tricks - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="mysql 得到各databases的大小 SELECT table_schema &amp;quot;DB Name&amp;quot;, ROUND(SUM(data_length &#43; index_length) / 1024 / 1024, 1) &amp;quot;DB Size in MB&amp;quot; FROM information_schema.tables GROUP BY table_schema; mysql 得到各个table的大小 SELECT table_name AS &amp;ldquo;Table&amp;rdquo;, round(((data_length &#43; index_length) / 1024 / 1024), 2) as size FROM information_schema.TABLES WHERE table_schema = &amp;ldquo;YOUR_DATABASE_NAME&amp;rdquo;" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/mysql-useful-tricks/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Mysql Useful Tricks" />
+<meta property="og:description" content="mysql 得到各databases的大小 SELECT table_schema &quot;DB Name&quot;, ROUND(SUM(data_length &#43; index_length) / 1024 / 1024, 1) &quot;DB Size in MB&quot; FROM information_schema.tables GROUP BY table_schema; mysql 得到各个table的大小 SELECT table_name AS &ldquo;Table&rdquo;, round(((data_length &#43; index_length) / 1024 / 1024), 2) as size FROM information_schema.TABLES WHERE table_schema = &ldquo;YOUR_DATABASE_NAME&rdquo;" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/mysql-useful-tricks/" />
+<meta property="article:published_time" content="2018-07-26T14:02:00&#43;08:00"/>
+<meta property="article:modified_time" content="2018-07-26T14:02:00&#43;08:00"/>
+
+<meta itemprop="name" content="Mysql Useful Tricks">
+<meta itemprop="description" content="mysql 得到各databases的大小 SELECT table_schema &quot;DB Name&quot;, ROUND(SUM(data_length &#43; index_length) / 1024 / 1024, 1) &quot;DB Size in MB&quot; FROM information_schema.tables GROUP BY table_schema; mysql 得到各个table的大小 SELECT table_name AS &ldquo;Table&rdquo;, round(((data_length &#43; index_length) / 1024 / 1024), 2) as size FROM information_schema.TABLES WHERE table_schema = &ldquo;YOUR_DATABASE_NAME&rdquo;">
+
+
+<meta itemprop="datePublished" content="2018-07-26T14:02:00&#43;08:00" />
+<meta itemprop="dateModified" content="2018-07-26T14:02:00&#43;08:00" />
+<meta itemprop="wordCount" content="462">
+
+
+
+<meta itemprop="keywords" content="tricks," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Mysql Useful Tricks"/>
+<meta name="twitter:description" content="mysql 得到各databases的大小 SELECT table_schema &quot;DB Name&quot;, ROUND(SUM(data_length &#43; index_length) / 1024 / 1024, 1) &quot;DB Size in MB&quot; FROM information_schema.tables GROUP BY table_schema; mysql 得到各个table的大小 SELECT table_name AS &ldquo;Table&rdquo;, round(((data_length &#43; index_length) / 1024 / 1024), 2) as size FROM information_schema.TABLES WHERE table_schema = &ldquo;YOUR_DATABASE_NAME&rdquo;"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Mysql Useful Tricks</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-26 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <blockquote>
+<p>mysql 得到各databases的大小</p>
+</blockquote>
+
+<pre><code>SELECT table_schema &quot;DB Name&quot;,
+    ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) &quot;DB Size in MB&quot; 
+FROM information_schema.tables 
+GROUP BY table_schema; 
+</code></pre>
+
+<blockquote>
+<p>mysql 得到各个table的大小
+    SELECT
+    table_name AS &ldquo;Table&rdquo;,<br />
+    round(((data_length + index_length) / 1024 / 1024), 2) as size<br />
+    FROM information_schema.TABLES<br />
+    WHERE table_schema = &ldquo;YOUR_DATABASE_NAME&rdquo;<br />
+    ORDER BY size DESC;</p>
+</blockquote>
+
+<p>mysql 5.7 在macos 改密码须知：
+&gt;  mysql&gt; UPDATE user SET authentication_string=PASSWORD(&ldquo;root&rdquo;) WHERE User=&lsquo;root&rsquo;;</p>
+
+<p>mysql 8.0 改密码：
+&gt; set PASSWORD =&lsquo;your_password&rsquo;  // 给当前用户改密码
+或者
+&gt; SET PASSWORD FOR &lsquo;USER&rsquo;@&lsquo;HOST&rsquo; =&lsquo;your_password&rsquo;;</p>
+
+<p>Clean mysql completely</p>
+
+<pre><code>sudo rm /usr/local/mysql
+sudo rm -rf /usr/local/var/mysql
+sudo rm -rf /usr/local/mysql*
+sudo rm ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
+sudo rm -rf /Library/StartupItems/MySQLCOM
+sudo rm -rf /Library/PreferencePanes/My*
+</code></pre>
+
+<blockquote>
+<p>MySQL 提升写入速度 几个tips
+AWS RDS MySQL 服务器很多参数已经是动态优化了，因此多余的参数设置也不多提，但是还是有些参数需要优化</p>
+</blockquote>
+
+<ol>
+<li>批量插入，插入时注意尽量避开键值冲突</li>
+<li>多线程插入，MySQL 5.7 32个链接同时插入速度是峰值（读的话是64）， 8.0以后性能有提升，64比较快</li>
+<li><code>max_allowed_packet</code> size, 默认5M左右， 设成1G 比较好，便于批量插入</li>
+<li>将<code>innodb_flush_log_at_trx_commit</code> 设置为0</li>
+<li>默认<code>innodb_buffer_pool_size</code> 设为可用内存的 70%~80%， 也就是说 16G的内存可以设为 <strong>12G</strong></li>
+<li>RDS 将transaction isolation 修改成 read commited 有助于减少gaps lock</li>
+<li>RDS 增加innodb_sort_buffer_size有助于提升大表索引创建速度</li>
+<li>索引最后添加</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/tricks/">tricks</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">EOS 学习笔记 智能合约(一）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/ubuntu-go-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+            <span class="next-text nav-default">Ubuntu下，golang myzsh 快速搭建</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

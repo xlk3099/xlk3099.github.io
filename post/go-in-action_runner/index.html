@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（十四）: 并发模式 - Runner - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="在前几章中, 学到了go的并发, 通道是如何工作的, 接下来会介绍三种go常见的并发模式, runner, pool, worker. 本篇会展示使用通道来监视程序的执行时间, 生命周期," />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action_runner/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（十四）: 并发模式 - Runner" />
+<meta property="og:description" content="在前几章中, 学到了go的并发, 通道是如何工作的, 接下来会介绍三种go常见的并发模式, runner, pool, worker. 本篇会展示使用通道来监视程序的执行时间, 生命周期," />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action_runner/" />
+<meta property="article:published_time" content="2018-04-15T17:53:27&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-15T17:53:27&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（十四）: 并发模式 - Runner">
+<meta itemprop="description" content="在前几章中, 学到了go的并发, 通道是如何工作的, 接下来会介绍三种go常见的并发模式, runner, pool, worker. 本篇会展示使用通道来监视程序的执行时间, 生命周期,">
+
+
+<meta itemprop="datePublished" content="2018-04-15T17:53:27&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-15T17:53:27&#43;08:00" />
+<meta itemprop="wordCount" content="2340">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（十四）: 并发模式 - Runner"/>
+<meta name="twitter:description" content="在前几章中, 学到了go的并发, 通道是如何工作的, 接下来会介绍三种go常见的并发模式, runner, pool, worker. 本篇会展示使用通道来监视程序的执行时间, 生命周期,"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（十四）: 并发模式 - Runner</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-15 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <p>在前几章中, 学到了go的并发, 通道是如何工作的, 接下来会介绍三种go常见的并发模式, runner, pool, worker.</p>
+
+<p>本篇会展示使用通道来监视程序的执行时间, 生命周期, 监听终止信号等等. 我们把能执行上述功能的entity抽象成对象Runner. Runner在后台处理任务程序会很有用, 也可以作为基于定时任务(cron task)的云环境任务.</p>
+
+<p>下面们定义了一个Runner类型, 从设计角度上思考, Runner需要完成下列工作:</p>
+
+<ul>
+<li>程序在分配时间内完成工作, 正常终止.</li>
+<li>程序没有完成工作, 应该被强制终止, 并返回超时错误.</li>
+<li>接收到系统发送的终端信号, 应该完成当前任务, 清理状态并停止工作.</li>
+<li>可以<strong>按顺序</strong>运行一系列工作.</li>
+</ul>
+
+<p>按照上面的Runner需求, 我们定义一个Runner 类型.</p>
+
+<pre><code class="language-go">package runner
+
+// 定义一个Runner类型
+type Runner struct{
+    interrupt chan os.Signal    // 监听系统终端信号
+    timeout &lt;-chan time.Time    // 监听超时信号
+    complete chan error         // 处理任务完成信号
+    tasks []func(int)           // tasks是一组按索引依次执行的函数.
+}
+</code></pre>
+
+<p>我们把不同的任务抽象成不同的函数, 因此Runner包含了一个成员<code>tasks</code>, 是一个函数切片. 此外Runner还有三个channel类型的成员:</p>
+
+<ul>
+<li>interrupt 信号: 负责监听系统事件.</li>
+<li>timeout 信号: 负责监听超时信号.</li>
+<li>complete 信号: 负责监听每个单独task返回值, 成功还是error</li>
+</ul>
+
+<p>根据Runner的内部四个数据类型, <strong>定义一个Runner的工厂函数</strong>:</p>
+
+<pre><code class="language-go">func New(d time.Duration) *Runner {
+    return &amp;Runner {
+        interrupt: make(chan os.Signal, 1),
+        complete: make(chan error),
+        timeout: time.After(d)
+    }
+}
+</code></pre>
+
+<p>关于这个工厂函数:</p>
+
+<ul>
+<li>允许调用者设置超时时间, 设定的超时时间会传给函数<code>time.After</code>, <code>time.After</code>返回值是一个time.Time的通道, 当设定时间到达后, 会往该通道写值.</li>
+<li>complete 通道被初始为无缓冲通道, 因为一旦一个task完成或者error out, 它就会像main函数(管理者)发送信号, 一旦信号被接受, Runner应该退出.</li>
+<li>interrupt 被初始化为缓冲区容量为1的通道, 这样可以保证通道至少能接收一个来自os.Signal的值, 确保runtime发送这个事件不会被堵塞. 因为如果对应的goroutine还没准备好.</li>
+</ul>
+
+<p>既然定义了Runner结构, 一个比较好的代码规范是, 我们也需要<strong>定义在Runner里常见的错误类型</strong>:</p>
+
+<pre><code class="language-go">var (
+    ErrTimeout = errors.New(&quot;执行超时&quot;)
+    ErrInterrupt = errors.New(&quot;收到系统中断信号&quot;)
+)
+</code></pre>
+
+<p><strong>Runner需要能够添加不同的tasks</strong>, 所以给Runner增加一个Add 方法:</p>
+
+<pre><code class="language-go">func (r *Runner) Add(tasks ...func(int)) {
+    r.tasks = append(r.tasks, tasks...)
+}
+</code></pre>
+
+<p>这里的Add方法接收一个名为tasks的可变参数, 接收可以是任意数量的只要满足类型是函数(接收一个整型参数, 不反回任何值)传入.</p>
+
+<p>我们还需要一个<strong>方法告诉Runner来执行内部的tasks</strong>.</p>
+
+<pre><code class="language-go">func (r *Runner) run() error{
+    for id, task := range r.tasks{
+        select {
+            // 当中断事件触发时, 
+            case &lt;- r.interrupt :
+                signal.Stop(r.interrupt)
+                return ErrInterrupt
+            default: // do nothing just continue
+        }
+        task(id)
+    }
+    return nil
+}
+</code></pre>
+
+<p>在go里, 用select关键词来检查接收到的信号, 一般而言, select在没有收到信号的时候是堵塞的, 但加了default分支, 就不会堵塞. 这里我们按照tasks 被添加的顺序依次执行, 每执行一个新任务时, 都会检查有没有收到interrupt信号, 如果有收到, 那么就直接返回ErrInerrupt, 没有就继续执行下面一个任务. 此外, 采用signal.Stop() 可以阻止接收之后的所有事件.</p>
+
+<p>上述基本就是Runner所需要的所有方法了, 还需要<strong>一个外部启动Runner的方法</strong>:</p>
+
+<pre><code class="language-go">func (r *Runner) Start() error {
+    // 我们希望接收所有中断信号
+    signal.Notify(r.interrupt, os.Interrupt)
+
+    // 用不同的goroutine执行不同的任务
+    go func() {
+        r.complete &lt;- r.run()
+    }()
+
+    select {
+        // 当任务完成时发出的信号
+        case err := &lt;- r.complete:
+            return err
+        // 当任务处理程序超时时发出的信号
+        case &lt;- r.timeout:
+            return ErrTimeout
+    }
+}
+</code></pre>
+
+<p>完整的Runner代码:</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;errors&quot;
+	&quot;os&quot;
+	&quot;os/signal&quot;
+	&quot;time&quot;
+)
+
+var (
+	ErrTimeout   = errors.New(&quot;执行超时&quot;)
+	ErrInterrupt = errors.New(&quot;收到系统中断信号&quot;)
+)
+
+// 定义一个Runner 开放类型
+type Runner struct {
+	interrupt chan os.Signal   // 监听系统终端信号
+	timeout   &lt;-chan time.Time // 监听超时信号
+	complete  chan error       // 处理任务完成信号
+	tasks     []func(int)      // tasks是一组按索引依次执行的函数.
+}
+
+func New(d time.Duration) *Runner {
+	return &amp;Runner{
+		interrupt: make(chan os.Signal, 1),
+		complete:  make(chan error),
+		timeout:   time.After(d),
+	}
+}
+
+func (r *Runner) Add(tasks ...func(int)) {
+	r.tasks = append(r.tasks, tasks...)
+}
+
+func (r *Runner) run() error {
+	for id, task := range r.tasks {
+		select {
+		// 当中断事件触发时,
+		case &lt;-r.interrupt:
+			signal.Stop(r.interrupt)
+			return ErrInterrupt
+		default: // do nothing just continue
+		}
+		task(id)
+	}
+	return nil
+}
+
+func (r *Runner) Start() error {
+	// 我们希望接收所有中断信号
+	signal.Notify(r.interrupt, os.Interrupt)
+
+	// 用不同的goroutine执行不同的任务
+	go func() {
+		r.complete &lt;- r.run()
+	}()
+
+	select {
+	// 当任务完成时发出的信号
+	case err := &lt;-r.complete:
+		return err
+	// 当任务处理程序超时时发出的信号
+	case &lt;-r.timeout:
+		return ErrTimeout
+	}
+}
+</code></pre>
+
+<p>再写一个main函数用来测试:</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;log&quot;
+	&quot;os&quot;
+	&quot;time&quot;
+
+	&quot;github.com/xlk3099/runner&quot;
+)
+
+// 定义超时时间
+const timeout = 3 * time.Second
+
+func main() {
+	log.Println(&quot;任务开始...&quot;)
+
+	// 用timeout创建一个新的runner instance
+	r := runner.New(timeout)
+
+	// 添加三个Task
+	r.Add(createTask(), createTask(), createTask())
+
+	// Run the tasks and handle the result.
+	if err := r.Start(); err != nil {
+		switch err {
+		case runner.ErrTimeout:
+			log.Println(&quot;由于超时, Runner终止.&quot;)
+			os.Exit(1)
+		case runner.ErrInterrupt:
+			log.Println(&quot;由于操作系统干扰, 程序终止.&quot;)
+			os.Exit(2)
+		}
+	}
+
+	log.Println(&quot;Runner执行结束.&quot;)
+}
+
+// createTask 返回一个函数
+func createTask() func(int) {
+	return func(id int) {
+		log.Printf(&quot;执行任务 - #%d.&quot;, id)
+		time.Sleep(time.Duration(id) * time.Second)
+	}
+}
+</code></pre>
+
+<p>运行上述代码, 并使其自然终止, 我们得到输出:</p>
+
+<pre><code>➜  xlk3099 go run main.go
+2018/04/15 22:24:21 任务开始...
+2018/04/15 22:24:21 执行任务 - #0.
+2018/04/15 22:24:21 执行任务 - #1.
+2018/04/15 22:24:22 执行任务 - #2.
+2018/04/15 22:24:24 由于超时, Runner终止.
+exit status 1
+</code></pre>
+
+<p>运行上述代码一段时间, 然后按ctrl+c, 得到输出:</p>
+
+<pre><code>➜  xlk3099 go run main.go
+2018/04/15 22:20:08 任务开始...
+2018/04/15 22:20:08 执行任务 - #0.
+2018/04/15 22:20:08 执行任务 - #1.
+^C2018/04/15 22:20:09 由于操作系统干扰, 程序终止.
+exit status 2
+</code></pre>
+
+<p>当然, 把超时时间设置成&gt;3的话, 我们会看到:</p>
+
+<pre><code>➜  xlk3099 go run main.go
+2018/04/15 22:22:46 任务开始...
+2018/04/15 22:22:46 执行任务 - #0.
+2018/04/15 22:22:46 执行任务 - #1.
+2018/04/15 22:22:47 执行任务 - #2.
+2018/04/15 22:22:49 Runner执行结束.
+</code></pre>
+
+<p>这个只是一个最基本的Runner模型, 还可以有更进一步的扩展, 大家可尝试研究.</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-15</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action_pool/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（十五）: 并发模式 - Pool</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action_channel/">
+            <span class="next-text nav-default">go实战读书笔记（十三）: channel</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

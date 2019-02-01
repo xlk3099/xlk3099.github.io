@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Numpy 参考手册 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="lekai" />
+  <meta name="description" content="Data Types Type Name Type Code Description int8 uint8 i1 u1 8-bit integer int16 uint16 i2 u2 16-bit integer int32 uint32 i4 u4 32-bit integer int64 uint64 i8 u8 64-bit integer float16 f2 Half-precision float float32 f4 f Standard single-precision float float64 f8 d Standard double-precision float float128 f16 g Extended-precision float complex64 c8 Complex represented by two 32-bit floats complex128 c16 Complex represented by two 64-bit floats complex256 c32" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/numpy_cheat_sheet/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Numpy 参考手册" />
+<meta property="og:description" content="Data Types Type Name Type Code Description int8 uint8 i1 u1 8-bit integer int16 uint16 i2 u2 16-bit integer int32 uint32 i4 u4 32-bit integer int64 uint64 i8 u8 64-bit integer float16 f2 Half-precision float float32 f4 f Standard single-precision float float64 f8 d Standard double-precision float float128 f16 g Extended-precision float complex64 c8 Complex represented by two 32-bit floats complex128 c16 Complex represented by two 64-bit floats complex256 c32" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/numpy_cheat_sheet/" />
+<meta property="article:published_time" content="2018-11-24T14:10:59&#43;08:00"/>
+<meta property="article:modified_time" content="2018-11-24T14:10:59&#43;08:00"/>
+
+<meta itemprop="name" content="Numpy 参考手册">
+<meta itemprop="description" content="Data Types Type Name Type Code Description int8 uint8 i1 u1 8-bit integer int16 uint16 i2 u2 16-bit integer int32 uint32 i4 u4 32-bit integer int64 uint64 i8 u8 64-bit integer float16 f2 Half-precision float float32 f4 f Standard single-precision float float64 f8 d Standard double-precision float float128 f16 g Extended-precision float complex64 c8 Complex represented by two 32-bit floats complex128 c16 Complex represented by two 64-bit floats complex256 c32">
+
+
+<meta itemprop="datePublished" content="2018-11-24T14:10:59&#43;08:00" />
+<meta itemprop="dateModified" content="2018-11-24T14:10:59&#43;08:00" />
+<meta itemprop="wordCount" content="1031">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Numpy 参考手册"/>
+<meta name="twitter:description" content="Data Types Type Name Type Code Description int8 uint8 i1 u1 8-bit integer int16 uint16 i2 u2 16-bit integer int32 uint32 i4 u4 32-bit integer int64 uint64 i8 u8 64-bit integer float16 f2 Half-precision float float32 f4 f Standard single-precision float float64 f8 d Standard double-precision float float128 f16 g Extended-precision float complex64 c8 Complex represented by two 32-bit floats complex128 c16 Complex represented by two 64-bit floats complex256 c32"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Numpy 参考手册</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-11-24 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#data-types">Data Types</a></li>
+<li><a href="#creating-arrays">Creating Arrays</a></li>
+<li><a href="#array-attributes-and-member-functions">Array Attributes and Member Functions</a></li>
+<li><a href="#array-indexing">Array Indexing</a></li>
+<li><a href="#operations-between-arrays-and-scalars">Operations between Arrays and Scalars</a></li>
+<li><a href="#unary-universal-functions-on-arrays">Unary Universal Functions on Arrays</a></li>
+<li><a href="#binary-universal-functions-on-arrays">Binary Universal Functions on Arrays</a></li>
+<li><a href="#statistical-functions-on-arrays">Statistical Functions on Arrays</a></li>
+<li><a href="#set-logic-on-arrays">Set Logic on Arrays</a></li>
+<li><a href="#linear-algebra-on-arrays">Linear Algebra on Arrays</a></li>
+<li><a href="#random-numbers">Random Numbers</a></li>
+<li><a href="#file-i-o">File I/O</a></li>
+<li><a href="#misc">Misc</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="data-types">Data Types</h2>
+
+<table>
+<thead>
+<tr>
+<th>Type Name</th>
+<th>Type Code</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>int8</code> <code>uint8</code></td>
+<td><code>i1</code> <code>u1</code></td>
+<td>8-bit integer</td>
+</tr>
+
+<tr>
+<td><code>int16</code> <code>uint16</code></td>
+<td><code>i2</code> <code>u2</code></td>
+<td>16-bit integer</td>
+</tr>
+
+<tr>
+<td><code>int32</code> <code>uint32</code></td>
+<td><code>i4</code> <code>u4</code></td>
+<td>32-bit integer</td>
+</tr>
+
+<tr>
+<td><code>int64</code> <code>uint64</code></td>
+<td><code>i8</code> <code>u8</code></td>
+<td>64-bit integer</td>
+</tr>
+
+<tr>
+<td><code>float16</code></td>
+<td><code>f2</code></td>
+<td>Half-precision float</td>
+</tr>
+
+<tr>
+<td><code>float32</code></td>
+<td><code>f4</code> <code>f</code></td>
+<td>Standard single-precision float</td>
+</tr>
+
+<tr>
+<td><code>float64</code></td>
+<td><code>f8</code> <code>d</code></td>
+<td>Standard double-precision float</td>
+</tr>
+
+<tr>
+<td><code>float128</code></td>
+<td><code>f16</code> <code>g</code></td>
+<td>Extended-precision float</td>
+</tr>
+
+<tr>
+<td><code>complex64</code></td>
+<td><code>c8</code></td>
+<td>Complex represented by two 32-bit floats</td>
+</tr>
+
+<tr>
+<td><code>complex128</code></td>
+<td><code>c16</code></td>
+<td>Complex represented by two 64-bit floats</td>
+</tr>
+
+<tr>
+<td><code>complex256</code></td>
+<td><code>c32</code></td>
+<td>Complex represented by two 128-bit floats</td>
+</tr>
+
+<tr>
+<td><code>bool</code></td>
+<td><code>?</code></td>
+<td>Boolean</td>
+</tr>
+
+<tr>
+<td><code>object</code></td>
+<td><code>0</code></td>
+<td>Python object type</td>
+</tr>
+
+<tr>
+<td><code>string_</code></td>
+<td><code>S</code></td>
+<td>Fixed-length string with 1 byte per char (e.g. S10 for a string of length 10)</td>
+</tr>
+
+<tr>
+<td><code>unicode_</code></td>
+<td><code>U</code></td>
+<td>Fixed-length unicode string (e.g. U10 for a unicode string of length 10)</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="creating-arrays">Creating Arrays</h2>
+
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>np.array([1, 2.5, -3])</code></td>
+<td>1D ndarray object</td>
+</tr>
+
+<tr>
+<td><code>np.array([1, 2, 3], dtype=np.float32)</code></td>
+<td>1D ndarray object with the specified element type</td>
+</tr>
+
+<tr>
+<td><code>np.array([[1, 2],[3, 4]])</code></td>
+<td>2D ndarray object</td>
+</tr>
+
+<tr>
+<td><code>np.zeros(5)</code></td>
+<td>1D ndarray object of length 5 with zeros</td>
+</tr>
+
+<tr>
+<td><code>np.zeros((2, 3))</code></td>
+<td>2D ndarray object of size 2x3 with zeros</td>
+</tr>
+
+<tr>
+<td><code>np.zeros_like(a)</code></td>
+<td>ndarray object with the shape of <code>a</code> with zeros</td>
+</tr>
+
+<tr>
+<td><code>np.ones(5)</code></td>
+<td>1D ndarray object of length 5 with ones</td>
+</tr>
+
+<tr>
+<td><code>np.ones((2, 3))</code></td>
+<td>2D ndarray object of size 2x3 with ones</td>
+</tr>
+
+<tr>
+<td><code>np.ones_like(a)</code></td>
+<td>ndarray object with the shape of <code>a</code> with ones</td>
+</tr>
+
+<tr>
+<td><code>np.empty(5)</code></td>
+<td>1D ndarray object of length 5 with uninitialized values</td>
+</tr>
+
+<tr>
+<td><code>np.empty((2, 3))</code></td>
+<td>2D ndarray object of size 2x3 with uninitialized values</td>
+</tr>
+
+<tr>
+<td><code>np.empty_like(a)</code></td>
+<td>ndarray object with the shape of <code>a</code> with uninitialized values</td>
+</tr>
+
+<tr>
+<td><code>np.eye(3)</code> <code>np.identity(3)</code></td>
+<td>identity matrix of size 3</td>
+</tr>
+
+<tr>
+<td><code>np.arange(10)</code></td>
+<td>Python&rsquo;s range but it returns a ndarray object</td>
+</tr>
+
+<tr>
+<td><code>np.asarray(a)</code></td>
+<td><code>a</code> as an ndarray object (does not copy if it already is one)</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="array-attributes-and-member-functions">Array Attributes and Member Functions</h2>
+
+<table>
+<thead>
+<tr>
+<th>Attribute/Function</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>a.ndim</code></td>
+<td>Dimensionality (int)</td>
+</tr>
+
+<tr>
+<td><code>a.shape</code></td>
+<td>Shape (a touple containing the length in each of the dimensions)</td>
+</tr>
+
+<tr>
+<td><code>a.dtype</code></td>
+<td>Data Type</td>
+</tr>
+
+<tr>
+<td><code>a.astype(np.float64)</code></td>
+<td>Return a new array with the converted elements</td>
+</tr>
+
+<tr>
+<td><code>a.reshape((3, 5))</code></td>
+<td>Reshape the ndarray object (the number of elements must be the same)</td>
+</tr>
+
+<tr>
+<td><code>a.swapaxes((1, 0))</code></td>
+<td>Swaps the specified axis pair</td>
+</tr>
+
+<tr>
+<td><code>...</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="array-indexing">Array Indexing</h2>
+
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>a[3]</code></td>
+<td>An element or subarray</td>
+</tr>
+
+<tr>
+<td><code>a[0, 3, 1]</code></td>
+<td>An element or subarray at the specified position of each of the dimensions</td>
+</tr>
+
+<tr>
+<td><code>a[2:6]</code> <code>a[:2]</code> <code>a[1:,2]</code></td>
+<td>A slice of elements or subarrays</td>
+</tr>
+
+<tr>
+<td><code>a[a &gt; 5]</code> <code>a[(a &gt; 5) \| (a == -1)]</code> <code>a[a &gt; 5, 2:]</code></td>
+<td>A boolean index returns only the elements or subarrays where the expression is true</td>
+</tr>
+
+<tr>
+<td><code>a[[0, 1], [0, 1]]</code></td>
+<td>A list of elements or subarrays that have their coordinate dimensions specified by the sublists (i.e. in the example the first list holds the 1st axis coordinates and the second list holds the 2nd axis coordinates so the length of the two lists must be equal)</td>
+</tr>
+
+<tr>
+<td><code>a[np.ix_([1, 2],[0, 5, 2])]</code></td>
+<td>A rectangular area specified by selecting the specified coordinates along the axes</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="operations-between-arrays-and-scalars">Operations between Arrays and Scalars</h2>
+
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>a + b</code> <code>a * b</code> <code>a / b</code> <code>a ** b</code> <code>...</code></td>
+<td>Elementwise operation between the two matrices</td>
+</tr>
+
+<tr>
+<td><code>a + 5</code> <code>a * 5</code> <code>a / 5</code> <code>a ** 5</code> <code>...</code></td>
+<td>Elementwise operation between the elements of the matrix and the scalar</td>
+</tr>
+
+<tr>
+<td><code>a &gt; 5</code> <code>a == 5</code> <code>...</code></td>
+<td>Elementwise comparison between the elements of the matrix and the scalar</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="unary-universal-functions-on-arrays">Unary Universal Functions on Arrays</h2>
+
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>np.sqrt(a)</code></td>
+<td>Elementwise square root</td>
+</tr>
+
+<tr>
+<td><code>np.square(a)</code></td>
+<td>Elementwise square</td>
+</tr>
+
+<tr>
+<td><code>np.exp(a)</code></td>
+<td>Elementwise exp</td>
+</tr>
+
+<tr>
+<td><code>np.log(a)</code> <code>np.log10(a)</code> <code>np.log2(a)</code> <code>np.log1p(a)</code></td>
+<td>Elementwise log, log2, log10 and log(1+x)</td>
+</tr>
+
+<tr>
+<td><code>np.abs(a)</code> <code>np.fabs(a)</code></td>
+<td>Elementwise abs (<code>fabs</code> is faster for non-complex values)</td>
+</tr>
+
+<tr>
+<td><code>np.sign(a)</code></td>
+<td>Elementwise sign (-1, 0, 1)</td>
+</tr>
+
+<tr>
+<td><code>np.ceil(a)</code> <code>np.floor(a)</code> <code>np.rint(a)</code></td>
+<td>Elementwise rounding</td>
+</tr>
+
+<tr>
+<td><code>np.modf(a)</code></td>
+<td>Elementwise <code>divmod</code></td>
+</tr>
+
+<tr>
+<td><code>np.isnan(a)</code></td>
+<td>Elementwise <code>NaN</code> detection</td>
+</tr>
+
+<tr>
+<td><code>np.isinfinite(a)</code> <code>np.isinf(a)</code></td>
+<td>Elementwise <code>inf</code> detection</td>
+</tr>
+
+<tr>
+<td><code>np.sin(a)</code> <code>np.sinh(a)</code> <code>np.cos(a)</code> <code>np.cosh(a)</code> <code>np.tan(a)</code> <code>np.tanh(a)</code></td>
+<td>Elementwise trigonometric functions</td>
+</tr>
+
+<tr>
+<td><code>np.logical_not(a)</code></td>
+<td>Elementwise boolean negation</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="binary-universal-functions-on-arrays">Binary Universal Functions on Arrays</h2>
+
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>np.add(a, b)</code></td>
+<td>Elementwise add</td>
+</tr>
+
+<tr>
+<td><code>np.subtract(a, b)</code></td>
+<td>Elementwise subtract</td>
+</tr>
+
+<tr>
+<td><code>np.multiply(a, b)</code></td>
+<td>Elementwise multiply</td>
+</tr>
+
+<tr>
+<td><code>np.divide(a, b)</code> <code>np.floor_divide(a, b)</code></td>
+<td>Elementwise divide</td>
+</tr>
+
+<tr>
+<td><code>np.power(a, b)</code></td>
+<td>Elementwise power</td>
+</tr>
+
+<tr>
+<td><code>np.maximum(a, b)</code> <code>np.fmax(a, b)</code></td>
+<td>Elementwise maximum (<code>fmax</code> ignores <code>NaN</code>s)</td>
+</tr>
+
+<tr>
+<td><code>np.minimum(a, b)</code> <code>np.fmin(a, b)</code></td>
+<td>Elementwise minimum (<code>fmax</code> ignores <code>NaN</code>s)</td>
+</tr>
+
+<tr>
+<td><code>np.mod(a, b)</code></td>
+<td>Elementwise <code>mod</code></td>
+</tr>
+
+<tr>
+<td><code>np.copysign(a, b)</code></td>
+<td>Copy the sign of the values in b to values of a</td>
+</tr>
+
+<tr>
+<td><code>np.equal(a, b)</code> <code>np.not_equal(a, b)</code> <code>np.greater(a, b)</code> <code>np.greater_equal(a, b)</code> <code>np.less(a, b)</code> <code>np.less_equal(a, b)</code></td>
+<td>Elementwise comparison</td>
+</tr>
+
+<tr>
+<td><code>np.logical_and(a, b)</code> <code>np.logical_or(a, b)</code> <code>np.logical_xor(a, b)</code></td>
+<td>Elementwise logical operators</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="statistical-functions-on-arrays">Statistical Functions on Arrays</h2>
+
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>a.mean()</code> <code>a.mean(2)</code></td>
+<td>Mean along the specified axes</td>
+</tr>
+
+<tr>
+<td><code>a.min()</code> <code>a.max(2)</code></td>
+<td>Find minimum/maximum for each element or subarray for the specified axes</td>
+</tr>
+
+<tr>
+<td><code>a.argmin()</code> <code>a.argmax(2)</code></td>
+<td>Find the index of minimum/maximum for each element or subarray for the specified axes</td>
+</tr>
+
+<tr>
+<td><code>a.sum()</code> <code>a.sum(2)</code></td>
+<td>Sum along the specified axes</td>
+</tr>
+
+<tr>
+<td><code>a.prod()</code> <code>a.prod(2)</code></td>
+<td>Product along the specified axes</td>
+</tr>
+
+<tr>
+<td><code>a.cumsum()</code> <code>a.cumsum(2)</code></td>
+<td>Cumulative sum along the specified axes</td>
+</tr>
+
+<tr>
+<td><code>a.cumprod()</code> <code>a.cumprod(2)</code></td>
+<td>Cumulative product along the specified axes</td>
+</tr>
+
+<tr>
+<td><code>a.std()</code> <code>a.var()</code></td>
+<td>Standard deviation and variance</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="set-logic-on-arrays">Set Logic on Arrays</h2>
+
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>np.unique(a)</code></td>
+<td>Sorted unique</td>
+</tr>
+
+<tr>
+<td><code>np.intersect1d(a, b)</code></td>
+<td>Sorted intersection</td>
+</tr>
+
+<tr>
+<td><code>np.union1d(a, b)</code></td>
+<td>Sorted union</td>
+</tr>
+
+<tr>
+<td><code>np.in1d(a, b)</code></td>
+<td>For each element of <code>a</code> decide if it one of <code>b</code>&rsquo;s elements</td>
+</tr>
+
+<tr>
+<td><code>np.setdiff1d(a, b)</code></td>
+<td>Sorted difference</td>
+</tr>
+
+<tr>
+<td><code>np.setxor1d(a, b)</code></td>
+<td>Sorted symmetric difference</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="linear-algebra-on-arrays">Linear Algebra on Arrays</h2>
+
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>a.T</code></td>
+<td>Transpose</td>
+</tr>
+
+<tr>
+<td><code>a.transpose((1, 0))</code></td>
+<td>Pivot the matrix on the specified list of axes</td>
+</tr>
+
+<tr>
+<td><code>np.diag(a)</code></td>
+<td>Returns the diagonal elements as an ndarray or convert a 1D array to a diagonal matrix</td>
+</tr>
+
+<tr>
+<td><code>np.dot(a, b)</code></td>
+<td>Dot (matrix) product</td>
+</tr>
+
+<tr>
+<td><code>np.trace(a)</code></td>
+<td>Trace</td>
+</tr>
+
+<tr>
+<td><code>np.linalg.det(a)</code></td>
+<td>Matrix determinant</td>
+</tr>
+
+<tr>
+<td><code>np.linalg.eig(a)</code></td>
+<td>Eigenvalues and eigenvectors</td>
+</tr>
+
+<tr>
+<td><code>np.linalg.inv(a)</code></td>
+<td>Inverse of a square matrix</td>
+</tr>
+
+<tr>
+<td><code>np.linalg.pinv(a)</code></td>
+<td>Pseudo-inverse</td>
+</tr>
+
+<tr>
+<td><code>np.linalg.qr(a)</code></td>
+<td>QR decomposition</td>
+</tr>
+
+<tr>
+<td><code>np.linalg.svd(a)</code></td>
+<td>SVD</td>
+</tr>
+
+<tr>
+<td><code>np.linalg.solve(A, b)</code></td>
+<td>Solve linear equation <code>Ax=b</code></td>
+</tr>
+
+<tr>
+<td><code>np.linalg.lstsq(A, b)</code></td>
+<td>Least squares solution for <code>Ax=b</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="random-numbers">Random Numbers</h2>
+
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>np.random.seed(4)</code></td>
+<td align="left">Set the seed of the random number generation</td>
+</tr>
+
+<tr>
+<td><code>np.random.permutation(a)</code></td>
+<td align="left">Random permutation of a sequence or a permuted range</td>
+</tr>
+
+<tr>
+<td><code>np.random.shuffle(a)</code></td>
+<td align="left">Shuffle a sequence in place</td>
+</tr>
+
+<tr>
+<td><code>np.random.rand()</code></td>
+<td align="left">Draw from a uniform distibution</td>
+</tr>
+
+<tr>
+<td><code>np.random.randint()</code></td>
+<td align="left">Draw from a uniform distibution</td>
+</tr>
+
+<tr>
+<td><code>np.random.normal()</code></td>
+<td align="left">Draw from a normal distibution</td>
+</tr>
+
+<tr>
+<td><code>np.random.randn()</code></td>
+<td align="left">Draw from a normal distibution (mean=0, std=1)</td>
+</tr>
+
+<tr>
+<td><code>np.random.binomial()</code></td>
+<td align="left">Draw from a binomial distibution</td>
+</tr>
+
+<tr>
+<td><code>np.random.beta()</code></td>
+<td align="left">Draw from a beta distibution</td>
+</tr>
+
+<tr>
+<td><code>np.random.chisquare()</code></td>
+<td align="left">Draw from a Chi-square distibution</td>
+</tr>
+
+<tr>
+<td><code>np.random.gamma()</code></td>
+<td align="left">Draw from a gamma distibution</td>
+</tr>
+
+<tr>
+<td><code>np.random.uniform()</code></td>
+<td align="left">Draw from a uniform <code>[0,1)</code> distibution</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="file-i-o">File I/O</h2>
+
+<table>
+<thead>
+<tr>
+<th align="left">Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left"><code>np.save('a.npy', a)</code></td>
+<td>Save to file</td>
+</tr>
+
+<tr>
+<td align="left"><code>np.load('a.npy')</code></td>
+<td>Load from file</td>
+</tr>
+
+<tr>
+<td align="left"><code>np.savetxt('foo.txt', a)</code></td>
+<td>Save into a text file</td>
+</tr>
+
+<tr>
+<td align="left"><code>np.loadtxt('foo.txt')</code></td>
+<td>Load text file</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="misc">Misc</h2>
+
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>np.meshgrid(xs, ys)</code></td>
+<td>A 2D grid of points from 2 1D ndarrays</td>
+</tr>
+
+<tr>
+<td><code>a.sort()</code> <code>a.sort(1)</code></td>
+<td>In-place sort an ndarray along the specified axes</td>
+</tr>
+
+<tr>
+<td><code>a.any()</code> <code>a.all()</code></td>
+<td>Decide if any/all of the elements of an ndarray is True</td>
+</tr>
+
+<tr>
+<td><code>np.where(cond, a, b)</code></td>
+<td>Chooses elementwise between two ndarrays <code>a</code> and <code>b</code> based on <code>cond</code></td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">lekai</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-11-24</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/ddia_chapter5/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Designing Data-Intensive Applications 5: Replication</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/ssh_handle_multiple_github_deploy_keys/">
+            <span class="next-text nav-default">利用ssh config维护github多个private repo的deploy keys</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Database on Even - A super concise theme for Hugo</title>
+    <link>http://localhost:1313/tags/database/</link>
+    <description>Recent content in Database on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 28 Oct 2018 22:42:36 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/tags/database/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>高性能MySQL 第五章: 高效索引</title>
+      <link>http://localhost:1313/post/high_performance_mysql_chapter5_summary/</link>
+      <pubDate>Sun, 28 Oct 2018 22:42:36 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/high_performance_mysql_chapter5_summary/</guid>
+      <description>第五章整体来讲是非常有价值的, 读几遍都不过分, 珠玉非常多, 先记下部分深有感触的部分. 排序类查询优化 我个人近期对这个感触是比较深的, 如果fil</description>
+    </item>
+    
+  </channel>
+</rss>

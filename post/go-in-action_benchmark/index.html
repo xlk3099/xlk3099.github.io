@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（二十一）: benchmark - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="基准测试, 又名性能测试, 很多时候同一问题有多个解决方案, 我们需要查看哪种解决方案性能更好的时候, 基准测试就很有用. 基准测试也可以用来测试某段" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action_benchmark/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（二十一）: benchmark" />
+<meta property="og:description" content="基准测试, 又名性能测试, 很多时候同一问题有多个解决方案, 我们需要查看哪种解决方案性能更好的时候, 基准测试就很有用. 基准测试也可以用来测试某段" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action_benchmark/" />
+<meta property="article:published_time" content="2018-04-22T20:54:32&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-22T20:54:32&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（二十一）: benchmark">
+<meta itemprop="description" content="基准测试, 又名性能测试, 很多时候同一问题有多个解决方案, 我们需要查看哪种解决方案性能更好的时候, 基准测试就很有用. 基准测试也可以用来测试某段">
+
+
+<meta itemprop="datePublished" content="2018-04-22T20:54:32&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-22T20:54:32&#43;08:00" />
+<meta itemprop="wordCount" content="1397">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（二十一）: benchmark"/>
+<meta name="twitter:description" content="基准测试, 又名性能测试, 很多时候同一问题有多个解决方案, 我们需要查看哪种解决方案性能更好的时候, 基准测试就很有用. 基准测试也可以用来测试某段"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（二十一）: benchmark</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-22 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <p>基准测试, 又名性能测试, 很多时候同一问题有多个解决方案, 我们需要查看哪种解决方案性能更好的时候, 基准测试就很有用. 基准测试也可以用来测试某段代码CPU使用效率. 尤其是在<code>loop</code> 多的时候, 基准测试就显得尤其有用.</p>
+
+<p>首先要强调的是, 基准测试也是go测试的一种, 也是通过<code>go test</code>运行, 跟单元测试一样, 基准测试的文件也是以<code>_test.go</code>结尾, 比如我们有个文件叫<code>client.go</code>, 那么对应的基准测试文件是<code>client_test.go</code>, 基准测试一般也是跟单测放在同一个文件里.</p>
+
+<p>在运行go test时, 如果我们只跑基准测试, 我们需要加入指令<code>bench regexp</code>来声明我们要运行对满足regex pattern的函数基准测试.
+如果要只运行基准测试函数, 那么需要加上<code>-run=&quot;none&quot;</code>指令.</p>
+
+<p>举个基准测试的例子, go中, 将整数值转换成字符串有三种方法.</p>
+
+<blockquote>
+<p>fmt.Sprintf(&ldquo;%d&rdquo;, num)
+strconv.FormatInt(num, 10)
+strconv.Itoa(num)</p>
+</blockquote>
+
+<p>我们可以通过基准测试来了解哪种方法运行更为迅速.</p>
+
+<pre><code class="language-go">func BenchmarkSprintf(b *testing.B) {
+	number := 10
+
+	b.ResetTimer()
+
+	for i := 0; i &lt; b.N; i++ {
+		fmt.Sprintf(&quot;%d&quot;, number)
+	}
+}
+
+func BenchmarkFormat(b *testing.B) {
+	number := int64(10)
+
+	b.ResetTimer()
+
+	for i := 0; i &lt; b.N; i++ {
+		strconv.FormatInt(number, 10)
+	}
+}
+
+func BenchmarkItoa(b *testing.B) {
+	number := 10
+
+	b.ResetTimer()
+
+	for i := 0; i &lt; b.N; i++ {
+		strconv.Itoa(number)
+	}
+}
+</code></pre>
+
+<p>运行上面三个基准测试之前, 我们先看一下一个基准测试函数的基本构成:</p>
+
+<ul>
+<li>每个基准测试函数都必须以<code>Benchmark</code>开头.</li>
+<li>每个基准测试函数都必须接受一个<code>testing.B</code>的指针参数.</li>
+<li>每个基准测试函数返回nothing&hellip;</li>
+</ul>
+
+<p>在看下每个基准函数测试的内部都有一个循环迭代, 其上限是B.N, 循环里面是要测试的函数对象. 之所以采用循环是为了让基准测试框架能准确测试性能, 在一段时间内反复运行被测试函数. 关于<code>ResetTimer</code>, 它是为了重置基准测试已经过的时间, 以及重置内存分配的计数器.</p>
+
+<p>运行上面三个基准函数测试:</p>
+
+<pre><code>&gt; go test -v -run=&quot;none&quot; -bench=&quot;.&quot; -benchmem
+goos: darwin
+goarch: amd64
+pkg: github.com/goinaction/code/chapter9/listing28
+BenchmarkSprintf-4      20000000                86.8 ns/op            16 B/op          2 allocs/op
+BenchmarkFormat-4       500000000                3.15 ns/op            0 B/op          0 allocs/op
+BenchmarkItoa-4         300000000                4.54 ns/op            0 B/op          0 allocs/op
+PASS
+ok      github.com/goinaction/code/chapter9/listing28   5.560s
+</code></pre>
+
+<p>上述输出解释:</p>
+
+<ul>
+<li><code>goos</code>: 表示当前测试运行系统</li>
+<li><code>goarch</code>:` 表示系统架构</li>
+<li><code>pkg: github.com/goinaction/code/chapter9/listing28</code> : 表示测试路径</li>
+<li><code>BenchmarkSprintf-4</code>, <code>BenchmarkFormat-4</code>, <code>BenchmarkItoa-4</code> 表示基准测试名, 以及可同时运行的测试数量(默认为4)</li>
+</ul>
+
+<p>我们看到, 在相同的时间内(testing.B的默认值):</p>
+
+<ul>
+<li>Sprintf 完成了2000万次操作, 每执一次Sprintf转换数字到字符串, 需要86.8ns</li>
+<li>Format 完成了5亿次操作, 每执行一次FormatInt转换数字到字符串, 需要3.15ns</li>
+<li>Iota完成了3亿次操作, 每执行亿次Iota转换数字到字符串, 需要4.54ns.</li>
+</ul>
+
+<p>内存分配:</p>
+
+<ul>
+<li>每执行一次Sprintf转换数字, 需要从stack上分配两次内存, 共消耗了16个byte内存.</li>
+<li>每执行一次FormatInt或者Iota 则0次内存分配, 0 消耗内存.</li>
+</ul>
+
+<blockquote>
+<p><code>ok      github.com/goinaction/code/chapter9/listing28   5.560s</code> 则表示运行三个基准测试共花了5.560秒.</p>
+</blockquote>
+
+<p>通过上面的三个测试, 我们了解到在进行int到string转换的时候, 使用FormatInt是最为快捷的一种方式.</p>
+
+<p>感兴趣的小伙伴可以尝试研究string join哪种方式更快:</p>
+
+<ol>
+<li>strings.Join(str1, str2, str3)</li>
+<li>fmt.Sprintf(&ldquo;%s%s%s&rdquo;, str1, str2, str3)</li>
+<li>直接相加, str1 + str2 + str3</li>
+<li>bytes.Buffer 构造string</li>
+</ol>
+
+<p>哈哈 我也记不清是golang哪个版本了, 以前是bytes.Buffer最快, 但我现在用的golang1.10 现在是第三个方案最快.</p>
+
+<hr />
+
+<p>附第9章小结</p>
+
+<ul>
+<li>测试功能被内置到 go中,go提供了必要的测试工具。</li>
+<li>go test工具用来运行测试。</li>
+<li>测试文件总是以_test.go 作为文件名的结尾。</li>
+<li>表组测试是利用一个测试函数测试多组值的好办法。</li>
+<li>包中的示例代码,既能用于测试,也能用于文档。</li>
+<li>基准测试提供了探查代码性能的机制。</li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-22</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/tmux-tricks/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Tmux Tricks</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action_testing/">
+            <span class="next-text nav-default">go实战读书笔记（二十）: 单元测试</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

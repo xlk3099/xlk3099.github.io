@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Db on Even - A super concise theme for Hugo</title>
+    <link>http://localhost:1313/tags/db/</link>
+    <description>Recent content in Db on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 25 Oct 2018 17:28:39 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/tags/db/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>给Redis的list添加超时属性</title>
+      <link>http://localhost:1313/post/redis_sorted_list_expire/</link>
+      <pubDate>Thu, 25 Oct 2018 17:28:39 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/redis_sorted_list_expire/</guid>
+      <description>Redis里简单的K/V Pair默认是有expire属性的，当设定超时时间，一旦超时，设置的k/v对会自动被清除，但对于在list的item</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（十六）: 并发模式 - Work - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="work 包利用了无缓冲通道来创建一个goroutine池, (注意, 上一章我们创建了一个资源池, 这里我们创建的是goroutine池) 这些gorou" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action_work/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（十六）: 并发模式 - Work" />
+<meta property="og:description" content="work 包利用了无缓冲通道来创建一个goroutine池, (注意, 上一章我们创建了一个资源池, 这里我们创建的是goroutine池) 这些gorou" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action_work/" />
+<meta property="article:published_time" content="2018-04-16T18:45:06&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-16T18:45:06&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（十六）: 并发模式 - Work">
+<meta itemprop="description" content="work 包利用了无缓冲通道来创建一个goroutine池, (注意, 上一章我们创建了一个资源池, 这里我们创建的是goroutine池) 这些gorou">
+
+
+<meta itemprop="datePublished" content="2018-04-16T18:45:06&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-16T18:45:06&#43;08:00" />
+<meta itemprop="wordCount" content="1270">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（十六）: 并发模式 - Work"/>
+<meta name="twitter:description" content="work 包利用了无缓冲通道来创建一个goroutine池, (注意, 上一章我们创建了一个资源池, 这里我们创建的是goroutine池) 这些gorou"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（十六）: 并发模式 - Work</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-16 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <p>work 包利用了无缓冲通道来创建一个goroutine池, (注意, 上一章我们创建了一个资源池, 这里我们创建的是goroutine池) 这些goroutine执行并控制一组工作, 让其并发执行. 这种case下, 使用无缓冲通道的效果比指定一个有缓冲区通道好, 因为这种case下不需要一个工作队列, 也不需要一组goroutine 配合执行.</p>
+
+<p>无缓冲通道的一大好处, 就是保证了两个goroutine之间的数据交换. 使用无缓冲通道的方法允许使用者知道什么时候goroutine池正在执行工作, 如果里面所有的goroutine都忙, 无法接受新的工作, 也能通过通道来告诉调用者.</p>
+
+<p>这么看来, 这章其实叫做goroutine pool更好&hellip;😁</p>
+
+<pre><code class="language-go">
+// 定义一个Pool
+type Pool struct {
+    work chan Worker 
+    wg sync.WaitGroup
+}
+
+type Worker interface {
+    Task()
+}
+</code></pre>
+
+<p>上面我们定义了一个Pool类型, Pool 有一个内部类型work用来接收Worker类型数据,
+还有一个WaitGroup参数, 用来等待所有work 被完成.</p>
+
+<p>Pool还需要有其他方法, 比如工厂函数, 给定大小, 建一个新的goroutine池, 添加新的任务.</p>
+
+<pre><code class="language-go">
+func New(size int) *Pool {
+    p := Pool {
+        work : make(chan Worker),
+    }
+
+    p.wg.Add(size)
+
+    for i:=0; i&lt;size; i++{
+        go func(){
+            for w := range p.work{
+                w.Task()
+            }
+            p.wg.Done()
+        }()
+    }
+    return &amp;p
+}
+</code></pre>
+
+<p>Pool 需要一个可以添加任务的方法:</p>
+
+<pre><code class="language-go">func (p *Pool) Run(w Worker){
+    p.work &lt;- w
+}
+</code></pre>
+
+<p>外部可以关闭Pool</p>
+
+<pre><code class="language-go">func (p *Pool) Shutdown() {
+    close(p.work)
+    p.wg.Wait()
+}
+</code></pre>
+
+<p>其实整个逻辑很简单, goroutine Pool里有个无缓冲通道, 当Pool 被创建的时候, 会启动给定数量的goroitines, 同时监听那个无缓冲通道. 外部可以往无缓冲通道里写入任务,
+由于一个任务只能被一个接收者(goroutine)接收, 所以剩余的goroutines会继续等待任务, 一旦所有的goroutines都处在忙碌状态, 那么外部也不能再往无缓冲通道里写入任务.</p>
+
+<p>完整的Pool代码:</p>
+
+<pre><code class="language-go">package pool
+
+import &quot;sync&quot;
+
+// 定义一个Pool
+type Pool struct {
+	work chan Worker
+	wg   sync.WaitGroup
+}
+
+type Worker interface {
+	Task()
+}
+
+func New(size int) *Pool {
+	p := Pool{
+		work: make(chan Worker),
+	}
+
+	p.wg.Add(size)
+
+	for i := 0; i &lt; size; i++ {
+		go func() {
+			for w := range p.work {
+				w.Task()
+			}
+			p.wg.Done()
+		}()
+	}
+	return &amp;p
+}
+
+func (p *Pool) Run(w Worker) {
+	p.work &lt;- w
+}
+
+func (p *Pool) Shutdown() {
+	close(p.work)
+	p.wg.Wait()
+}
+</code></pre>
+
+<p>测试程序(来自go实战):</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;log&quot;
+	&quot;sync&quot;
+	&quot;time&quot;
+
+	&quot;github.com/xlk3099/work&quot;
+)
+
+// names提供了一组用来显示的名字
+var names = []string{
+	&quot;steve&quot;,
+	&quot;bob&quot;,
+	&quot;mary&quot;,
+	&quot;therese&quot;,
+	&quot;jason&quot;,
+}
+
+// namePrinter使用特定方式打印名字
+type namePrinter struct {
+	name string
+}
+
+// Task实现Worker接口
+func (m *namePrinter) Task() {
+	log.Println(m.name)
+	time.Sleep(time.Second)
+}
+
+// main是所有Go程序的入口
+func main() {
+	//使用两个goroutine来创建工作池
+	p := work.New(2)
+	var wg sync.WaitGroup
+	wg.Add(100 * len(names))
+	for i := 0; i &lt; 100; i++ { // 迭代names切片
+		for _, name := range names {
+			// 创建一个namePrinter并提供 // 指定的名字
+			np := namePrinter{
+				name: name,
+			}
+
+			go func() {
+				p.Run(&amp;np)
+				wg.Done()
+			}()
+		}
+	}
+	wg.Wait()
+	p.Shutdown()
+}
+
+</code></pre>
+
+<p>work这一章跟Pool其实很像, 区别在于资源池内部的资源是其它resources, 比如DB connection. 但work 里面的Pool资源是goroutines, 负责管理多少个goroutines处理一个任务.</p>
+
+<p></br></p>
+
+<hr />
+
+<p>附上第7章小结:</p>
+
+<ul>
+<li>可以使用通道来控制程序的生命周期.</li>
+<li>可以使用default来防止select语句阻塞.</li>
+<li>用缓冲通道可以用来管理一组可复用的资源.</li>
+<li>使用无缓冲通道可以来创建完成工作的goroutine池.</li>
+<li>任何时候都可以使用同步通道来让两个goroutine交换数据, 在通道操作完成时一定保证对方接收到了数据.</li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-16</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action_log/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（十七）: 标准库 - Log</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action_pool/">
+            <span class="next-text nav-default">go实战读书笔记（十五）: 并发模式 - Pool</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

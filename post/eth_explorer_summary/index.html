@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Eth Explorer 开发回顾 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="lekai" />
+  <meta name="description" content="从Evernote工作笔记上来看，开始着手调研以太坊浏览器是3月底，正式开始设计实现浏览器是4月份，到现在浏览器开发，parser 跟ethx" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/eth_explorer_summary/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Eth Explorer 开发回顾" />
+<meta property="og:description" content="从Evernote工作笔记上来看，开始着手调研以太坊浏览器是3月底，正式开始设计实现浏览器是4月份，到现在浏览器开发，parser 跟ethx" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/eth_explorer_summary/" />
+<meta property="article:published_time" content="2018-09-27T10:14:13&#43;08:00"/>
+<meta property="article:modified_time" content="2018-09-27T10:14:13&#43;08:00"/>
+
+<meta itemprop="name" content="Eth Explorer 开发回顾">
+<meta itemprop="description" content="从Evernote工作笔记上来看，开始着手调研以太坊浏览器是3月底，正式开始设计实现浏览器是4月份，到现在浏览器开发，parser 跟ethx">
+
+
+<meta itemprop="datePublished" content="2018-09-27T10:14:13&#43;08:00" />
+<meta itemprop="dateModified" content="2018-09-27T10:14:13&#43;08:00" />
+<meta itemprop="wordCount" content="3858">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Eth Explorer 开发回顾"/>
+<meta name="twitter:description" content="从Evernote工作笔记上来看，开始着手调研以太坊浏览器是3月底，正式开始设计实现浏览器是4月份，到现在浏览器开发，parser 跟ethx"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Eth Explorer 开发回顾</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-09-27 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#初版-原型"><strong>初版 原型</strong></a></li>
+<li><a href="#版本-v0-0-1"><strong>版本 v0.0.1</strong></a></li>
+<li><a href="#版本v0-0-2"><strong>版本v0.0.2</strong></a></li>
+<li><a href="#总结"><strong>总结</strong></a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>从Evernote工作笔记上来看，开始着手调研以太坊浏览器是3月底，正式开始设计实现浏览器是4月份，到现在浏览器开发，parser 跟ethx 两个服务，也差不多正好半年。</p>
+
+<p>写个小结记录下这段有意义的时光。。。</p>
+
+<h2 id="初版-原型"><strong>初版 原型</strong></h2>
+
+<p>初版的主要设计需求：</p>
+
+<ol>
+<li>支持获取blocks，transactions, uncles, erc20 transactions 等链上数据。</li>
+<li>能准确同步历史数据。</li>
+<li>能监听最新block。</li>
+<li>能监听最新的tx pool。</li>
+</ol>
+
+<p>关于获取链上历史数据部分，一开始看了<a href="https://github.com/citp/BlockSci">BlockSci</a>受了启发，了解到获取历史数据主要有两种方式</p>
+
+<ol>
+<li>通过rpc直接从节点获取</li>
+<li>直接从节点数据库拉取</li>
+</ol>
+
+<p>方法二不用说肯定是最高效的，比方法一省了一个跟节点1交互的过程。
+也是我一开始主攻方向。花了点时间总算能从节点数据库里面获得自己感兴趣的数据，但刚出炉的方法没捂热，就很悲剧的发现，节点数据库采用的是<code>levelDB</code>，
+只支持单进程访问。意味着用方法2拉数据的时候，eth节点得停止运行，可是有部分数据是必须通过rpc获取，不能停啊</p>
+
+<p>方法2, 卒&hellip;</p>
+
+<p>于是转攻方法一: <code>数据都是直接通过rpc访问eth获取</code></p>
+
+<p>方法一表现的还不错，速度还行，通过测试网发现速度可以啊，单线程大概每秒得有30个block的import，再算算600万/30/3600 差不多得55个小时，问问时下行情，貌似可行啊&hellip;
+更不用说多线程了，当然，后来我知道自己天真了&hellip;</p>
+
+<p>抛开后续困扰不谈，初版实现了下列功能：</p>
+
+<ol>
+<li>能够从eth 主链上获取<code>blocks</code>,<code>transactions</code>,<code>uncles</code>并解析这三类信息。</li>
+<li>eth 大部分json rpc的封装，用golang实现。</li>
+<li>gRPC+restfulAPI 结合，说白了就是一个服务同时接受gRPC跟https访问。</li>
+</ol>
+
+<p>初版功能不是很多，但真的是一个一个坑过来的，但解决后也确实都成了自己的知识点。</p>
+
+<ul>
+<li>eth各种数据类型跟parser里自己定义的类型之间的转换，这一部分来回坑了我很多次，还是怪自己定义数据类型是随意跟不熟练。</li>
+<li>eth各种 json rpc 实现跟调用注意事项</li>
+<li>json marshal 跟 unmarshal 高阶玩法</li>
+<li>golang里面数据类型跟mysql交互的orm实现，这里尝试过gorm，但gorm对big.Int支持不佳，遂放弃，最后自己对mysql各种语句进行了封装。</li>
+<li>gRPC 跟 restful apis的结合</li>
+<li>多线程实现方面的坑跟经验总结
+
+<ol>
+<li>MySQL connection 有连接数量上限,会返回 <code>too many connections</code> 错误</li>
+<li>虽然golang的goroutines很轻量级，但是随手写goroutines，尤其是跟eth或者mysql交互部分，很快就将系统可用端口占光。worker pool真的好用。</li>
+</ol></li>
+</ul>
+
+<p>我看了下git的历史，从设计到实现到运行，差不多一个月吧。</p>
+
+<p>实现完之后，试着导入测试网络，一开始看到每秒大概有上百个blocks导入，心里还是非常开心的，测试网大概近400万个blocks，照这个时间，也就10小时左右能搞定。
+但实际情况是，在导入到100万之后，速度几乎停滞不前。。。</p>
+
+<p><img src="https://user-images.githubusercontent.com/1768412/46524268-d488af80-c8ba-11e8-8763-e73c83812457.jpeg" alt="default" /></p>
+
+<p>初版的问题：</p>
+
+<ol>
+<li>所有数据都是从eth rpc获取，速度非常慢，如果后续有新的需求或者说parser部分出错，重新导入绝对是个大工程。</li>
+<li>数据类型偏少，需要查询账户相关信息。</li>
+</ol>
+
+<h2 id="版本-v0-0-1"><strong>版本 v0.0.1</strong></h2>
+
+<p>原型主要问题就是在于从eth拿历史数据非常慢，必须有更好的方式获取历史数据.
+想到的思路：</p>
+
+<ol>
+<li>起多台eth节点，作负载均衡, 按理论，获取速度可以有线性提升</li>
+<li>将eth数据储存到本地缓存，放入到读写更快的系统中,便于今后的开发（痛一次，今后就不痛了&hellip;)</li>
+</ol>
+
+<p>方案1是最先想实行的，跟同事提过一两次，没啥反应，加上自己对多台eth到底能提升多少性能，也没啥逼数&hellip;算了（<strong>新员工，脸皮薄</strong>）</p>
+
+<p>那就大刀阔斧的搞方案2吧. <strong>（将单机处理能力性能提升到巅峰，想想也是酷，增加对各个模块的了解，没毛病）</strong></p>
+
+<p>方案2 主要问题就是挑选性能更好的数据服务。
+需要考虑的几个点</p>
+
+<ol>
+<li>最好是go语言支持，内嵌数据库，不需要额外的service，多一个service需要多考虑很多因素&hellip;</li>
+<li>读写速度都要快，多线程读写支持。读的速度要求大于写的速度。</li>
+<li>SSD 读写优化</li>
+</ol>
+
+<p>这一阶段看了些经典的KV数据库以及缓存性数据库,优先看了下 levelDB golang的实现版：<a href="https://github.com/golang/leveldb">https://github.com/golang/leveldb</a> ，后来，网上稍微搜了搜，大家说rocksDB更好，在写跟更并发方面优化做了更多。但rocksDB 是c++写的，golang需要采用的话，需要使用cgo，说实话，不是很喜欢cgo。</p>
+
+<p>后来恰巧在geth看到有人提交了一个pr 用badgerDB 代替levelDB， 这引起了我很大兴趣。链接：<a href="https://github.com/ethereum/go-ethereum/issues/15717">https://github.com/ethereum/go-ethereum/issues/15717</a></p>
+
+<p>稍稍，做了些badger的研究，发现badgerDB 读写速度灰常牛逼，<a href="https://blog.dgraph.io/post/badger/">https://blog.dgraph.io/post/badger/</a> badgerDB 这篇官博里做的benchMark测试算是吊打rocksDB。遂入坑。。。就这么容易就入坑的。。。</p>
+
+<p>其实中间还看了下<a href="https://github.com/pingcap/tidb">TiDB</a>，<a href="https://github.com/boltdb/bolt">boltDB</a>, 但从已有的文章来看，单机性能都比不上badgerDB。
+总体来讲，badgerDB整体性能还行，但局部取值很慢。</p>
+
+<p>历史数据库选定后, 第二阶段的主要任务可以归纳成：</p>
+
+<ol>
+<li>将eth历史数据导入到badgerDB</li>
+<li>修改原型架构，分为两部分
+
+<ol>
+<li>历史数据部分从badgerDB 导入</li>
+<li>最新数据从eth节点导入</li>
+</ol></li>
+<li>支持 erc20 识别</li>
+<li>支持 internal transactions</li>
+<li>支持accounts 余额查询，按余额排序</li>
+</ol>
+
+<p>其中支持erc20识别是老板来的，通过eventLogs签名识别，老板老中医威武霸气，对以太坊的熟练度确实高。</p>
+
+<p>同步eth主网全节点，采用parity， achive+fatdb+trace模式耗时1周。</p>
+
+<p>从eth导入历史数据到badger，600万个block209小时，心里再度郁闷下，明明知道eth处理query速度不快，<strong>后悔没有搭建多个eth节点+1</strong></p>
+
+<p><img src="https://user-images.githubusercontent.com/1768412/46520762-b9fd0900-c8af-11e8-9e23-1925d8abdb5d.png" alt="image" /></p>
+
+<p>然后就是新功能开发，采坑&hellip;</p>
+
+<ol>
+<li>accounts balance计算</li>
+<li>erc20 transactions 的查询支持，以及用户的token balance追踪</li>
+<li>internal transaction的查询支持</li>
+</ol>
+
+<p>其中account balance计算，表示手搓党真的伤不起，这里我赌5毛，etherscan的account balance肯定是通过json rpc获取的，这个我来回真算了好久才算对，不过最后也算是理解到位，在清算流水的时候还帮到了忙&hellip;</p>
+
+<p>到后来所有功能支持，到第一版主网成功同步完毕，差不多是7月底了。。。</p>
+
+<p>v0.0.1，抛开tokens的一些功能限制，etherscan有的功能基本都齐备了</p>
+
+<ol>
+<li>数据类型增加，支持<code>blocks</code>, <code>uncles</code>, <code>transactions</code>, <code>accounts</code>, <code>erc20_transactions</code>, <code>internal_transactions</code>, <code>contracts</code></li>
+<li>ethx 实现完成，支持上述数据类型的多种api查询</li>
+<li>可根据机器配置，自定义block porter的数量，理论上block porter越多，数据导入越快.</li>
+<li>支持回滚</li>
+</ol>
+
+<p>写入历史数据部分：
+<img src="https://user-images.githubusercontent.com/1768412/46521180-48be5580-c8b1-11e8-8985-e1dc07e7bd80.png" alt="image" /></p>
+
+<p>整体来看，当时写入速度还是很均衡的，基本维持在38M 左右，耗时54小时左右能将全部历史数据写到mysql数据库。
+再加上索引创立时间13小时，因此全部耗时在70小时左右，可以接受。
+全部数据导入到MySQL, 算索引，大小略超出1T。</p>
+
+<p>v0.0.1 问题：</p>
+
+<ol>
+<li>容灾性不强，一旦依赖的三方服务down，比如RDS, Parity，或者Redis，那么数据大概率出现污染</li>
+<li>Token相关查询支持缺失</li>
+</ol>
+
+<h2 id="版本v0-0-2"><strong>版本v0.0.2</strong></h2>
+
+<p><em>产品经理上线了&hellip;不容易</em></p>
+
+<p>要支持token balance查询，按token balance还要排序。。。我了个天，以太坊智能合约是图灵完备的，account的eth balance还能通过对交易的理解，手搓上去，
+但token balance，对于好多不按套路写的货币，真的算不准，臣真的无能为力啊。。。</p>
+
+<p>只能堕落，采用eth json rpc来获取account balance了，但是一想到eth rpc的速度，想到近亿的query，心里凉飕飕的。。。</p>
+
+<p><strong>后悔没有搭建多个eth节点+2</strong></p>
+
+<p>v0.0.2 提供了更好的容灾性，说白了就是加了更多的retry，回滚重试，异常捕获等</p>
+
+<p>v0.0.2 parser有进一步优化，为了将parser对历史数据解析方面速度最大化，对MySQL, Parity， Badger的瓶颈跟性能有了长足的认识跟了解，</p>
+
+<p>同时，比起第一版数据库层面也做了很多优化跟改良。。。</p>
+
+<ul>
+<li>优化数据库表格分表</li>
+<li>优化数据库统一命名规则</li>
+<li>优化api查询规则</li>
+</ul>
+
+<p>第二版的数据库写入速度是这样的，基本上逼近网络传输速度上限，所有的历史数据基本能在12小时倒完。
+<img src="https://user-images.githubusercontent.com/1768412/46522661-f9c6ef00-c8b5-11e8-9177-10120389995c.png" alt="image" /></p>
+
+<p>但12小时只是个开始，后续50个小时是漫长的等待eth 返回所有accounts的eth balance跟token balance&hellip;
+<strong>后悔没有搭建多个eth节点+3</strong></p>
+
+<h2 id="总结"><strong>总结</strong></h2>
+
+<p>parser 解析历史数据基本上现在达到了单机性能极致，进一步提升速度只能让运维大哥们搭建更多的以太坊节点了。</p>
+
+<p>整个开发过程真的踩了挺多坑的也学习了很多，每次有新的idea也是毫不犹豫的回去立马实施，并且能不断的反思进步，基本上整个开发流程中想到的idea跟优化自己都
+试了一遍，好几次都是半夜有个想法就爬起来，直接干到凌晨4，5点。</p>
+
+<p>同时也是因为改的频繁，中间出了几次regression&hellip;<strong>这里又不得不谈测试的重要性</strong></p>
+
+<ol>
+<li>加强了对不同数据库的理解，优劣，MySQL 算是入门了吧，会写点索引了，知道部分优化，知道一些坑了，知道一些瓶颈了，今年必须把《高性能MySQL》看完</li>
+<li>golang 编程能力进一步加强</li>
+<li>eth理解入门</li>
+<li>下次系统设计的时候，一定要 <strong>尽早</strong> <strong>准确</strong> 地了解各个模块中的瓶颈，性能优劣。</li>
+<li>事实证明grpc+restful api不好用，限制了api语句查询灵活性，外加 <strong>grpc 组内伙伴根本没人用啊</strong> （暂时）</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">lekai</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-09-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/redis_sorted_list_expire/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">给Redis的list添加超时属性</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/eos-mainnet-setup/">
+            <span class="next-text nav-default">EOS 主网节点搭建</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

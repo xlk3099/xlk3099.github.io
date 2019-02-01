@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>go实战读书笔记（十二）: race conditions 竞争状态 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="xlk3099" />
+  <meta name="description" content="并发中的一大难点就是访问共享资源时, 多个线程或(goroutines in go) 尝试同时对这个资源进行读写, 这种状态叫做 race condition, 非常容易引起问题. 一般而" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0-DEV" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/go-in-action_race_condition/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="go实战读书笔记（十二）: race conditions 竞争状态" />
+<meta property="og:description" content="并发中的一大难点就是访问共享资源时, 多个线程或(goroutines in go) 尝试同时对这个资源进行读写, 这种状态叫做 race condition, 非常容易引起问题. 一般而" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/go-in-action_race_condition/" />
+<meta property="article:published_time" content="2018-04-15T15:00:28&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-15T15:00:28&#43;08:00"/>
+
+<meta itemprop="name" content="go实战读书笔记（十二）: race conditions 竞争状态">
+<meta itemprop="description" content="并发中的一大难点就是访问共享资源时, 多个线程或(goroutines in go) 尝试同时对这个资源进行读写, 这种状态叫做 race condition, 非常容易引起问题. 一般而">
+
+
+<meta itemprop="datePublished" content="2018-04-15T15:00:28&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-15T15:00:28&#43;08:00" />
+<meta itemprop="wordCount" content="1568">
+
+
+
+<meta itemprop="keywords" content="Go In Action," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="go实战读书笔记（十二）: race conditions 竞争状态"/>
+<meta name="twitter:description" content="并发中的一大难点就是访问共享资源时, 多个线程或(goroutines in go) 尝试同时对这个资源进行读写, 这种状态叫做 race condition, 非常容易引起问题. 一般而"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">茜&#39;s Crab</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">类别</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">茜&#39;s Crab</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">类别</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">go实战读书笔记（十二）: race conditions 竞争状态</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-15 </span>
+        <div class="post-category">
+            
+              <a href="/categories/golang/"> golang </a>
+            
+          </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#竞争状态">竞争状态</a></li>
+<li><a href="#锁住共享资源">锁住共享资源</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>并发中的一大难点就是访问共享资源时, 多个线程或(goroutines in go) 尝试同时对这个资源进行读写, 这种状态叫做 <strong>race condition</strong>, 非常容易引起问题. 一般而言, 对共享资源的操作应该是原子操作, 也就是说, 同一时刻, 最多只能有一个goroutine对共享资源进行读写操作.</p>
+
+<p></br></p>
+
+<h1 id="竞争状态">竞争状态</h1>
+
+<hr />
+
+<p>不啰嗦, 看代码: <a href="https://play.golang.org/p/xn7M1ndeINI">https://play.golang.org/p/xn7M1ndeINI</a></p>
+
+<blockquote>
+<p>代码 6-2</p>
+
+<pre><code class="language-go">// This sample program demonstrates how to create race
+// conditions in our programs. We don't want to do this.
+package main
+
+import (
+	&quot;fmt&quot;
+	&quot;runtime&quot;
+	&quot;sync&quot;
+)
+
+var (
+	// counter is a variable incremented by all goroutines.
+	counter int
+
+	// wg is used to wait for the program to finish.
+	wg sync.WaitGroup
+)
+
+// main is the entry point for all Go programs.
+func main() {
+	runtime.GOMAXPROCS(1)
+	// Add a count of two, one for each goroutine.
+	wg.Add(2)
+
+	// Create two goroutines.
+	go incCounter(1)
+	go incCounter(2)
+
+	// Wait for the goroutines to finish.
+	wg.Wait()
+	fmt.Println(&quot;Final Counter:&quot;, counter)
+}
+
+// incCounter increments the package level counter variable.
+func incCounter(id int) {
+	// Schedule the call to Done to tell main we are done.
+	defer wg.Done()
+
+	for count := 0; count &lt; 2; count++ {
+		// Capture the value of Counter.
+		value := counter
+
+		// Yield the thread and be placed back in queue.
+		runtime.Gosched()
+
+		// Increment our local value of Counter.
+		value++
+
+		// Store the value back into Counter.
+		counter = value
+	}
+}
+
+</code></pre>
+
+<p>输出:</p>
+
+<pre><code>Final Counter : 2
+</code></pre>
+</blockquote>
+
+<p>上述代码对counter进行了4次读写操作, 每个goroutine执行两次, 但是程序停止时, counter的值是2 而不是我们所想的4.</p>
+
+<div class='align-center'>
+  <p><img src="https://user-images.githubusercontent.com/1768412/38775864-71a8949e-40bf-11e8-9b47-1ca89b66da82.png" alt="image" />
+代码6-2示意图 图片来自 (go实战)</p>
+
+</div>
+
+<p>在代码20行, 我添加了设置最大逻辑处理器为1, 在41行, 加入了runtime包的Gosched, 目的是用于将goroutine从当前线程退出,不然运行速度太快, 我们无法捕获这次race condition.</p>
+
+<p>go有个工具, 可以在代码里检测竞争状态, 在编译时, 我们加上参数<code>-race</code> 即可.</p>
+
+<pre><code>go build -race // 用竞争检测器检查程序竞争状态代码
+
+./listing09
+
+==================
+WARNING: DATA RACE
+Write at 0x0000011d6318 by goroutine 6:
+  main.incCounter()
+      /Users/qianqian/projects/go_in_action/chapter6/listing09/listing09.go:50 +0x90
+
+Previous read at 0x0000011d6318 by goroutine 7:
+  main.incCounter()
+      /Users/qianqian/projects/go_in_action/chapter6/listing09/listing09.go:41 +0x6f
+
+Goroutine 6 (running) created at:
+  main.main()
+      /Users/qianqian/projects/go_in_action/chapter6/listing09/listing09.go:26 +0x75
+
+Goroutine 7 (running) created at:
+  main.main()
+      /Users/qianqian/projects/go_in_action/chapter6/listing09/listing09.go:27 +0x96
+==================
+Final Counter: 2
+Found 1 data race(s)
+</code></pre>
+
+<p>上述问题一种解决措施就是锁住共享资源, 每次只允许一个goroutine对共享资源进行读写.</p>
+
+<p></br></p>
+
+<h1 id="锁住共享资源">锁住共享资源</h1>
+
+<hr />
+
+<p>go提供了传统的同步goroutine机制, 就是对共享资源添加锁. go里的atomic包跟sync包提供了很好的解决方案.</p>
+
+<ol>
+<li><p><strong>atomic 原子函数</strong>
+原子函数以底层的加锁机制来同步访问<strong>整形变量</strong>和<strong>整形指针</strong>. 对代码6-2 <code>incCounter</code> 利用原子函数做出如下修改可以很轻松的解决竞争问题.</p>
+
+<pre><code class="language-go">// incCounter increments the package level counter variable.
+func incCounter(id int) {
+    // Schedule the call to Done to tell main we are done.
+    defer wg.Done()
+
+    for count := 0; count &lt; 2; count++ {
+        // Safely Add One To Counter.
+        atomic.AddInt64(&amp;counter, 1)
+
+        // Yield the thread and be placed back in queue.
+        runtime.Gosched()
+    }
+}
+</code></pre>
+
+<p>这里我们使用了atomic包里的<code>AddInt64</code>, 这个函数会同步整形值加法, 方法作用是强制同一时刻只能有一个goroutine运行并完成这个加法操作. 运行新代码后, 我们会得到正确值: 4.</p>
+
+<p>另外两个有用原子函数是LoadInt64, 和StoreInt64, 也是提供了安全的读写整形数值的方式. 关于atomic包的更多信息, 可以查看go官网关于atomic的文档:<a href="https://golang.org/pkg/sync/atomic">https://golang.org/pkg/sync/atomic</a></p></li>
+
+<li><p><strong>互斥锁</strong>
+另一种访问共享资源的方式是试用mutex (mutual exclusion). 互斥锁用于在代码上创建一个临界区, 保证同一时间只有一个goroutine可以执行这段代码, 当然mutex 跟 atomic不一样, 不限于整形数据.</p>
+
+<p>利用互斥锁修改上述代码:</p>
+
+<pre><code class="language-go">// This sample program demonstrates how to use a mutex
+// to define critical sections of code that need synchronous
+// access.
+package main
+
+import (
+    &quot;fmt&quot;
+    &quot;runtime&quot;
+    &quot;sync&quot;
+)
+
+var (
+    // counter is a variable incremented by all goroutines.
+    counter int
+
+    // wg is used to wait for the program to finish.
+    wg sync.WaitGroup
+
+    // mutex is used to define a critical section of code.
+    mutex sync.Mutex
+)
+
+// main is the entry point for all Go programs.
+func main() {
+    // Add a count of two, one for each goroutine.
+    wg.Add(2)
+
+    // Create two goroutines.
+    go incCounter(1)
+    go incCounter(2)
+
+    // Wait for the goroutines to finish.
+    wg.Wait()
+    fmt.Printf(&quot;Final Counter: %d\n&quot;, counter)
+}
+
+// incCounter increments the package level Counter variable
+// using the Mutex to synchronize and provide safe access.
+func incCounter(id int) {
+    // Schedule the call to Done to tell main we are done.
+    defer wg.Done()
+
+    for count := 0; count &lt; 2; count++ {
+        // Only allow one goroutine through this
+        // critical section at a time.
+        mutex.Lock()
+        {
+            // Capture the value of counter.
+            value := counter
+
+            // Yield the thread and be placed back in queue.
+            runtime.Gosched()
+
+            // Increment our local value of counter.
+            value++
+
+            // Store the value back into counter.
+            counter = value
+        }
+        mutex.Unlock()
+        // Release the lock and allow any
+        // waiting goroutine through.
+    }
+}
+</code></pre>
+
+<p>mutex使用方式很简单, 在需要保护的区域, 加上mutex.Lock(), 代码运行完毕后, 再mutex.Unlock()即可. 这里为了使保护区域明显, 在Lock跟Unlock之间加入了Scope<code>{}</code>.</p>
+
+<p>虽然原子函数跟互斥锁都能解决竞争状态, 但事实上, 它们并没有让编写并发程序变得更简单, 更有趣. 下一节我们会介绍channel, 用go的方式来解决共享资源的访问.</p></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">xlk3099</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-15</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/go-in-action/">Go In Action</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-in-action_channel/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">go实战读书笔记（十三）: channel</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/go-in-action-goroutine/">
+            <span class="next-text nav-default">go实战读书笔记（十一）: goroutine</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'xlk3099';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:xkl3099@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/lekai-xie-462a432a/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/xlk3099" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lekai</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-116766924-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Even - A super concise theme for Hugo</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 23 Jan 2019 13:05:20 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Designing Data-Intensive Applications 8: The trouble with distributed systems</title>
+      <link>http://localhost:1313/post/ddia_chapter8/</link>
+      <pubDate>Wed, 23 Jan 2019 13:05:20 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ddia_chapter8/</guid>
+      <description>分布式系统需要思考的问题 这章信息点太碎片化了，其实笔记写了很多，但太过细散化。就利用结尾的summary 精简概括下。 Summary 分布式系统问题小结： Unliable</description>
+    </item>
+    
+    <item>
+      <title>Designing Data-Intensive Applications 7: Transaction</title>
+      <link>http://localhost:1313/post/ddia_chapter7/</link>
+      <pubDate>Tue, 22 Jan 2019 10:50:25 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ddia_chapter7/</guid>
+      <description>Summary Race condition scenarios Dirty Reads One client reads another client’s writes before they have been committed. The read committed isolation level and stronger levels prevent dirty reads. Dirty Writes One client overwrites data that another client has written, but not yet committed. Almost all transaction implementations prevent dirty writes. Two transactions concurrently try to update the same object in a database, normaly</description>
+    </item>
+    
+    <item>
+      <title>Designing Data-Intensive Applications 6: Partition</title>
+      <link>http://localhost:1313/post/ddia_chapter6/</link>
+      <pubDate>Mon, 21 Jan 2019 16:49:01 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ddia_chapter6/</guid>
+      <description>Partition Partition 两种主流方式 partition by key range: efficient at range query but may got skewed and hotspot issue partition by hashing key: less skewed and hostspot issue but sacrifices range query performance Partitioning secondary indexes By Document(local index): Cassandra， MongoDB， ElasticSe</description>
+    </item>
+    
+    <item>
+      <title>Designing Data-Intensive Applications 5: Replication</title>
+      <link>http://localhost:1313/post/ddia_chapter5/</link>
+      <pubDate>Sat, 19 Jan 2019 17:48:02 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ddia_chapter5/</guid>
+      <description>Replication 定义 Keep a copy of the same data on multiple machines via networks 作用 Increase availability keep the system running, even one machine (or several machines, or even one data center) goes down place data geographically close to users, so users can interact with the data faster Increase reliability allow disconnected operation: allow an application continue working even when there is a network interruption. e.g. 日历</description>
+    </item>
+    
+    <item>
+      <title>Numpy 参考手册</title>
+      <link>http://localhost:1313/post/numpy_cheat_sheet/</link>
+      <pubDate>Sat, 24 Nov 2018 14:10:59 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/numpy_cheat_sheet/</guid>
+      <description>Data Types Type Name Type Code Description int8 uint8 i1 u1 8-bit integer int16 uint16 i2 u2 16-bit integer int32 uint32 i4 u4 32-bit integer int64 uint64 i8 u8 64-bit integer float16 f2 Half-precision float float32 f4 f Standard single-precision float float64 f8 d Standard double-precision float float128 f16 g Extended-precision float complex64 c8 Complex represented by two 32-bit floats complex128 c16 Complex represented by two 64-bit floats complex256 c32</description>
+    </item>
+    
+    <item>
+      <title>利用ssh config维护github多个private repo的deploy keys</title>
+      <link>http://localhost:1313/post/ssh_handle_multiple_github_deploy_keys/</link>
+      <pubDate>Thu, 15 Nov 2018 10:50:10 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ssh_handle_multiple_github_deploy_keys/</guid>
+      <description>有时候会遇上这样的需求：在一个或者多个服务器上，不想通过账号密码拉取存放在 github 上的多个 private repo，典型的例子便是 CI/CD 工具。 CI/CD 自动推送中，很关键的</description>
+    </item>
+    
+    <item>
+      <title>用circle ci 跟flask做自动化集成测试的一次经历</title>
+      <link>http://localhost:1313/post/circleci_and_flask/</link>
+      <pubDate>Wed, 14 Nov 2018 16:35:40 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/circleci_and_flask/</guid>
+      <description>需求 最近手头工作的项目代码是放在公网github，作为private repo，采用的CI是circle ci，但需要跑的集成测试，是部署在AW</description>
+    </item>
+    
+    <item>
+      <title>理解MySQL 执行计划 Explain</title>
+      <link>http://localhost:1313/post/understand_explain_in_mysql/</link>
+      <pubDate>Thu, 01 Nov 2018 13:57:11 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/understand_explain_in_mysql/</guid>
+      <description>最近在看MySQL的书跟文章比较多，如何优化表的结构，字段设计，如何优化表的索引设计，如何优化查询语句。 但其实吧，在做任何优化之前，都应该要</description>
+    </item>
+    
+    <item>
+      <title>golang slice cut 分析</title>
+      <link>http://localhost:1313/post/golang-slice-cut-analysis/</link>
+      <pubDate>Wed, 31 Oct 2018 10:37:01 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/golang-slice-cut-analysis/</guid>
+      <description>昨天在刷Leetcode的时候， 碰到一题：Remove Duplicates from Sorted Array II, 当时第一反应就是直接用slice的cut技巧，直接移除重复部分。 这道题目提醒</description>
+    </item>
+    
+    <item>
+      <title>gopher的ppt：slide</title>
+      <link>http://localhost:1313/post/golang_present_slide/</link>
+      <pubDate>Tue, 30 Oct 2018 15:28:18 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/golang_present_slide/</guid>
+      <description>slide是随着go语言诞生而产生的一种幻灯片格式。 官方文档 有记录present的各种syntax以及例子， 想了想，还是做个简单的翻译放入自</description>
+    </item>
+    
+    <item>
+      <title>高性能MySQL 第五章: 高效索引</title>
+      <link>http://localhost:1313/post/high_performance_mysql_chapter5_summary/</link>
+      <pubDate>Sun, 28 Oct 2018 22:42:36 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/high_performance_mysql_chapter5_summary/</guid>
+      <description>第五章整体来讲是非常有价值的, 读几遍都不过分, 珠玉非常多, 先记下部分深有感触的部分. 排序类查询优化 我个人近期对这个感触是比较深的, 如果fil</description>
+    </item>
+    
+    <item>
+      <title>LRU golang 实现</title>
+      <link>http://localhost:1313/post/leet_code_lru/</link>
+      <pubDate>Sat, 27 Oct 2018 11:57:27 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/leet_code_lru/</guid>
+      <description>今天刷leetcode的时候就做到了LRU实现 链接: https://leetcode.com/problems/lru-cache/description/. 也是巧, 前两天刚发布一篇关于给redis list添加expire属性, 其实跟LRU思路</description>
+    </item>
+    
+    <item>
+      <title>给Redis的list添加超时属性</title>
+      <link>http://localhost:1313/post/redis_sorted_list_expire/</link>
+      <pubDate>Thu, 25 Oct 2018 17:28:39 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/redis_sorted_list_expire/</guid>
+      <description>Redis里简单的K/V Pair默认是有expire属性的，当设定超时时间，一旦超时，设置的k/v对会自动被清除，但对于在list的item</description>
+    </item>
+    
+    <item>
+      <title>Eth Explorer 开发回顾</title>
+      <link>http://localhost:1313/post/eth_explorer_summary/</link>
+      <pubDate>Thu, 27 Sep 2018 10:14:13 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/eth_explorer_summary/</guid>
+      <description>从Evernote工作笔记上来看，开始着手调研以太坊浏览器是3月底，正式开始设计实现浏览器是4月份，到现在浏览器开发，parser 跟ethx</description>
+    </item>
+    
+    <item>
+      <title>EOS 主网节点搭建</title>
+      <link>http://localhost:1313/post/eos-mainnet-setup/</link>
+      <pubDate>Thu, 02 Aug 2018 13:40:58 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/eos-mainnet-setup/</guid>
+      <description>一旦eos代码下载完成，编译完成，可使用下列代码来搭建一个主网同步节点。 注意：这里搭建的是一个non-producer节点。 EOS 主网setup</description>
+    </item>
+    
+    <item>
+      <title>EOS学习笔记 智能合约（二）</title>
+      <link>http://localhost:1313/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/</link>
+      <pubDate>Tue, 31 Jul 2018 15:46:53 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/</guid>
+      <description>Smart Contract 文件格式 eosiocpp 可以使得创建新的contract简单化，它会帮忙创建一个新的contract 模板。 包含两个文件.hpp 跟.cpp文件。 apply action handler and</description>
+    </item>
+    
+    <item>
+      <title>EOS 学习笔记 智能合约(一）</title>
+      <link>http://localhost:1313/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</link>
+      <pubDate>Tue, 31 Jul 2018 14:36:45 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/eos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</guid>
+      <description>contract 其实说简单了就是在给定一系列的输入，会产生可预期的输出行为的一种协议。比如游戏里的移动，商业协议里面的财产转移等等。 EOS smart contract 简介 EOS的 contract 在</description>
+    </item>
+    
+    <item>
+      <title>Mysql Useful Tricks</title>
+      <link>http://localhost:1313/post/mysql-useful-tricks/</link>
+      <pubDate>Thu, 26 Jul 2018 14:02:00 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/mysql-useful-tricks/</guid>
+      <description>mysql 得到各databases的大小 SELECT table_schema &amp;quot;DB Name&amp;quot;, ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) &amp;quot;DB Size in MB&amp;quot; FROM information_schema.tables GROUP BY table_schema; mysql 得到各个table的大小 SELECT table_name AS &amp;ldquo;Table&amp;rdquo;, round(((data_length + index_length) / 1024 / 1024), 2) as size FROM information_schema.TABLES WHERE table_schema = &amp;ldquo;YOUR_DATABASE_NAME&amp;rdquo;</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu下，golang myzsh 快速搭建</title>
+      <link>http://localhost:1313/post/ubuntu-go-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link>
+      <pubDate>Wed, 25 Jul 2018 14:02:00 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ubuntu-go-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid>
+      <description>安装build essential sudo apt-get install build-essential 安装oh-my-zsh apt install zsh sh -c &amp;quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&amp;quot; 安装最新的golang sudo apt-get update sudo apt-get -y upgrade wget https://dl.google.com/go/go1.10.3.linux-amd64.tar.gz sudo tar -xvf go1.10.3.linux-amd64.tar.gz sudo mv go /usr/local 更新golang 环境</description>
+    </item>
+    
+    <item>
+      <title>Designing Data-Intensive Applications 1 - 可靠，可扩展，可维护的应用程序</title>
+      <link>http://localhost:1313/post/ddia-chapter-1/</link>
+      <pubDate>Mon, 23 Jul 2018 10:24:55 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ddia-chapter-1/</guid>
+      <description>这本书从今年一月就开始看了， 一开始是思源推荐给我的，因为之前在欧特克的工作没有怎么接触大规模的数据需求项目，期间读了几次断断续续，也没完整读</description>
+    </item>
+    
+    <item>
+      <title>Linux 指令备忘录</title>
+      <link>http://localhost:1313/post/linux-useful/</link>
+      <pubDate>Tue, 24 Apr 2018 10:08:11 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/linux-useful/</guid>
+      <description>Linux 下有用的top monitoring tool： top - original tool htop - adds support to multicore/cpu iotop - input/output monitoring iftop - network monitoring atop - merges previous elements into a single overview gtop - fancy visuals of system stats slabtop – displays a listing of the top caches Linux 下给指定用户读写执行权利</description>
+    </item>
+    
+    <item>
+      <title>Tmux Tricks</title>
+      <link>http://localhost:1313/post/tmux-tricks/</link>
+      <pubDate>Tue, 24 Apr 2018 10:08:11 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/tmux-tricks/</guid>
+      <description>关于tmux神器, 这里就不多介绍了, 自行百度或者google&amp;hellip; 这篇起备忘录作用. 对于笔者而言, tmux 最大好处就是断开ssh连接, 远</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（二十一）: benchmark</title>
+      <link>http://localhost:1313/post/go-in-action_benchmark/</link>
+      <pubDate>Sun, 22 Apr 2018 20:54:32 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_benchmark/</guid>
+      <description>基准测试, 又名性能测试, 很多时候同一问题有多个解决方案, 我们需要查看哪种解决方案性能更好的时候, 基准测试就很有用. 基准测试也可以用来测试某段</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（二十）: 单元测试</title>
+      <link>http://localhost:1313/post/go-in-action_testing/</link>
+      <pubDate>Sun, 22 Apr 2018 15:42:11 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_testing/</guid>
+      <description>go的单测. go的测试文件都已*_test.go结尾. 不管是单元测试, 还是benchmark测试. 执行go测试文件指令为: go test [测试文件]|</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十九）: 标准库 - Input &amp; Output</title>
+      <link>http://localhost:1313/post/go-in-action_input_output/</link>
+      <pubDate>Thu, 19 Apr 2018 21:36:30 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_input_output/</guid>
+      <description>unix 系统(包括linux&amp;amp;macos) 一个很好用的地方就是一个程序的输出可以作为另一个程序的输入. 把多个不同作用的小程序整合到一起, 写</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十八）: 标准库 - JSON</title>
+      <link>http://localhost:1313/post/go-in-action_json/</link>
+      <pubDate>Wed, 18 Apr 2018 19:03:13 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_json/</guid>
+      <description>go经常遇到的一个问题就是JSON解码, 现在很多data serialization 都是JSON格式. 可以说是现在后端跟前端最常用的通信数据格式. 比如REST API啊</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十七）: 标准库 - Log</title>
+      <link>http://localhost:1313/post/go-in-action_log/</link>
+      <pubDate>Tue, 17 Apr 2018 20:17:20 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_log/</guid>
+      <description>go提供了很强大的标准库, 其中经常被用到的就是log, json 跟 io. 这篇我们看下log的使用. log在go开发中被使用的很多, 无论是用来debug程</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十六）: 并发模式 - Work</title>
+      <link>http://localhost:1313/post/go-in-action_work/</link>
+      <pubDate>Mon, 16 Apr 2018 18:45:06 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_work/</guid>
+      <description>work 包利用了无缓冲通道来创建一个goroutine池, (注意, 上一章我们创建了一个资源池, 这里我们创建的是goroutine池) 这些gorou</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十五）: 并发模式 - Pool</title>
+      <link>http://localhost:1313/post/go-in-action_pool/</link>
+      <pubDate>Mon, 16 Apr 2018 15:49:32 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_pool/</guid>
+      <description>上一节介绍了用go实现Runner, 这一节会介绍利用go的缓冲区通道跟goroutines实现资源池开发. 资源池用来管理任意数量的gorou</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十四）: 并发模式 - Runner</title>
+      <link>http://localhost:1313/post/go-in-action_runner/</link>
+      <pubDate>Sun, 15 Apr 2018 17:53:27 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_runner/</guid>
+      <description>在前几章中, 学到了go的并发, 通道是如何工作的, 接下来会介绍三种go常见的并发模式, runner, pool, worker. 本篇会展示使用通道来监视程序的执行时间, 生命周期,</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十三）: channel</title>
+      <link>http://localhost:1313/post/go-in-action_channel/</link>
+      <pubDate>Sun, 15 Apr 2018 16:12:23 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_channel/</guid>
+      <description>中文书里把channel翻译成通道, 虽然很形象, 还是不喜欢, 就保持英文名channel吧. 在上一篇介绍了race condition, 以及通过使用mutex或者</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十二）: race conditions 竞争状态</title>
+      <link>http://localhost:1313/post/go-in-action_race_condition/</link>
+      <pubDate>Sun, 15 Apr 2018 15:00:28 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_race_condition/</guid>
+      <description>并发中的一大难点就是访问共享资源时, 多个线程或(goroutines in go) 尝试同时对这个资源进行读写, 这种状态叫做 race condition, 非常容易引起问题. 一般而</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十一）: goroutine</title>
+      <link>http://localhost:1313/post/go-in-action-goroutine/</link>
+      <pubDate>Sun, 15 Apr 2018 12:02:23 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action-goroutine/</guid>
+      <description>之前我们提到过, go 语法和运行时直接内置了对并发的支持(通过goroutine跟channel). go的并发同步模型是来自于一个叫做通信顺讯进</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（十）: export &amp; unexport</title>
+      <link>http://localhost:1313/post/go-in-action_export_unexport/</link>
+      <pubDate>Sat, 14 Apr 2018 22:23:29 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_export_unexport/</guid>
+      <description>go在包level支持标识符的公开或者隐藏. 关于如何公开还是不公开的规则很简单, 如果要公开包里的类型, 或者方法, 参数, 只需要将该类型, 方法,</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（九）: Type embedding 类型嵌入</title>
+      <link>http://localhost:1313/post/go-in-action_embeded_type/</link>
+      <pubDate>Sat, 14 Apr 2018 21:51:35 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_embeded_type/</guid>
+      <description>go开发一段时间, 大家就会发现, 如果我想改已有原始类型添加方法怎么办? 可以通过类型嵌入来实现. 类型嵌入是将已有类型直接声明在新的结构类型里,</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（八）: interface 接口</title>
+      <link>http://localhost:1313/post/go-in-action_interface/</link>
+      <pubDate>Sat, 14 Apr 2018 20:31:15 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_interface/</guid>
+      <description>多态是所有现代高级编程语言最基本的一个特性. 多态指代码能根据类型的具体实现采取不同行为的能力, 在go里, 多态的实现通过实现interface</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（七）: struct 结构类型</title>
+      <link>http://localhost:1313/post/go-in-action_struct/</link>
+      <pubDate>Sat, 14 Apr 2018 16:41:13 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_struct/</guid>
+      <description>在介绍篇就强调过, go是静态语言类型. 当编译器了解到数据类型信息的时候, 它可以保障程序用一种安全的方式在处理数据. 每一种数据类型都告诉了编译</description>
+    </item>
+    
+    <item>
+      <title>golang: Slice tricks 切片技巧</title>
+      <link>http://localhost:1313/post/go-slice-tricks/</link>
+      <pubDate>Sat, 14 Apr 2018 15:18:08 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-slice-tricks/</guid>
+      <description>好吧, 看到标题, 可能会想为什么有slice tricks 但没有 map tricks? 事实上map 就是用来储存查询,K/V pair在语言里也没啥别的用途了. 但slice 不一</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（六）：Map 映射</title>
+      <link>http://localhost:1313/post/go-in-action_map/</link>
+      <pubDate>Sat, 14 Apr 2018 13:43:58 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_map/</guid>
+      <description>不喜欢中文名映射, 还是用map吧&amp;hellip; Map 是一种用来存储一系列K/V键值对的数据结构. Map是无序的. Map的内部构成 先看一下map</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（五）：Slice 切片</title>
+      <link>http://localhost:1313/post/go-in-action_slice/</link>
+      <pubDate>Sat, 14 Apr 2018 11:18:08 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_slice/</guid>
+      <description>上一篇讲了数组， 但数组有个局限， 就是一旦数组被声明， 大小不可变. 切片弥补了数组的短板，可以按需求自动增长缩小， 可以当做动态数组使用。 *切片的</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（四）：Array 数组</title>
+      <link>http://localhost:1313/post/go-in-action-array/</link>
+      <pubDate>Tue, 10 Apr 2018 20:35:36 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action-array/</guid>
+      <description>在大多数编程语言中, 数组都是最常见的数据储存类型. go也不例外, 而且在go里, slice, map 的底层都是通过数组实现的. 数组的内部实现 在go 里, 数组是一</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（三）：go tools 开发工具</title>
+      <link>http://localhost:1313/post/go-in-action_tools/</link>
+      <pubDate>Mon, 09 Apr 2018 22:38:33 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_tools/</guid>
+      <description>go 本身是一个非常强大的命令工具. 打开命令行, 输入go, 敲击回车: ➜ ~ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files and cached files doc show documentation for package or symbol</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（二）：package 包管理</title>
+      <link>http://localhost:1313/post/go-in-action_package/</link>
+      <pubDate>Tue, 03 Apr 2018 22:20:10 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_package/</guid>
+      <description>包的结构跟命名 所有go程序都由若干个包组成, 每个包里面可以包含若干go文件. 举个🌰, go自带的http包: net/http/ cgi/ cookiejar/ testdata/ fcgi/ httptest/ httputil/ pprof/ testdata/ 在这里http是</description>
+    </item>
+    
+    <item>
+      <title>go实战读书笔记（一） ：go简介 </title>
+      <link>http://localhost:1313/post/go-in-action_introduction/</link>
+      <pubDate>Mon, 02 Apr 2018 22:08:46 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/go-in-action_introduction/</guid>
+      <description>开发速度 相比C跟C++，go的编译器更为简洁快速，在编译一个go项目的时候，编译器只需要查找直接引用的包，而不需要像java，C或者C++那</description>
+    </item>
+    
+    <item>
+      <title>ETH包含多个节点私链搭建</title>
+      <link>http://localhost:1313/post/eth-privatenet/</link>
+      <pubDate>Wed, 28 Mar 2018 10:24:55 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/eth-privatenet/</guid>
+      <description>网上搜了下ETH私链搭建教程，大多都是单个节点，关于多个节点之间的交互搭建，网上信息不是很多。虽说ETH官方文档比起绝大多数开源社区好多了，</description>
+    </item>
+    
+    <item>
+      <title>使用travis 搭建blog的 continuous deployment</title>
+      <link>http://localhost:1313/post/ci-travis-blog/</link>
+      <pubDate>Mon, 19 Mar 2018 10:24:55 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/ci-travis-blog/</guid>
+      <description>使用hugo build static blogs 确实很方便，但有个问题，尤其是经常写blog的话。 每次更新一篇日志，都得用hugo -t [theme] 重新build 一遍，然后再推送到对应</description>
+    </item>
+    
+    <item>
+      <title>Shortcodes 参考手册</title>
+      <link>http://localhost:1313/post/shortcodes/</link>
+      <pubDate>Tue, 30 Aug 2016 16:01:23 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/shortcodes/</guid>
+      <description>&lt;h1 id=&#34;center-right-left&#34;&gt;center, right, left&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;## default
+![img](/path/to/img.gif &amp;quot;img&amp;quot;)
+
+{{% center %}}
+## center
+![img](/path/to/img.gif &amp;quot;img&amp;quot;)
+{{% /center %}}
+
+{{% right %}}
+## right
+![img](/path/to/img.gif &amp;quot;img&amp;quot;)
+{{% /right %}}
+
+{{% left %}}
+## left
+![img](/path/to/img.gif &amp;quot;img&amp;quot;)
+{{% /left %}}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>JS Flowchart 参考手册</title>
+      <link>http://localhost:1313/post/js-flowchart-diagrams/</link>
+      <pubDate>Wed, 04 Mar 2015 21:57:50 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/js-flowchart-diagrams/</guid>
+      <description>&lt;h2 id=&#34;usage&#34;&gt;Usage&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-flowchart&#34;&gt;st=&amp;gt;start: Start|past:&amp;gt;http://www.google.com[blank]
+e=&amp;gt;end: End:&amp;gt;http://www.google.com
+op1=&amp;gt;operation: My Operation|past
+op2=&amp;gt;operation: Stuff|current
+sub1=&amp;gt;subroutine: My Subroutine|invalid
+cond=&amp;gt;condition: Yes
+or No?|approved:&amp;gt;http://www.google.com
+c2=&amp;gt;condition: Good idea|rejected
+io=&amp;gt;inputoutput: catch something...|request
+
+st-&amp;gt;op1(right)-&amp;gt;cond
+cond(yes, right)-&amp;gt;c2
+cond(no)-&amp;gt;sub1(left)-&amp;gt;op1
+c2(yes)-&amp;gt;io-&amp;gt;e
+c2(no)-&amp;gt;op2-&amp;gt;e
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>JS Sequence 参考手册</title>
+      <link>http://localhost:1313/post/js-sequence-diagrams/</link>
+      <pubDate>Wed, 04 Mar 2015 21:57:45 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/js-sequence-diagrams/</guid>
+      <description>&lt;h2 id=&#34;usage&#34;&gt;Usage&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sequence&#34;&gt;Andrew-&amp;gt;China: Says Hello
+Note right of China: China thinks\nabout it
+China--&amp;gt;Andrew: How are you?
+Andrew-&amp;gt;&amp;gt;China: I am good thanks!
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>代码高亮参考手册</title>
+      <link>http://localhost:1313/post/syntax-highlighting/</link>
+      <pubDate>Tue, 30 Aug 2011 16:01:23 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/syntax-highlighting/</guid>
+      <description>&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;function helloWorld () {
+  alert(&amp;quot;Hello, World!&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://localhost:1313/post/ddia_chapter9/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/ddia_chapter9/</guid>
+      <description>title: &amp;ldquo;Designing Data-Intensive Applications 9: Consistency and Consensus&amp;rdquo; date: 2019-01-24T14:28:31+08:00
+draft: true  Faults and partial Failures
+In a distributed system, partial failure 的问题: if you try to do anything
+Clock Synchronization for global snapshots</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://localhost:1313/post/golang_%E5%8D%95%E6%B5%8B%E6%8A%80%E5%B7%A7%E8%BF%9B%E9%98%B6_%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/golang_%E5%8D%95%E6%B5%8B%E6%8A%80%E5%B7%A7%E8%BF%9B%E9%98%B6_%E6%80%BB%E7%BB%93/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
